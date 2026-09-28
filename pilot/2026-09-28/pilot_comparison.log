@@ -1,0 +1,51 @@
+syn folded_curve       g=0.15 k'=20  truth@.2=0.98 ballceil@.2=0.83 cmp_cons@.2=0.48 cmp_opt@.2=0.74  viol=0/0
+syn folded_curve       g=0.15 k'=40  truth@.2=0.99 ballceil@.2=0.99 cmp_cons@.2=0.99 cmp_opt@.2=0.99  viol=0/0
+syn folded_curve       g=0.3 k'=20  truth@.2=1.00 ballceil@.2=0.41 cmp_cons@.2=0.08 cmp_opt@.2=0.36  viol=0/0
+syn folded_curve       g=0.3 k'=40  truth@.2=1.00 ballceil@.2=1.00 cmp_cons@.2=0.91 cmp_opt@.2=1.00  viol=0/0
+syn thin_bridge        g=0.15 k'=20  truth@.2=1.00 ballceil@.2=0.41 cmp_cons@.2=0.22 cmp_opt@.2=0.51  viol=0/0
+syn thin_bridge        g=0.15 k'=40  truth@.2=1.00 ballceil@.2=1.00 cmp_cons@.2=1.00 cmp_opt@.2=1.00  viol=0/0
+syn thin_bridge        g=0.3 k'=20  truth@.2=1.00 ballceil@.2=0.12 cmp_cons@.2=0.09 cmp_opt@.2=0.18  viol=0/0
+syn thin_bridge        g=0.3 k'=40  truth@.2=1.00 ballceil@.2=0.78 cmp_cons@.2=0.59 cmp_opt@.2=0.99  viol=0/0
+syn imbalanced_mixture g=0.15 k'=20  truth@.2=1.00 ballceil@.2=0.39 cmp_cons@.2=0.20 cmp_opt@.2=0.50  viol=0/0
+syn imbalanced_mixture g=0.15 k'=40  truth@.2=1.00 ballceil@.2=1.00 cmp_cons@.2=1.00 cmp_opt@.2=1.00  viol=0/0
+syn imbalanced_mixture g=0.3 k'=20  truth@.2=1.00 ballceil@.2=0.04 cmp_cons@.2=0.01 cmp_opt@.2=0.09  viol=0/0
+syn imbalanced_mixture g=0.3 k'=40  truth@.2=1.00 ballceil@.2=0.74 cmp_cons@.2=0.51 cmp_opt@.2=0.99  viol=0/0
+syn curved_surface     g=0.15 k'=20  truth@.2=1.00 ballceil@.2=0.34 cmp_cons@.2=0.08 cmp_opt@.2=0.41  viol=0/0
+syn curved_surface     g=0.15 k'=40  truth@.2=1.00 ballceil@.2=1.00 cmp_cons@.2=1.00 cmp_opt@.2=1.00  viol=0/0
+syn curved_surface     g=0.3 k'=20  truth@.2=1.00 ballceil@.2=0.02 cmp_cons@.2=0.01 cmp_opt@.2=0.06  viol=0/0
+syn curved_surface     g=0.3 k'=40  truth@.2=1.00 ballceil@.2=0.77 cmp_cons@.2=0.54 cmp_opt@.2=1.00  viol=0/0
+digits exact tsne s=42 k'=20  truth@0.1=0.063  truth@0.2=0.240  truth@0.3=0.466  truth@0.5=0.836
+digits exact tsne s=42 k'=30  truth@0.1=0.336  truth@0.2=0.548  truth@0.3=0.730  truth@0.5=0.923
+digits exact tsne s=42 k'=40  truth@0.1=0.505  truth@0.2=0.703  truth@0.3=0.838  truth@0.5=0.951
+digits exact tsne s=123 k'=20  truth@0.1=0.062  truth@0.2=0.238  truth@0.3=0.457  truth@0.5=0.832
+digits exact tsne s=123 k'=30  truth@0.1=0.336  truth@0.2=0.543  truth@0.3=0.728  truth@0.5=0.923
+digits exact tsne s=123 k'=40  truth@0.1=0.497  truth@0.2=0.698  truth@0.3=0.834  truth@0.5=0.950
+digits exact tsne s=456 k'=20  truth@0.1=0.062  truth@0.2=0.241  truth@0.3=0.460  truth@0.5=0.834
+digits exact tsne s=456 k'=30  truth@0.1=0.336  truth@0.2=0.549  truth@0.3=0.730  truth@0.5=0.923
+digits exact tsne s=456 k'=40  truth@0.1=0.501  truth@0.2=0.703  truth@0.3=0.835  truth@0.5=0.950
+digits R= 8 s=42 k'=20  truth@.2=0.238 ballceil@.2=0.009 cmp_cons@.2=0.004 broken_cons@.2=0.133  truth@.3=0.452 cmp_cons@.3=0.025  viol=0/0
+digits R= 8 s=42 k'=40  truth@.2=0.702 ballceil@.2=0.193 cmp_cons@.2=0.189 broken_cons@.2=0.054  truth@.3=0.848 cmp_cons@.3=0.277  viol=0/0
+digits R= 8 s=123 k'=20  truth@.2=0.235 ballceil@.2=0.009 cmp_cons@.2=0.004 broken_cons@.2=0.137  truth@.3=0.450 cmp_cons@.3=0.025  viol=0/0
+digits R= 8 s=123 k'=40  truth@.2=0.700 ballceil@.2=0.194 cmp_cons@.2=0.187 broken_cons@.2=0.051  truth@.3=0.848 cmp_cons@.3=0.278  viol=0/0
+digits R= 8 s=456 k'=20  truth@.2=0.239 ballceil@.2=0.009 cmp_cons@.2=0.004 broken_cons@.2=0.134  truth@.3=0.455 cmp_cons@.3=0.025  viol=0/0
+digits R= 8 s=456 k'=40  truth@.2=0.704 ballceil@.2=0.196 cmp_cons@.2=0.189 broken_cons@.2=0.054  truth@.3=0.846 cmp_cons@.3=0.278  viol=0/0
+digits R=16 s=42 k'=20  truth@.2=0.235 ballceil@.2=0.022 cmp_cons@.2=0.019 broken_cons@.2=0.295  truth@.3=0.459 cmp_cons@.3=0.065  viol=0/0
+digits R=16 s=42 k'=40  truth@.2=0.706 ballceil@.2=0.334 cmp_cons@.2=0.349 broken_cons@.2=0.099  truth@.3=0.843 cmp_cons@.3=0.510  viol=0/0
+digits R=16 s=123 k'=20  truth@.2=0.236 ballceil@.2=0.022 cmp_cons@.2=0.021 broken_cons@.2=0.299  truth@.3=0.456 cmp_cons@.3=0.065  viol=0/0
+digits R=16 s=123 k'=40  truth@.2=0.703 ballceil@.2=0.337 cmp_cons@.2=0.354 broken_cons@.2=0.100  truth@.3=0.842 cmp_cons@.3=0.505  viol=0/0
+digits R=16 s=456 k'=20  truth@.2=0.233 ballceil@.2=0.022 cmp_cons@.2=0.019 broken_cons@.2=0.295  truth@.3=0.458 cmp_cons@.3=0.064  viol=0/0
+digits R=16 s=456 k'=40  truth@.2=0.706 ballceil@.2=0.334 cmp_cons@.2=0.351 broken_cons@.2=0.099  truth@.3=0.841 cmp_cons@.3=0.508  viol=0/0
+digits R=32 s=42 k'=20  truth@.2=0.242 ballceil@.2=0.057 cmp_cons@.2=0.047 broken_cons@.2=0.429  truth@.3=0.466 cmp_cons@.3=0.133  viol=0/0
+digits R=32 s=42 k'=40  truth@.2=0.705 ballceil@.2=0.454 cmp_cons@.2=0.478 broken_cons@.2=0.145  truth@.3=0.842 cmp_cons@.3=0.658  viol=0/0
+digits R=32 s=123 k'=20  truth@.2=0.243 ballceil@.2=0.057 cmp_cons@.2=0.045 broken_cons@.2=0.421  truth@.3=0.467 cmp_cons@.3=0.135  viol=0/0
+digits R=32 s=123 k'=40  truth@.2=0.710 ballceil@.2=0.451 cmp_cons@.2=0.485 broken_cons@.2=0.142  truth@.3=0.843 cmp_cons@.3=0.646  viol=0/0
+digits R=32 s=456 k'=20  truth@.2=0.243 ballceil@.2=0.054 cmp_cons@.2=0.045 broken_cons@.2=0.427  truth@.3=0.457 cmp_cons@.3=0.133  viol=0/0
+digits R=32 s=456 k'=40  truth@.2=0.709 ballceil@.2=0.451 cmp_cons@.2=0.479 broken_cons@.2=0.143  truth@.3=0.842 cmp_cons@.3=0.653  viol=0/0
+digits R=64 s=42 k'=20  truth@.2=0.242 ballceil@.2=0.084 cmp_cons@.2=0.074 broken_cons@.2=0.538  truth@.3=0.466 cmp_cons@.3=0.209  viol=0/0
+digits R=64 s=42 k'=40  truth@.2=0.701 ballceil@.2=0.533 cmp_cons@.2=0.570 broken_cons@.2=0.190  truth@.3=0.841 cmp_cons@.3=0.726  viol=0/0
+digits R=64 s=123 k'=20  truth@.2=0.239 ballceil@.2=0.083 cmp_cons@.2=0.072 broken_cons@.2=0.545  truth@.3=0.465 cmp_cons@.3=0.210  viol=0/0
+digits R=64 s=123 k'=40  truth@.2=0.704 ballceil@.2=0.530 cmp_cons@.2=0.568 broken_cons@.2=0.194  truth@.3=0.835 cmp_cons@.3=0.728  viol=0/0
+digits R=64 s=456 k'=20  truth@.2=0.243 ballceil@.2=0.082 cmp_cons@.2=0.073 broken_cons@.2=0.541  truth@.3=0.465 cmp_cons@.3=0.210  viol=0/0
+digits R=64 s=456 k'=40  truth@.2=0.696 ballceil@.2=0.532 cmp_cons@.2=0.572 broken_cons@.2=0.188  truth@.3=0.841 cmp_cons@.3=0.729  viol=0/0
+
+49 rows in 101s -> pilot_comparison.json
