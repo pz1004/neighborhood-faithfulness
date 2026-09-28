@@ -5,13 +5,19 @@ Simultaneous, finite-sample confidence intervals on how far each displayed neigh
 with replicates. From the intervals comes a faithful / distorted / unresolved map that is
 valid at every tolerance.
 
-**Status (2026-09-29): Gates 1 and 2 passed; the Gate 3 need pilot on THINGS-EEG2 ended
-in the protocol's "reframe" branch.** Real EEG replicates showed strong need: naive
-neighborhood maps mislabel about 20% of points, and most of their "faithful" calls are
-wrong. They also showed no use: the certificate resolves no point even at 72 repetitions,
-because of signal-to-noise rather than the error control. The per-point certificate is
-therefore informative only where naive maps are already right.
-[docs/gate3_pilot_things.md](docs/gate3_pilot_things.md) has the details. The protocol is
+**Status (2026-09-29): Gates 1 and 2 passed. The Gate 3 need pilot on THINGS-EEG2 ended
+in the protocol's "reframe" branch, and the reframe's prior-art check ended in its
+"short empirical note" branch.**
+- Real EEG replicates showed strong need. Naive neighborhood maps mislabel about 20% of
+  points, and most of their "faithful" calls are wrong.
+- They also showed no use. The certificate resolves no point even at 72 repetitions,
+  because of signal-to-noise rather than the error control.
+- The reframed dataset-level "neighborhood noise ceiling" is routine as a method: its
+  target, estimator, planning curve and validation each have direct precedents. Only the
+  empirical finding is new.
+
+Details: [docs/gate3_pilot_things.md](docs/gate3_pilot_things.md) and
+[docs/reframe_prior_art.md](docs/reframe_prior_art.md). The protocol is
 [docs/research_plan.md](docs/research_plan.md), with Amendments 1 and 2 at its end. The
 earlier reports are [docs/gate1_prior_art.md](docs/gate1_prior_art.md) and
 [docs/gate2_report.md](docs/gate2_report.md).
@@ -33,6 +39,7 @@ reproduction. `reach/predecessor/` is the predecessor's code, copied verbatim; s
 | `docs/gate1_prior_art.md` | Gate 1: prior-art audit of the combination (four literatures) |
 | `docs/gate2_report.md` | Gate 2: validity under seven noise models, robustness, power, need, planning rule |
 | `docs/gate3_pilot_things.md` | Gate 3 need pilot on THINGS-EEG2: need, use, validity under real noise, diagnostics |
+| `docs/reframe_prior_art.md` | prior-art check of the reframed neighborhood noise ceiling: protocol, verdicts, decision |
 | `reach/engines.py` | E-ball, E-pair-t, E-pair-pool and the reference E-cmp (plan Section 4) |
 | `reach/target.py` | reach, its closed-form box bounds, displays, naive maps (plan Section 3) |
 | `reach/noise.py` | the seven noise models (plan Section 5.2) |
