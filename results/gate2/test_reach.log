@@ -1,0 +1,49 @@
+[ok] definition: reach equals explicit sort, eps=0.1
+[ok] definition: reach <= k' iff overlap with Top_k' >= m, eps=0.1
+[ok] definition: reach equals explicit sort, eps=0.2
+[ok] definition: reach <= k' iff overlap with Top_k' >= m, eps=0.2
+[ok] definition: reach equals explicit sort, eps=0.5
+[ok] definition: reach <= k' iff overlap with Top_k' >= m, eps=0.5
+[ok] box: degenerate box is exact, m=6
+[ok] box: contains truth, m=6
+[ok] box: contains the reach of 20 random matrices in the box, m=6
+[ok] box: members-at-U / outsiders-at-L attains r_hi, m=6
+[ok] box: members-at-L / outsiders-at-U attains r_lo, m=6
+[ok] box: degenerate box is exact, m=8
+[ok] box: contains truth, m=8
+[ok] box: contains the reach of 20 random matrices in the box, m=8
+[ok] box: members-at-U / outsiders-at-L attains r_hi, m=8
+[ok] box: members-at-L / outsiders-at-U attains r_lo, m=8
+[ok] box: degenerate box is exact, m=10
+[ok] box: contains truth, m=10
+[ok] box: contains the reach of 20 random matrices in the box, m=10
+[ok] box: members-at-U / outsiders-at-L attains r_hi, m=10
+[ok] box: members-at-L / outsiders-at-U attains r_lo, m=10
+[ok] zero noise: ball reach bounds exact
+[ok] zero noise: pair_t reach bounds exact
+[ok] zero noise: pair_pool reach bounds exact
+[ok] zero noise: cmp reach bounds exact
+[ok] monotone: pair_t intervals widen as delta falls
+[ok] monotone: ball intervals widen as delta falls
+[ok] reproduction: synthetic folded_curve gamma=0.15 k'=20  (ball_box_reliable=0.670/0.670 cmp_cons_reliable=0.480/0.480 cmp_cons_broken=0.010/0.010)
+[ok] reproduction: synthetic folded_curve gamma=0.15 k'=40  (ball_box_reliable=0.990/0.990 cmp_cons_reliable=0.990/0.990 cmp_cons_broken=0.000/0.000)
+[ok] reproduction: synthetic folded_curve gamma=0.3 k'=20  (ball_box_reliable=0.140/0.140 cmp_cons_reliable=0.080/0.080 cmp_cons_broken=0.000/0.000)
+[ok] reproduction: synthetic folded_curve gamma=0.3 k'=40  (ball_box_reliable=0.920/0.920 cmp_cons_reliable=0.910/0.910 cmp_cons_broken=0.000/0.000)
+[ok] reproduction: synthetic thin_bridge gamma=0.15 k'=20  (ball_box_reliable=0.150/0.150 cmp_cons_reliable=0.220/0.220 cmp_cons_broken=0.000/0.000)
+[ok] reproduction: synthetic thin_bridge gamma=0.15 k'=40  (ball_box_reliable=0.960/0.960 cmp_cons_reliable=1.000/1.000 cmp_cons_broken=0.000/0.000)
+[ok] reproduction: synthetic thin_bridge gamma=0.3 k'=20  (ball_box_reliable=0.070/0.070 cmp_cons_reliable=0.090/0.090 cmp_cons_broken=0.000/0.000)
+[ok] reproduction: synthetic thin_bridge gamma=0.3 k'=40  (ball_box_reliable=0.390/0.390 cmp_cons_reliable=0.590/0.590 cmp_cons_broken=0.000/0.000)
+[ok] reproduction: synthetic imbalanced_mixture gamma=0.15 k'=20  (ball_box_reliable=0.210/0.210 cmp_cons_reliable=0.200/0.200 cmp_cons_broken=0.000/0.000)
+[ok] reproduction: synthetic imbalanced_mixture gamma=0.15 k'=40  (ball_box_reliable=0.960/0.960 cmp_cons_reliable=1.000/1.000 cmp_cons_broken=0.000/0.000)
+[ok] reproduction: synthetic imbalanced_mixture gamma=0.3 k'=20  (ball_box_reliable=0.010/0.010 cmp_cons_reliable=0.010/0.010 cmp_cons_broken=0.000/0.000)
+[ok] reproduction: synthetic imbalanced_mixture gamma=0.3 k'=40  (ball_box_reliable=0.320/0.320 cmp_cons_reliable=0.510/0.510 cmp_cons_broken=0.000/0.000)
+[ok] reproduction: synthetic curved_surface gamma=0.15 k'=20  (ball_box_reliable=0.100/0.100 cmp_cons_reliable=0.080/0.080 cmp_cons_broken=0.000/0.000)
+[ok] reproduction: synthetic curved_surface gamma=0.15 k'=40  (ball_box_reliable=0.990/0.990 cmp_cons_reliable=1.000/1.000 cmp_cons_broken=0.000/0.000)
+[ok] reproduction: synthetic curved_surface gamma=0.3 k'=20  (ball_box_reliable=0.000/0.000 cmp_cons_reliable=0.010/0.010 cmp_cons_broken=0.000/0.000)
+[ok] reproduction: synthetic curved_surface gamma=0.3 k'=40  (ball_box_reliable=0.300/0.300 cmp_cons_reliable=0.540/0.540 cmp_cons_broken=0.000/0.000)
+[ok] reproduction: digits t-SNE seed 42 R=8 k'=20  (ball_box_reliable=0.002/0.002 cmp_cons_reliable=0.004/0.004 cmp_cons_broken=0.133/0.133)
+   seen before Gate 2 (plan 5.7): pair_t at this configuration, k'=20: faithful 0.013, distorted 0.266
+[ok] reproduction: digits t-SNE seed 42 R=8 k'=40  (ball_box_reliable=0.076/0.076 cmp_cons_reliable=0.189/0.189 cmp_cons_broken=0.054/0.054)
+   seen before Gate 2 (plan 5.7): pair_t at this configuration, k'=40: faithful 0.261, distorted 0.066
+
+0 failures in 5s
