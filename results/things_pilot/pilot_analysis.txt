@@ -1,0 +1,40 @@
+THINGS-EEG2 NEED PILOT (plan Amendment 2): k=10, eps=0.2, k'=20, t-SNE displays
+Primary: reference-extrapolated naive mislabel rate q(R), median over subjects [95% bootstrap]
+  q( 8) = 0.172 [0.159, 0.197]   raw disagreement with R_h=40: 0.173   per subject: 0.174 0.169 0.168 0.149 0.193 0.164 0.204 0.190 0.131 0.206
+  q(16) = 0.194 [0.184, 0.214]   raw disagreement with R_h=40: 0.226   per subject: 0.193 0.217 0.175 0.194 0.233 0.214 0.186 0.191 0.166 0.203
+  q(32) = 0.195 [0.171, 0.238]   raw disagreement with R_h=40: 0.243   per subject: 0.205 0.238 0.185 0.189 0.255 0.201 0.169 0.152 0.242 0.171
+  q(80), extrapolated with q = a + b/sqrt(R): 0.215 [0.166, 0.267]   per subject: 0.217 0.267 0.190 0.213 0.280 0.227 0.157 0.148 0.269 0.166
+  need at native R: PASSES (q(80) >= 0.05)
+  need at R=8: met (q(8) = 0.172)
+
+Secondary: certified bounds from E-pair-t on H (R=40), medians over subjects
+  R= 8: naive mislabel in [0.000, 1.000]  (H resolves 0.000 of points)
+  R=16: naive mislabel in [0.000, 1.000]  (H resolves 0.000 of points)
+  R=32: naive mislabel in [0.000, 1.000]  (H resolves 0.000 of points)
+
+Secondary: semi-synthetic (truth = H means, noise = resampled U residuals), medians
+  R= 8: exact naive mislabel 0.161  (range 0.110-0.205); E-pair-t resolved 0.000; false certified labels 0
+  R=16: exact naive mislabel 0.182  (range 0.145-0.214); E-pair-t resolved 0.000; false certified labels 0
+  R=32: exact naive mislabel 0.188  (range 0.152-0.203); E-pair-t resolved 0.000; false certified labels 0
+
+Use: E-pair-t resolved share at k'=20 on the real user blocks, t-SNE, medians over subjects
+  R= 8: resolved 0.000 (faithful 0.000); naive map calls 0.175 faithful
+  R=16: resolved 0.000 (faithful 0.000); naive map calls 0.260 faithful
+  R=32: resolved 0.000 (faithful 0.000); naive map calls 0.334 faithful
+  R=72: resolved 0.000 (faithful 0.000); naive map calls 0.381 faithful
+  use (resolved >= 0.30 with R <= 16): FAILS
+
+Validity under resampled real noise (300 draws per subject, R=8): E-pair-t failure rate median 0.000, max 0.000; reach claims only: max 0.000
+  validity condition (<= 0.10): holds
+
+Diagnostics (split 0, U+H residuals, 20-dim space), per subject:
+  mean_residual_variance       median   1.126  range   0.875 -   1.253
+  eig_max_over_min             median   1.722  range   1.498 -   2.624
+  eig_max_over_mean            median   1.318  range   1.228 -   1.966
+  excess_kurtosis_median       median   0.348  range   0.105 -   1.107
+  excess_kurtosis_max          median   1.016  range   0.201 -  13.299
+  s2_cv_over_homoscedastic     median   1.626  range   1.213 -   3.450
+  F_session_x_image            median   1.136  range   1.045 -   1.338
+  F_session                    median  27.532  range   6.039 -  46.782
+
+Pre-registered recommendation: need-power tension holds on real data: reframe before any further data

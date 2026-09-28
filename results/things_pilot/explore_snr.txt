@@ -1,0 +1,17 @@
+{'subject': 1, 'frac_pairs_d2cv_pos': 0.9999497487437186, 'median_true_d': 1.8992948722478036, 'noise_pair_d': 0.6984882118747814, 'median_d8': 1.0715807776996935, 'rel_gap_8_to_20': 0.17953828925065607, 'pair_t_half_width': 1.0075102218757763}
+{'subject': 2, 'frac_pairs_d2cv_pos': 0.9997989949748743, 'median_true_d': 2.173771432911219, 'noise_pair_d': 0.7795854132240527, 'median_d8': 1.223385199964906, 'rel_gap_8_to_20': 0.18432961302098777, 'pair_t_half_width': 1.1194867407386657}
+{'subject': 3, 'frac_pairs_d2cv_pos': 0.9999497487437186, 'median_true_d': 2.5349127430873217, 'noise_pair_d': 0.7989519530237067, 'median_d8': 1.5021348654512088, 'rel_gap_8_to_20': 0.16391732900244138, 'pair_t_half_width': 1.110897763478112}
+{'subject': 4, 'frac_pairs_d2cv_pos': 0.9999497487437186, 'median_true_d': 2.411549378978241, 'noise_pair_d': 0.762735837707494, 'median_d8': 1.473682966038119, 'rel_gap_8_to_20': 0.15230181942883345, 'pair_t_half_width': 1.0593320189102267}
+{'subject': 5, 'frac_pairs_d2cv_pos': 0.9998994974874372, 'median_true_d': 2.362286525459025, 'noise_pair_d': 0.7826896029838507, 'median_d8': 1.2693403128975413, 'rel_gap_8_to_20': 0.18367242625457558, 'pair_t_half_width': 1.1006961405721885}
+{'subject': 6, 'frac_pairs_d2cv_pos': 1.0, 'median_true_d': 2.813517051850117, 'noise_pair_d': 0.8123097868469686, 'median_d8': 1.6614186111668898, 'rel_gap_8_to_20': 0.1527862684103427, 'pair_t_half_width': 1.1077671491081478}
+{'subject': 7, 'frac_pairs_d2cv_pos': 1.0, 'median_true_d': 2.8524428529316017, 'noise_pair_d': 0.6970552725011785, 'median_d8': 1.6729137525114652, 'rel_gap_8_to_20': 0.1511924735319177, 'pair_t_half_width': 0.9135677729314196}
+{'subject': 8, 'frac_pairs_d2cv_pos': 1.0, 'median_true_d': 3.4793083367111444, 'noise_pair_d': 0.8036902296741202, 'median_d8': 2.162417556951482, 'rel_gap_8_to_20': 0.1356548591792393, 'pair_t_half_width': 1.0447365944719609}
+{'subject': 9, 'frac_pairs_d2cv_pos': 0.9987939698492462, 'median_true_d': 1.7108554289323115, 'noise_pair_d': 0.8081325924010827, 'median_d8': 0.9172462080887681, 'rel_gap_8_to_20': 0.21131996765465638, 'pair_t_half_width': 1.205740764175371}
+{'subject': 10, 'frac_pairs_d2cv_pos': 1.0, 'median_true_d': 3.4688772531976007, 'noise_pair_d': 0.8342859994258293, 'median_d8': 2.1113412204323527, 'rel_gap_8_to_20': 0.1408071890002146, 'pair_t_half_width': 1.0898890430920556}
+
+medians over subjects: true distance 2.473, noise of a 72-rep mean pair 0.791; 8th-neighbor distance 1.488, relative gap to the 20th 0.158; E-pair-t half-width at R=72 1.095; pairs with positive cross-validated d^2 1.000
+
+semi-synthetic, k'=20: truth faithful / naive faithful / naive false-faithful / naive false-distorted (medians)
+  R= 8: 0.052 / 0.167 / 0.140 / 0.022   (share of naive 'faithful' calls that are wrong: 0.84)
+  R=16: 0.126 / 0.217 / 0.136 / 0.044   (share of naive 'faithful' calls that are wrong: 0.63)
+  R=32: 0.200 / 0.273 / 0.130 / 0.056   (share of naive 'faithful' calls that are wrong: 0.47)

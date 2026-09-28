@@ -1,0 +1,112 @@
+[
+ {
+  "subject": 1,
+  "zip": "sub-01.zip",
+  "zip_size": 1071722467,
+  "member": "sub-01/preprocessed_eeg_test.npy",
+  "bytes": 217601432,
+  "crc32": 2398128805,
+  "sha256": "08e52b18caf46b8504beb4edaadef025f114eaea25ab1f4eb8c5f9114c56ebff",
+  "source": "https://osf.io/download/nb8wr/",
+  "fetched": "2026-09-29 00:17:34"
+ },
+ {
+  "subject": 2,
+  "zip": "sub-02.zip",
+  "zip_size": 1071516660,
+  "member": "sub-02/preprocessed_eeg_test.npy",
+  "bytes": 217601432,
+  "crc32": 2715175656,
+  "sha256": "e5ff0774a83beb49366a73c73fb04c9e692d5ab1f80c3d57c9fd1ff6e110d791",
+  "source": "https://osf.io/download/u43p5/",
+  "fetched": "2026-09-29 00:18:25"
+ },
+ {
+  "subject": 3,
+  "zip": "sub-03.zip",
+  "zip_size": 1071567672,
+  "member": "sub-03/preprocessed_eeg_test.npy",
+  "bytes": 217601432,
+  "crc32": 4289625267,
+  "sha256": "a84287154735104fce3ea830ebad0897f7b654e7812e2a9102f6917590954129",
+  "source": "https://osf.io/download/fy4n6/",
+  "fetched": "2026-09-29 00:19:15"
+ },
+ {
+  "subject": 4,
+  "zip": "sub-04.zip",
+  "zip_size": 1071421033,
+  "member": "sub-04/preprocessed_eeg_test.npy",
+  "bytes": 217601432,
+  "crc32": 3191893354,
+  "sha256": "9632bbd3361a3b9cf62cb8ac3535810c51e012aa6cbe6d149a36a8f7d35e629b",
+  "source": "https://osf.io/download/py8jz/",
+  "fetched": "2026-09-29 00:19:59"
+ },
+ {
+  "subject": 5,
+  "zip": "sub-05.zip",
+  "zip_size": 1072655693,
+  "member": "sub-05/preprocessed_eeg_test.npy",
+  "bytes": 217601432,
+  "crc32": 3434460609,
+  "sha256": "4822c960746c89bceaf270b697c24c7946cb439b1223f96afda75374a9788d84",
+  "source": "https://osf.io/download/2cn7v/",
+  "fetched": "2026-09-29 00:20:49"
+ },
+ {
+  "subject": 6,
+  "zip": "sub-06.zip",
+  "zip_size": 1072667739,
+  "member": "sub-06/preprocessed_eeg_test.npy",
+  "bytes": 217601432,
+  "crc32": 1567146919,
+  "sha256": "8e99f3ec1fcd8bd84d2e0c838a6da71df604fcb302e71f520c7916596538a627",
+  "source": "https://osf.io/download/bd83f/",
+  "fetched": "2026-09-29 00:21:34"
+ },
+ {
+  "subject": 7,
+  "zip": "sub-07.zip",
+  "zip_size": 1071671310,
+  "member": "sub-07/preprocessed_eeg_test.npy",
+  "bytes": 217601432,
+  "crc32": 2059903932,
+  "sha256": "eae4be5fff123d45e681c94cef0d97ac2b71360aca80086c2f46af9cfb3bff72",
+  "source": "https://osf.io/download/mw8hr/",
+  "fetched": "2026-09-29 00:22:18"
+ },
+ {
+  "subject": 8,
+  "zip": "sub-08.zip",
+  "zip_size": 1071848309,
+  "member": "sub-08/preprocessed_eeg_test.npy",
+  "bytes": 217601432,
+  "crc32": 2271125747,
+  "sha256": "9d9db1f3ff3566016ea7ad1c71645a68ab0e2fa17a7241b7e4c01ef294b9417f",
+  "source": "https://osf.io/download/n9bzm/",
+  "fetched": "2026-09-29 00:23:07"
+ },
+ {
+  "subject": 9,
+  "zip": "sub-09.zip",
+  "zip_size": 1071469818,
+  "member": "sub-09/preprocessed_eeg_test.npy",
+  "bytes": 217601432,
+  "crc32": 646256029,
+  "sha256": "70652bcf9d078bf2a4122cc6462ab94208bf806e40be305e99bc7ac7391c555c",
+  "source": "https://osf.io/download/fv6jz/",
+  "fetched": "2026-09-29 00:23:58"
+ },
+ {
+  "subject": 10,
+  "zip": "sub-10.zip",
+  "zip_size": 1071595380,
+  "member": "sub-10/preprocessed_eeg_test.npy",
+  "bytes": 217601432,
+  "crc32": 432946098,
+  "sha256": "f968c5bdbf78541628a09c129933ca561682616859ccae4bfce75bf67a1ab25d",
+  "source": "https://osf.io/download/8fyu9/",
+  "fetched": "2026-09-29 00:26:03"
+ }
+]
