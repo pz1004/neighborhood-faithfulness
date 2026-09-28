@@ -397,3 +397,84 @@ whose family-wise failure rate equals its design value.
 test rejects "failure rate ≤ δ" at level 0.01 in any configuration. The Gate 2 report
 gives the verdict under the original clauses next to the amended one. The amended criterion
 also applies to Gate 4.
+
+### Amendment 2 (2026-09-29): Gate 3 need pilot on THINGS-EEG2
+
+**When and why.** Written before any THINGS-EEG2 data value was loaded. The owner authorized
+this one dataset for a need pilot, the cheapest decisive step named in the Gate 2 report.
+Section 6 requires Gate 3 specifics to be fixed before data is loaded, and this amendment
+fixes them. One dataset cannot pass Gate 3, which needs two, but it can stop the project.
+
+**The data, as documented by the authors' code (not yet inspected):**
+- Source: the preprocessed test set of Gifford et al. (2022), OSF node `anp5v`. Only the
+  test file inside each subject's zip was fetched; `fetch_things_eeg2_test.py` checks each
+  file's CRC-32 against the zip.
+- Shape: 10 subjects, each with 200 images × 80 repetitions × 17 occipital/parietal
+  channels × 100 samples (−0.2 to 0.79 s at 100 Hz).
+- Preprocessing: baseline-corrected; channels whitened within each session (MVNN, one
+  covariance averaged over time points).
+- Repetition order: 4 sessions of 20 repetitions, merged, then shuffled across sessions with
+  seed 20200220. That shuffle reconstructs each repetition's session.
+
+**Design (per subject, per split; 10 random splits with seeds 3_500_000 + 1000·s + split):**
+1. **Blocks.** Repetitions are divided within each session into F (2 per session, 8
+   total), U (8 per session, 32) and H (10 per session, 40). Every block therefore draws
+   equally on the four sessions.
+2. **Representation, fitted on F only.** Take the post-stimulus samples (t ≥ 0: 80 samples ×
+   17 channels = 1360 features).
+   - PCA of F's image means to 100 dimensions.
+   - F's residual covariance in those dimensions (1400 degrees of freedom, Ledoit–Wolf
+     shrinkage), then whitening.
+   - PCA of the whitened means to D = 20.
+
+   The truth is each image's expected response, averaged over the four sessions and
+   projected into that space.
+3. **User.** Session-stratified prefixes of U with R ∈ {8, 16, 32}.
+   - Displays: t-SNE (perplexity 30, PCA initialization, seeds 17/29/31) and PCA-2, both of
+     the user's means.
+   - Tolerances: k = 10 (n = 200) and ε = 0.2. The primary k′ is 2k = 20; secondary
+     k′ ∈ {10, 40}.
+4. **Primary need estimator: mislabel rate extrapolated in the reference.**
+   - Each user labeling is compared with plug-in labels from disjoint, session-stratified
+     sub-blocks of H of size R_h ∈ {8, 20, 40} (5, 2 and 1 sub-blocks).
+   - The disagreement is averaged over splits and seeds, per subject.
+   - q̂(R) is the intercept of a least-squares line in R_h^(−1/2).
+   - As R_h → ∞ the reference labels converge to the truth. To first order their own error
+     rate scales with their noise standard deviation.
+5. **Secondary need estimators:**
+   - (a) *Certified bounds.* E-pair-t is run on H (R = 40). Naive errors counted on the
+     points H resolves give a lower bound. Adding H's unresolved share gives an upper bound.
+   - (b) *Semi-synthetic.* The truth is split 0's H means. User data is that truth plus U
+     residuals resampled within image, for R ∈ {8, 16, 32}, 30 draws per subject. The
+     naive mislabel rate is then exact.
+6. **Use.** E-pair-t's resolved share at k′ = 20 on the real user blocks, R ∈ {8, 16, 32},
+   and on U ∪ H (R = 72).
+7. **Validity under real noise.** In the semi-synthetic setting, E-pair-t's family-wise
+   failure rate over 300 draws per subject at R = 8: all pairs, plus reach under the PCA-2
+   and noisy-kNN displays.
+8. **Diagnostics (G3-diag).** From split 0, on the U ∪ H residuals in the 20-dimensional
+   space:
+   - excess kurtosis;
+   - eigenvalue spread of the pooled residual covariance (max/min and max/mean);
+   - dispersion of s_i² relative to its value under homoscedasticity;
+   - a session × image interaction statistic, using the reconstructed sessions;
+   - mean residual variance, as a check that F's whitening carries over.
+
+**Decision (medians over the 10 subjects; fixed in advance):**
+- **Need at native R (80):**
+  - *Fails* if q̂(32) < 0.05, since q falls with R.
+  - *Passes* if q̂(80) ≥ 0.05, extrapolated with q = a + b/√R over R ∈ {8, 16, 32}.
+  - *Inconclusive* otherwise.
+  - Need at R = 8 is reported against the same 0.05.
+- **Use:** E-pair-t's resolved share at k′ = 20 must be ≥ 0.30 with R ≤ 16.
+- **Validity:** the use numbers stand only if E-pair-t's semi-synthetic failure rate is
+  ≤ 0.10.
+
+**Recommendations, fixed now:**
+- Need fails: stop. A second dataset would have to be argued to differ systematically.
+- Need passes or is inconclusive, and use passes: go on to a second dataset.
+- Need passes and use fails: the need–power tension holds on real data. No further data
+  until the method is reframed.
+
+**Deviation.** The plan states G3-need at native R. The pilot measures R ≤ 32 directly and
+reaches native R only by extrapolation.

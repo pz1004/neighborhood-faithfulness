@@ -1,0 +1,9 @@
+[ok] restricted loader reads an np.save'd dict exactly
+[ok] restricted loader blocks non-numpy globals
+[ok] replayed shuffle gives 4 sessions of 20
+[ok] blocks partition the 80 repetitions
+[ok] user prefixes and reference sub-blocks are session-stratified
+[ok] features keep t >= 0 only (80 samples x 17 channels)
+[ok] representation whitens F's own noise (variance ~ 1)
+
+0 failures
