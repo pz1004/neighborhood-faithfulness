@@ -1,0 +1,7 @@
+100 tasks, 32 workers
+  20/100 in 45s
+  40/100 in 53s
+  60/100 in 58s
+  80/100 in 77s
+  100/100 in 81s
+done in 81s -> results/gate2/power.jsonl

@@ -1,0 +1,4 @@
+gamma=0.15 R= 8 (k'=40, eps=0.2, 15 t-SNE displays): naive right on 14707 points -> pair_t right 4891, abstains 9816, wrong 0; naive wrong on 293 -> pair_t right 0, abstains 293, wrong 0
+gamma=0.15 R=16 (k'=40, eps=0.2, 15 t-SNE displays): naive right on 14722 points -> pair_t right 7565, abstains 7157, wrong 0; naive wrong on 278 -> pair_t right 0, abstains 278, wrong 0
+gamma=0.30 R= 8 (k'=40, eps=0.2, 15 t-SNE displays): naive right on 14398 points -> pair_t right 741, abstains 13657, wrong 0; naive wrong on 602 -> pair_t right 0, abstains 602, wrong 0
+gamma=0.30 R=16 (k'=40, eps=0.2, 15 t-SNE displays): naive right on 14539 points -> pair_t right 2784, abstains 11755, wrong 0; naive wrong on 461 -> pair_t right 0, abstains 461, wrong 0

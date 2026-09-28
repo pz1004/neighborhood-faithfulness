@@ -1,0 +1,9 @@
+folded_curve       gamma=0.15: ball ceiling 0.737  ball interval 0.492  pair_t 0.797
+folded_curve       gamma=0.30: ball ceiling 0.312  ball interval 0.096  pair_t 0.383
+thin_bridge        gamma=0.15: ball ceiling 0.469  ball interval 0.207  pair_t 0.656
+thin_bridge        gamma=0.30: ball ceiling 0.102  ball interval 0.056  pair_t 0.146
+imbalanced_mixture gamma=0.15: ball ceiling 0.423  ball interval 0.173  pair_t 0.607
+imbalanced_mixture gamma=0.30: ball ceiling 0.068  ball interval 0.004  pair_t 0.123
+curved_surface     gamma=0.15: ball ceiling 0.286  ball interval 0.081  pair_t 0.538
+curved_surface     gamma=0.30: ball ceiling 0.026  ball interval 0.003  pair_t 0.043
+pooled over the 8 panels: ball ceiling 0.303  ball interval 0.139  pair_t 0.412

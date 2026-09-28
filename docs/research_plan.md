@@ -370,3 +370,30 @@ is loaded).**
 - An exact comparison engine (n³ family). It is worth building only if the comparison
   family survives G2-R and the n³ family's shared-query advantage exceeds its multiplicity
   cost.
+
+## Amendments
+
+### Amendment 1 (2026-09-28): the G2-V criterion
+
+**When.** Made after the Gate 2 validity runs had been seen, and before any power run. It
+does not affect the choice of default engine (Section 6, G2-R and G2-P).
+
+**What went wrong.** G2-V as written has two clauses: an estimated failure rate ≤ δ, and a
+one-sided 95% Clopper–Pearson upper bound ≤ 0.075. Both are miscalibrated for an engine
+whose family-wise failure rate equals its design value.
+
+- **The ball layer is such an engine by construction.** Its n ball events are independent,
+  and each is exact at δ/n, so their union has probability exactly
+  1 − (1 − δ/n)^n = 0.0488 at n = 1000 (and at n = 200).
+- **How often a correct engine fails.** Its estimated rate exceeds 0.05 with probability
+  0.39 in each configuration, at both 300 and 1000 draws. At 300 draws its upper bound
+  exceeds 0.075 about half the time.
+- **Across configurations.** E-ball is checked in eight configurations, so the clauses
+  were close to certain to fail a correctly working ball engine.
+- **Where the slack is.** The Bonferroni engines built on dependent pairs (E-pair-t,
+  E-pair-pool) have slack. The ball layer has none.
+
+**The replacement.** An engine fails G2-V under its own model if an exact one-sided binomial
+test rejects "failure rate ≤ δ" at level 0.01 in any configuration. The Gate 2 report
+gives the verdict under the original clauses next to the amended one. The amended criterion
+also applies to Gate 4.

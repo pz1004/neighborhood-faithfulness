@@ -1,0 +1,168 @@
+GATE 2 VALIDITY: family-wise failure rate per engine (draws with any false statement)
+cfg geometry   noise      R  gamma draws |             ball |           pair_t |        pair_pool |              cmp
+  0 digits     gauss      8  0.15  1000 |   57/1000 ub 0.071 |    6/1000 ub 0.012 |   11/1000 ub 0.018 |    0/1000 ub 0.003
+  1 digits     gauss     16  0.15   300 |   13/300  ub 0.068 |    5/300  ub 0.035 |    5/300  ub 0.035 |    0/300  ub 0.010
+  2 digits     gauss_het  8  0.15   300 |   10/300  ub 0.056 |    2/300  ub 0.021 |  299/300  ub 1.000 |    0/300  ub 0.010
+  3 digits     gauss_het 16  0.15   300 |   12/300  ub 0.064 |    4/300  ub 0.030 |  300/300  ub 1.000 |    0/300  ub 0.010
+  4 digits     t5         8  0.15   300 |   13/300  ub 0.068 |    0/300  ub 0.010 |   63/300  ub 0.252 |    0/300  ub 0.010
+  5 digits     t5        16  0.15   300 |   12/300  ub 0.064 |    3/300  ub 0.026 |   30/300  ub 0.133 |    0/300  ub 0.010
+  6 digits     t3         8  0.15   300 |   15/300  ub 0.076 |    6/300  ub 0.039 |  293/300  ub 0.989 |    0/300  ub 0.010
+  7 digits     t3        16  0.15   300 |   10/300  ub 0.056 |    9/300  ub 0.052 |  285/300  ub 0.969 |    0/300  ub 0.010
+  8 digits     rep_t5     8  0.15   300 |    6/300  ub 0.039 |    0/300  ub 0.010 |  230/300  ub 0.806 |    0/300  ub 0.010
+  9 digits     rep_t5    16  0.15   300 |    7/300  ub 0.043 |    4/300  ub 0.030 |  154/300  ub 0.562 |    0/300  ub 0.010
+ 10 digits     aniso4     8  0.15   300 |   66/300  ub 0.263 |    6/300  ub 0.039 |   13/300  ub 0.068 |    0/300  ub 0.010
+ 11 digits     aniso4    16  0.15   300 |   65/300  ub 0.259 |    8/300  ub 0.048 |   11/300  ub 0.060 |    0/300  ub 0.010
+ 12 digits     aniso16    8  0.15   300 |  241/300  ub 0.840 |   38/300  ub 0.163 |   74/300  ub 0.291 |    0/300  ub 0.010
+ 13 digits     aniso16   16  0.15   300 |  246/300  ub 0.856 |   63/300  ub 0.252 |   83/300  ub 0.322 |    0/300  ub 0.010
+ 14 surface    gauss      8  0.15   300 |   14/300  ub 0.072 |    2/300  ub 0.021 |    5/300  ub 0.035 |    0/300  ub 0.010
+ 15 surface    gauss_het  8  0.15   300 |   15/300  ub 0.076 |    1/300  ub 0.016 |  291/300  ub 0.984 |    0/300  ub 0.010
+ 16 surface    t5         8  0.15   300 |   16/300  ub 0.080 |    2/300  ub 0.021 |   32/300  ub 0.141 |    0/300  ub 0.010
+ 17 surface    aniso4     8  0.15   300 |   68/300  ub 0.270 |    2/300  ub 0.021 |    2/300  ub 0.021 |    0/300  ub 0.010
+ 18 digits     gauss      8  0.50   300 |   13/300  ub 0.068 |    0/300  ub 0.010 |    0/300  ub 0.010 |    0/300  ub 0.010
+ 19 digits     t5         8  0.50   300 |   15/300  ub 0.076 |    1/300  ub 0.016 |   23/300  ub 0.107 |    0/300  ub 0.010
+ 20 digits200  gauss      8  0.15   300 |   13/300  ub 0.068 |    4/300  ub 0.030 |    7/300  ub 0.043 |    0/300  ub 0.010
+ 21 digits200  t5         8  0.15   300 |   10/300  ub 0.056 |    6/300  ub 0.039 |   23/300  ub 0.107 |    0/300  ub 0.010
+ 22 digits200  aniso4     8  0.15   300 |   40/300  ub 0.170 |    9/300  ub 0.052 |    5/300  ub 0.035 |    0/300  ub 0.010
+ 23 digits200  rep_t5     8  0.15   300 |    5/300  ub 0.035 |    1/300  ub 0.016 |   92/300  ub 0.353 |    0/300  ub 0.010
+  (x/n = failing draws / draws; ub = one-sided 95% Clopper-Pearson upper bound)
+
+Reach claims only (points whose true reach left its interval), failing draws:
+  0 digits     gauss     R= 8 gamma=0.15: ball=0  pair_t=0  pair_pool=0  cmp=0
+  1 digits     gauss     R=16 gamma=0.15: ball=0  pair_t=0  pair_pool=0  cmp=0
+  2 digits     gauss_het R= 8 gamma=0.15: ball=0  pair_t=0  pair_pool=0  cmp=0
+  3 digits     gauss_het R=16 gamma=0.15: ball=0  pair_t=0  pair_pool=0  cmp=0
+  4 digits     t5        R= 8 gamma=0.15: ball=0  pair_t=0  pair_pool=0  cmp=0
+  5 digits     t5        R=16 gamma=0.15: ball=0  pair_t=0  pair_pool=0  cmp=0
+  6 digits     t3        R= 8 gamma=0.15: ball=0  pair_t=0  pair_pool=3  cmp=0
+  7 digits     t3        R=16 gamma=0.15: ball=0  pair_t=0  pair_pool=3  cmp=0
+  8 digits     rep_t5    R= 8 gamma=0.15: ball=0  pair_t=0  pair_pool=0  cmp=0
+  9 digits     rep_t5    R=16 gamma=0.15: ball=0  pair_t=0  pair_pool=0  cmp=0
+ 10 digits     aniso4    R= 8 gamma=0.15: ball=0  pair_t=0  pair_pool=0  cmp=0
+ 11 digits     aniso4    R=16 gamma=0.15: ball=0  pair_t=0  pair_pool=0  cmp=0
+ 12 digits     aniso16   R= 8 gamma=0.15: ball=0  pair_t=0  pair_pool=0  cmp=0
+ 13 digits     aniso16   R=16 gamma=0.15: ball=0  pair_t=0  pair_pool=0  cmp=0
+ 14 surface    gauss     R= 8 gamma=0.15: ball=0  pair_t=0  pair_pool=0  cmp=0
+ 15 surface    gauss_het R= 8 gamma=0.15: ball=0  pair_t=0  pair_pool=0  cmp=0
+ 16 surface    t5        R= 8 gamma=0.15: ball=0  pair_t=0  pair_pool=0  cmp=0
+ 17 surface    aniso4    R= 8 gamma=0.15: ball=0  pair_t=0  pair_pool=0  cmp=0
+ 18 digits     gauss     R= 8 gamma=0.50: ball=0  pair_t=0  pair_pool=0  cmp=0
+ 19 digits     t5        R= 8 gamma=0.50: ball=0  pair_t=0  pair_pool=0  cmp=0
+ 20 digits200  gauss     R= 8 gamma=0.15: ball=0  pair_t=0  pair_pool=0  cmp=0
+ 21 digits200  t5        R= 8 gamma=0.15: ball=0  pair_t=0  pair_pool=0  cmp=0
+ 22 digits200  aniso4    R= 8 gamma=0.15: ball=0  pair_t=0  pair_pool=0  cmp=0
+ 23 digits200  rep_t5    R= 8 gamma=0.15: ball=0  pair_t=0  pair_pool=0  cmp=0
+
+G2-V (exactness under the engine's own model)
+  original clauses: rate <= 0.05 and ub <= 0.075; amended (plan Amendment 1): exact one-sided
+  binomial test of 'rate <= 0.05' not rejected at level 0.01, i.e. P(X >= x | p = 0.05) >= 0.01
+  ball       cfg  0 digits    gauss     R= 8 g=0.15:  57/1000 rate 0.057 ub 0.071 p 0.172  original FAIL  amended ok
+  ball       cfg  1 digits    gauss     R=16 g=0.15:  13/300  rate 0.043 ub 0.068 p 0.739  original ok  amended ok
+  ball       cfg  2 digits    gauss_het R= 8 g=0.15:  10/300  rate 0.033 ub 0.056 p 0.935  original ok  amended ok
+  ball       cfg  3 digits    gauss_het R=16 g=0.15:  12/300  rate 0.040 ub 0.064 p 0.822  original ok  amended ok
+  ball       cfg 14 surface   gauss     R= 8 g=0.15:  14/300  rate 0.047 ub 0.072 p 0.642  original ok  amended ok
+  ball       cfg 15 surface   gauss_het R= 8 g=0.15:  15/300  rate 0.050 ub 0.076 p 0.537  original FAIL  amended ok
+  ball       cfg 18 digits    gauss     R= 8 g=0.50:  13/300  rate 0.043 ub 0.068 p 0.739  original ok  amended ok
+  ball       cfg 20 digits200 gauss     R= 8 g=0.15:  13/300  rate 0.043 ub 0.068 p 0.739  original ok  amended ok
+  pair_t     cfg  0 digits    gauss     R= 8 g=0.15:   6/1000 rate 0.006 ub 0.012 p 1.000  original ok  amended ok
+  pair_t     cfg  1 digits    gauss     R=16 g=0.15:   5/300  rate 0.017 ub 0.035 p 0.999  original ok  amended ok
+  pair_t     cfg  2 digits    gauss_het R= 8 g=0.15:   2/300  rate 0.007 ub 0.021 p 1.000  original ok  amended ok
+  pair_t     cfg  3 digits    gauss_het R=16 g=0.15:   4/300  rate 0.013 ub 0.030 p 1.000  original ok  amended ok
+  pair_t     cfg 14 surface   gauss     R= 8 g=0.15:   2/300  rate 0.007 ub 0.021 p 1.000  original ok  amended ok
+  pair_t     cfg 15 surface   gauss_het R= 8 g=0.15:   1/300  rate 0.003 ub 0.016 p 1.000  original ok  amended ok
+  pair_t     cfg 18 digits    gauss     R= 8 g=0.50:   0/300  rate 0.000 ub 0.010 p 1.000  original ok  amended ok
+  pair_t     cfg 20 digits200 gauss     R= 8 g=0.15:   4/300  rate 0.013 ub 0.030 p 1.000  original ok  amended ok
+  pair_pool  cfg  0 digits    gauss     R= 8 g=0.15:  11/1000 rate 0.011 ub 0.018 p 1.000  original ok  amended ok
+  pair_pool  cfg  1 digits    gauss     R=16 g=0.15:   5/300  rate 0.017 ub 0.035 p 0.999  original ok  amended ok
+  pair_pool  cfg 14 surface   gauss     R= 8 g=0.15:   5/300  rate 0.017 ub 0.035 p 0.999  original ok  amended ok
+  pair_pool  cfg 18 digits    gauss     R= 8 g=0.50:   0/300  rate 0.000 ub 0.010 p 1.000  original ok  amended ok
+  pair_pool  cfg 20 digits200 gauss     R= 8 g=0.15:   7/300  rate 0.023 ub 0.043 p 0.993  original ok  amended ok
+  G2-V under the original clauses FAILS; under Amendment 1 PASSES
+
+G2-R (robustness set on digits, R=8, gamma=0.15: rate <= 0.10 on each)
+  ball       not robust: gauss_het=10/300  t5=13/300  rep_t5=6/300  aniso4=66/300
+  pair_t     robust: gauss_het=2/300  t5=0/300  rep_t5=0/300  aniso4=6/300
+  pair_pool  not robust: gauss_het=299/300  t5=63/300  rep_t5=230/300  aniso4=13/300
+  cmp        robust: gauss_het=0/300  t5=0/300  rep_t5=0/300  aniso4=0/300
+
+GATE 2 POWER: digits, t-SNE displays (3 seeds x 5 draws), eps=0.2
+primary metric: resolved share (faithful + distorted) at k'=40
+  gauss     gamma=0.15 R= 8: ball=0.092  pair_t=0.326  pair_pool=0.364  cmp=0.242   truth faithful@40=0.710
+  gauss     gamma=0.15 R=16: ball=0.226  pair_t=0.504  pair_pool=0.521  cmp=0.456   truth faithful@40=0.708
+  gauss     gamma=0.15 R=32: ball=0.391  pair_t=0.642  pair_pool=0.648  cmp=0.623   truth faithful@40=0.707
+  gauss     gamma=0.30 R= 8: ball=0.003  pair_t=0.049  pair_pool=0.075  cmp=0.019   truth faithful@40=0.705
+  gauss     gamma=0.30 R=16: ball=0.023  pair_t=0.186  pair_pool=0.203  cmp=0.131   truth faithful@40=0.710
+  gauss     gamma=0.30 R=32: ball=0.106  pair_t=0.355  pair_pool=0.366  cmp=0.316   truth faithful@40=0.711
+  gauss_het gamma=0.15 R= 8: ball=0.078  pair_t=0.284  pair_pool=0.294  cmp=0.197   truth faithful@40=0.706
+  gauss_het gamma=0.15 R=16: ball=0.210  pair_t=0.458  pair_pool=0.455  cmp=0.403   truth faithful@40=0.705
+  gauss_het gamma=0.15 R=32: ball=0.369  pair_t=0.602  pair_pool=0.599  cmp=0.575   truth faithful@40=0.705
+  gauss_het gamma=0.30 R= 8: ball=0.002  pair_t=0.041  pair_pool=0.039  cmp=0.013   truth faithful@40=0.708
+  gauss_het gamma=0.30 R=16: ball=0.024  pair_t=0.148  pair_pool=0.144  cmp=0.092   truth faithful@40=0.706
+  gauss_het gamma=0.30 R=32: ball=0.094  pair_t=0.302  pair_pool=0.293  cmp=0.254   truth faithful@40=0.711
+
+Default engine (G2-R): pair_t  [robust]
+G2-P: pair_t primary metric 0.326 at R=8 (floor 0.20), 0.504 at R=16 (floor 0.30) -> PASSES
+GATE 2 PASSES (G2-V and G2-P)
+
+Labels by engine, digits t-SNE, gauss, gamma=0.15, eps=0.2: faithful / distorted / unresolved
+  R= 8 k'=20 truth=0.237  ball=0.002/0.080/0.918  pair_t=0.015/0.263/0.722  pair_pool=0.020/0.296/0.684  cmp=0.006/0.138/0.857
+  R= 8 k'=30 truth=0.554  ball=0.021/0.028/0.950  pair_t=0.122/0.110/0.768  pair_pool=0.142/0.121/0.737  cmp=0.065/0.086/0.849
+  R= 8 k'=40 truth=0.710  ball=0.076/0.016/0.908  pair_t=0.259/0.067/0.674  pair_pool=0.288/0.077/0.636  cmp=0.189/0.053/0.758
+  R= 8 k'=60 truth=0.844  ball=0.212/0.007/0.781  pair_t=0.507/0.033/0.460  pair_pool=0.539/0.038/0.423  cmp=0.425/0.026/0.549
+  R= 8 k'=80 truth=0.900  ball=0.366/0.004/0.630  pair_t=0.658/0.021/0.321  pair_pool=0.685/0.022/0.292  cmp=0.611/0.018/0.371
+  R= 8 ball witness ceiling (faithful, k'=40) = 0.200; median log2(r_hi/r_lo): ball=2.67  pair_t=1.76  pair_pool=1.65  cmp=2.92
+  R=16 k'=20 truth=0.234  ball=0.008/0.183/0.810  pair_t=0.045/0.413/0.542  pair_pool=0.048/0.427/0.526  cmp=0.021/0.294/0.686
+  R=16 k'=30 truth=0.553  ball=0.078/0.074/0.848  pair_t=0.222/0.179/0.600  pair_pool=0.234/0.183/0.583  cmp=0.181/0.151/0.668
+  R=16 k'=40 truth=0.708  ball=0.184/0.042/0.774  pair_t=0.398/0.107/0.496  pair_pool=0.410/0.111/0.479  cmp=0.355/0.102/0.544
+  R=16 k'=60 truth=0.848  ball=0.388/0.021/0.591  pair_t=0.636/0.059/0.306  pair_pool=0.646/0.061/0.293  cmp=0.618/0.057/0.325
+  R=16 k'=80 truth=0.901  ball=0.570/0.012/0.418  pair_t=0.763/0.032/0.205  pair_pool=0.771/0.035/0.193  cmp=0.757/0.034/0.208
+  R=16 ball witness ceiling (faithful, k'=40) = 0.333; median log2(r_hi/r_lo): ball=2.05  pair_t=1.25  pair_pool=1.20  cmp=1.74
+  R=32 k'=20 truth=0.240  ball=0.022/0.323/0.655  pair_t=0.077/0.531/0.392  pair_pool=0.077/0.536/0.386  cmp=0.047/0.436/0.516
+  R=32 k'=30 truth=0.550  ball=0.161/0.127/0.712  pair_t=0.314/0.248/0.439  pair_pool=0.318/0.250/0.432  cmp=0.288/0.228/0.484
+  R=32 k'=40 truth=0.707  ball=0.313/0.078/0.609  pair_t=0.494/0.148/0.358  pair_pool=0.499/0.149/0.352  cmp=0.480/0.143/0.377
+  R=32 k'=60 truth=0.847  ball=0.561/0.040/0.399  pair_t=0.717/0.074/0.209  pair_pool=0.720/0.075/0.205  cmp=0.717/0.076/0.207
+  R=32 k'=80 truth=0.903  ball=0.706/0.023/0.271  pair_t=0.816/0.049/0.135  pair_pool=0.816/0.049/0.135  cmp=0.818/0.051/0.131
+  R=32 ball witness ceiling (faithful, k'=40) = 0.445; median log2(r_hi/r_lo): ball=1.56  pair_t=0.88  pair_pool=0.87  cmp=1.12
+
+False labels over every power record (must be 0 on the event):
+  ball=0  pair_t=0  pair_pool=0  cmp=0
+
+G2-N (need): naive map mislabel rate at k'=40, eps=0.2, digits t-SNE (plug-in / bias-corrected)
+  gauss     gamma=0.15 R= 8: plug-in 0.020  corrected 0.020  (plug-in false-faithful points per display: 9.7)
+  gauss     gamma=0.15 R=16: plug-in 0.019  corrected 0.019  (plug-in false-faithful points per display: 9.4)
+  gauss     gamma=0.15 R=32: plug-in 0.013  corrected 0.013  (plug-in false-faithful points per display: 8.3)
+  gauss     gamma=0.30 R= 8: plug-in 0.040  corrected 0.040  (plug-in false-faithful points per display: 20.5)
+  gauss     gamma=0.30 R=16: plug-in 0.031  corrected 0.031  (plug-in false-faithful points per display: 15.9)
+  gauss     gamma=0.30 R=32: plug-in 0.027  corrected 0.027  (plug-in false-faithful points per display: 13.1)
+  gauss_het gamma=0.15 R= 8: plug-in 0.025  corrected 0.024  (plug-in false-faithful points per display: 12.4)
+  gauss_het gamma=0.15 R=16: plug-in 0.021  corrected 0.021  (plug-in false-faithful points per display: 9.7)
+  gauss_het gamma=0.15 R=32: plug-in 0.016  corrected 0.015  (plug-in false-faithful points per display: 8.5)
+  gauss_het gamma=0.30 R= 8: plug-in 0.041  corrected 0.041  (plug-in false-faithful points per display: 21.8)
+  gauss_het gamma=0.30 R=16: plug-in 0.033  corrected 0.033  (plug-in false-faithful points per display: 16.5)
+  gauss_het gamma=0.30 R=32: plug-in 0.025  corrected 0.024  (plug-in false-faithful points per display: 13.5)
+
+PCA-2 displays, digits gauss gamma=0.15, eps=0.2, k'=40: truth faithful and engine resolved
+  R= 8 truth=0.063  ball=0.731  pair_t=0.862  pair_pool=0.871  cmp=0.833
+  R=16 truth=0.062  ball=0.824  pair_t=0.910  pair_pool=0.914  cmp=0.896
+  R=32 truth=0.063  ball=0.879  pair_t=0.946  pair_pool=0.947  cmp=0.943
+
+Synthetic families, PCA-2, gauss, R=8, eps=0.2: faithful share at k'=20 and k'=40
+  gamma=0.15 folded_curve       k'=20: truth=0.97 ball=0.49 pair_t=0.80 pair_pool=0.84 cmp=0.39   k'=40: truth=1.00 ball=0.98 pair_t=0.98 pair_pool=0.98 cmp=0.98
+  gamma=0.15 thin_bridge        k'=20: truth=1.00 ball=0.21 pair_t=0.66 pair_pool=0.73 cmp=0.23   k'=40: truth=1.00 ball=0.99 pair_t=1.00 pair_pool=1.00 cmp=1.00
+  gamma=0.15 imbalanced_mixture k'=20: truth=1.00 ball=0.17 pair_t=0.61 pair_pool=0.67 cmp=0.18   k'=40: truth=1.00 ball=0.97 pair_t=1.00 pair_pool=1.00 cmp=1.00
+  gamma=0.15 curved_surface     k'=20: truth=0.99 ball=0.08 pair_t=0.54 pair_pool=0.62 cmp=0.10   k'=40: truth=1.00 ball=0.99 pair_t=1.00 pair_pool=1.00 cmp=1.00
+  gamma=0.30 folded_curve       k'=20: truth=0.97 ball=0.10 pair_t=0.38 pair_pool=0.44 cmp=0.06   k'=40: truth=1.00 ball=0.81 pair_t=0.97 pair_pool=0.97 cmp=0.86
+  gamma=0.30 thin_bridge        k'=20: truth=1.00 ball=0.06 pair_t=0.15 pair_pool=0.19 cmp=0.07   k'=40: truth=1.00 ball=0.40 pair_t=0.91 pair_pool=0.97 cmp=0.60
+  gamma=0.30 imbalanced_mixture k'=20: truth=1.00 ball=0.00 pair_t=0.12 pair_pool=0.16 cmp=0.01   k'=40: truth=1.00 ball=0.38 pair_t=0.87 pair_pool=0.94 cmp=0.59
+  gamma=0.30 curved_surface     k'=20: truth=0.99 ball=0.00 pair_t=0.04 pair_pool=0.06 cmp=0.01   k'=40: truth=1.00 ball=0.28 pair_t=0.97 pair_pool=0.99 cmp=0.60
+
+Planning rule (plan 5.8): median of per-point c (quartiles), eps=0.2, points with reach <= 4k
+  digits t-SNE gauss g=0.15 R= 8: ball=1.37 [0.91,1.93]  pair_t=1.38 [0.99,1.99]  pair_pool=1.33 [0.95,1.93]
+  digits t-SNE gauss g=0.15 R=16: ball=1.30 [0.93,1.88]  pair_t=1.32 [0.91,1.87]  pair_pool=1.30 [0.90,1.84]
+  digits t-SNE gauss g=0.15 R=32: ball=1.26 [0.90,1.81]  pair_t=1.27 [0.85,1.83]  pair_pool=1.27 [0.84,1.81]
+  digits t-SNE gauss g=0.30 R= 8: ball=1.47 [1.09,1.89]  pair_t=1.59 [1.06,2.21]  pair_pool=1.49 [0.99,2.09]
+  digits t-SNE gauss g=0.30 R=16: ball=1.42 [0.94,1.97]  pair_t=1.43 [1.01,2.04]  pair_pool=1.39 [0.99,2.00]
+  digits t-SNE gauss g=0.30 R=32: ball=1.36 [0.91,1.94]  pair_t=1.35 [0.97,1.95]  pair_pool=1.33 [0.95,1.93]
+  synthetic PCA-2 pair_t gamma=0.15: folded_curve=0.46 [0.00,1.25] (d=1.0)  thin_bridge=0.84 [0.00,1.44] (d=2.0)  imbalanced_mixture=0.98 [0.32,1.60] (d=2.0)  curved_surface=1.07 [0.62,1.64] (d=2.0)
+  synthetic PCA-2 pair_t gamma=0.30: folded_curve=1.39 [0.74,1.99] (d=1.0)  thin_bridge=1.70 [1.28,2.10] (d=2.0)  imbalanced_mixture=1.71 [1.30,2.15] (d=2.0)  curved_surface=1.70 [1.30,2.10] (d=2.0)
+
+Wall time per call, digits R=8 (median seconds): ball=0.074  pair_t=0.215  pair_pool=0.186  cmp=0.583

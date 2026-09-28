@@ -1,0 +1,296 @@
+{
+ "configs": [
+  {
+   "geometry": "digits",
+   "model": "gauss",
+   "gamma": 0.15,
+   "R": 8,
+   "draws": 5,
+   "displays": [
+    "pca2",
+    "tsne17",
+    "tsne29",
+    "tsne31"
+   ],
+   "index": 0
+  },
+  {
+   "geometry": "digits",
+   "model": "gauss",
+   "gamma": 0.15,
+   "R": 16,
+   "draws": 5,
+   "displays": [
+    "pca2",
+    "tsne17",
+    "tsne29",
+    "tsne31"
+   ],
+   "index": 1
+  },
+  {
+   "geometry": "digits",
+   "model": "gauss",
+   "gamma": 0.15,
+   "R": 32,
+   "draws": 5,
+   "displays": [
+    "pca2",
+    "tsne17",
+    "tsne29",
+    "tsne31"
+   ],
+   "index": 2
+  },
+  {
+   "geometry": "digits",
+   "model": "gauss",
+   "gamma": 0.3,
+   "R": 8,
+   "draws": 5,
+   "displays": [
+    "pca2",
+    "tsne17",
+    "tsne29",
+    "tsne31"
+   ],
+   "index": 3
+  },
+  {
+   "geometry": "digits",
+   "model": "gauss",
+   "gamma": 0.3,
+   "R": 16,
+   "draws": 5,
+   "displays": [
+    "pca2",
+    "tsne17",
+    "tsne29",
+    "tsne31"
+   ],
+   "index": 4
+  },
+  {
+   "geometry": "digits",
+   "model": "gauss",
+   "gamma": 0.3,
+   "R": 32,
+   "draws": 5,
+   "displays": [
+    "pca2",
+    "tsne17",
+    "tsne29",
+    "tsne31"
+   ],
+   "index": 5
+  },
+  {
+   "geometry": "digits",
+   "model": "gauss_het",
+   "gamma": 0.15,
+   "R": 8,
+   "draws": 5,
+   "displays": [
+    "pca2",
+    "tsne17",
+    "tsne29",
+    "tsne31"
+   ],
+   "index": 6
+  },
+  {
+   "geometry": "digits",
+   "model": "gauss_het",
+   "gamma": 0.15,
+   "R": 16,
+   "draws": 5,
+   "displays": [
+    "pca2",
+    "tsne17",
+    "tsne29",
+    "tsne31"
+   ],
+   "index": 7
+  },
+  {
+   "geometry": "digits",
+   "model": "gauss_het",
+   "gamma": 0.15,
+   "R": 32,
+   "draws": 5,
+   "displays": [
+    "pca2",
+    "tsne17",
+    "tsne29",
+    "tsne31"
+   ],
+   "index": 8
+  },
+  {
+   "geometry": "digits",
+   "model": "gauss_het",
+   "gamma": 0.3,
+   "R": 8,
+   "draws": 5,
+   "displays": [
+    "pca2",
+    "tsne17",
+    "tsne29",
+    "tsne31"
+   ],
+   "index": 9
+  },
+  {
+   "geometry": "digits",
+   "model": "gauss_het",
+   "gamma": 0.3,
+   "R": 16,
+   "draws": 5,
+   "displays": [
+    "pca2",
+    "tsne17",
+    "tsne29",
+    "tsne31"
+   ],
+   "index": 10
+  },
+  {
+   "geometry": "digits",
+   "model": "gauss_het",
+   "gamma": 0.3,
+   "R": 32,
+   "draws": 5,
+   "displays": [
+    "pca2",
+    "tsne17",
+    "tsne29",
+    "tsne31"
+   ],
+   "index": 11
+  },
+  {
+   "geometry": "folded_curve",
+   "model": "gauss",
+   "gamma": 0.15,
+   "R": 8,
+   "draws": 5,
+   "displays": [
+    "pca2"
+   ],
+   "index": 12
+  },
+  {
+   "geometry": "folded_curve",
+   "model": "gauss",
+   "gamma": 0.3,
+   "R": 8,
+   "draws": 5,
+   "displays": [
+    "pca2"
+   ],
+   "index": 13
+  },
+  {
+   "geometry": "thin_bridge",
+   "model": "gauss",
+   "gamma": 0.15,
+   "R": 8,
+   "draws": 5,
+   "displays": [
+    "pca2"
+   ],
+   "index": 14
+  },
+  {
+   "geometry": "thin_bridge",
+   "model": "gauss",
+   "gamma": 0.3,
+   "R": 8,
+   "draws": 5,
+   "displays": [
+    "pca2"
+   ],
+   "index": 15
+  },
+  {
+   "geometry": "imbalanced_mixture",
+   "model": "gauss",
+   "gamma": 0.15,
+   "R": 8,
+   "draws": 5,
+   "displays": [
+    "pca2"
+   ],
+   "index": 16
+  },
+  {
+   "geometry": "imbalanced_mixture",
+   "model": "gauss",
+   "gamma": 0.3,
+   "R": 8,
+   "draws": 5,
+   "displays": [
+    "pca2"
+   ],
+   "index": 17
+  },
+  {
+   "geometry": "curved_surface",
+   "model": "gauss",
+   "gamma": 0.15,
+   "R": 8,
+   "draws": 5,
+   "displays": [
+    "pca2"
+   ],
+   "index": 18
+  },
+  {
+   "geometry": "curved_surface",
+   "model": "gauss",
+   "gamma": 0.3,
+   "R": 8,
+   "draws": 5,
+   "displays": [
+    "pca2"
+   ],
+   "index": 19
+  }
+ ],
+ "seed_base": 3200000,
+ "k": 20,
+ "eps": [
+  0.1,
+  0.2,
+  0.3
+ ],
+ "kprime": [
+  20,
+  30,
+  40,
+  60,
+  80
+ ],
+ "tsne": {
+  "seeds": [
+   17,
+   29,
+   31
+  ],
+  "n_components": 2,
+  "perplexity": 50,
+  "init": "pca",
+  "n_jobs": 1
+ },
+ "delta": 0.05,
+ "split": {
+  "dZ": 0.04,
+  "dW": 0.005,
+  "dS": 0.005
+ },
+ "python": "3.13.5",
+ "numpy": "2.1.3",
+ "scipy": "1.15.3",
+ "sklearn": "1.6.1",
+ "started": "2026-09-28 23:39:58"
+}
