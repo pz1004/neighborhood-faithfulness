@@ -499,3 +499,11 @@ reference disagreement moved toward the exact false comfort as the reference gre
 extrapolant linear in 1/R_h landed closer to the exact value in most cells. The one linear
 in R_h^(−1/2) came out low. The protocol's conservative bound already takes the smaller of
 the two, so this observation changes nothing in it.
+
+### Amendment 4 (2026-09-29): second dataset for the note
+
+The owner authorized downloading the Allen Brain Observatory two-photon natural-scenes
+data, and asked for the analysis to be pre-registered. The protocol is
+`docs/note_protocol_allen.md`. It was committed after only the experiment metadata had
+been fetched, before any recording file was downloaded or any response value read. The
+code that implements it is committed separately, before the analysis runs.

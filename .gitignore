@@ -3,3 +3,5 @@ __pycache__/
 .ipynb_checkpoints/
 data/**/*.npy
 data/**/*.part
+data/allen_2p/*.nwb
+data/allen_2p/*.part
