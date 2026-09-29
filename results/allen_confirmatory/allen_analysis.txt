@@ -1,0 +1,37 @@
+SECOND DATASET (docs/note_protocol_allen.md): Allen two-photon, mouse V1, medians over subjects;
+extrapolants linear in R_h^-1/2 and in 1/R_h; L = conservative lower bound
+
+Estimator check, R=8, primary cell: median bias of the conservative estimator FC +0.003, q +0.000
+
+cell            R   NF     TF (sqrt/inv)   q (sqrt/inv)    FC (sqrt/inv)   FC L
+primary         8  0.161  0.000/0.000     0.161/0.161     1.000/1.000    0.997
+primary        16  0.172  0.002/0.002     0.172/0.172     0.994/0.996    0.977
+rsa_cv_mds      8  0.009  0.000/0.000     0.010/0.010     1.000/1.000    1.000
+rsa_cv_mds     16  0.022  0.001/0.001     0.024/0.023     1.000/1.000    0.988
+k5              8  0.199  0.003/0.002     0.196/0.198     0.990/0.994    0.969
+k5             16  0.217  0.010/0.007     0.217/0.217     0.977/0.986    0.939
+k20             8  0.278  0.001/0.001     0.278/0.278     0.997/0.998    0.993
+k20            16  0.283  0.003/0.002     0.278/0.280     0.993/0.996    0.969
+eps0.1          8  0.063  0.000/0.000     0.063/0.063     1.000/1.000    1.000
+eps0.1         16  0.065  0.000/0.000     0.065/0.065     1.000/1.000    0.997
+eps0.3          8  0.310  0.004/0.003     0.309/0.309     0.991/0.994    0.978
+eps0.3         16  0.318  0.014/0.009     0.316/0.317     0.982/0.988    0.930
+tsne_perp15     8  0.117  0.000/0.000     0.116/0.117     1.000/1.000    0.988
+tsne_perp15    16  0.114  0.001/0.001     0.116/0.115     1.000/1.000    0.978
+tsne_perp50     8  0.127  0.000/0.000     0.127/0.127     0.997/0.998    0.993
+tsne_perp50    16  0.126  0.001/0.001     0.125/0.126     0.997/0.998    0.985
+pca2            8  0.017  0.000/0.000     0.017/0.017     1.000/1.000    1.000
+pca2           16  0.017  0.000/0.000     0.016/0.016     1.000/1.000    1.000
+mds             8  0.089  0.000/0.000     0.089/0.089     1.000/1.000    1.000
+mds            16  0.079  0.001/0.000     0.079/0.079     1.000/1.000    0.988
+early_window    8  0.156  0.000/0.000     0.156/0.156     1.000/1.000    0.998
+early_window   16  0.158  0.000/0.000     0.158/0.158     1.000/1.000    0.998
+unwhitened      8  0.460  0.000/0.000     0.460/0.460     1.000/1.000    0.999
+unwhitened     16  0.452  0.000/0.000     0.452/0.452     1.000/1.000    0.998
+
+C1  FC(8) > 0.5, primary:          L = 0.997 -> SUPPORTED
+C1-RSA FC(8) > 0.5, rsa_cv_mds:    L = 1.000 -> SUPPORTED
+C3  q(R) > 0.10 for R = 8, 16:     L = 0.154, 0.158 -> SUPPORTED
+Generality: C1's criterion holds in 12 of 12 cells -> general
+
+Joint conclusion with THINGS-EEG2 (C1 True, C1-RSA True): independently confirmed in a second species and modality, for standard and RSA-style maps

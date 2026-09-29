@@ -1,0 +1,235 @@
+{
+ "protocol": "docs/note_protocol_allen.md",
+ "subjects": [
+  {
+   "subject": 1,
+   "experiment_id": 500964514,
+   "donor_id": 495726985
+  },
+  {
+   "subject": 2,
+   "experiment_id": 501886692,
+   "donor_id": 495726996
+  },
+  {
+   "subject": 3,
+   "experiment_id": 501559087,
+   "donor_id": 495727004
+  },
+  {
+   "subject": 4,
+   "experiment_id": 501794235,
+   "donor_id": 495727020
+  },
+  {
+   "subject": 5,
+   "experiment_id": 502368172,
+   "donor_id": 496001356
+  },
+  {
+   "subject": 6,
+   "experiment_id": 503019786,
+   "donor_id": 496001361
+  },
+  {
+   "subject": 7,
+   "experiment_id": 510705057,
+   "donor_id": 497258301
+  },
+  {
+   "subject": 8,
+   "experiment_id": 504808661,
+   "donor_id": 497589678
+  },
+  {
+   "subject": 9,
+   "experiment_id": 510345479,
+   "donor_id": 505143553
+  },
+  {
+   "subject": 10,
+   "experiment_id": 524848692,
+   "donor_id": 515909194
+  }
+ ],
+ "cells": [
+  [
+   "primary",
+   {
+    "pipe": "P1",
+    "rep": "white",
+    "win": "full",
+    "disp": "tsne30",
+    "k": 10,
+    "eps": 0.2
+   }
+  ],
+  [
+   "rsa_cv_mds",
+   {
+    "pipe": "P2",
+    "rep": "white",
+    "win": "full",
+    "disp": "mds_cv",
+    "k": 10,
+    "eps": 0.2
+   }
+  ],
+  [
+   "k5",
+   {
+    "pipe": "P1",
+    "rep": "white",
+    "win": "full",
+    "disp": "tsne30",
+    "k": 5,
+    "eps": 0.2
+   }
+  ],
+  [
+   "k20",
+   {
+    "pipe": "P1",
+    "rep": "white",
+    "win": "full",
+    "disp": "tsne30",
+    "k": 20,
+    "eps": 0.2
+   }
+  ],
+  [
+   "eps0.1",
+   {
+    "pipe": "P1",
+    "rep": "white",
+    "win": "full",
+    "disp": "tsne30",
+    "k": 10,
+    "eps": 0.1
+   }
+  ],
+  [
+   "eps0.3",
+   {
+    "pipe": "P1",
+    "rep": "white",
+    "win": "full",
+    "disp": "tsne30",
+    "k": 10,
+    "eps": 0.3
+   }
+  ],
+  [
+   "tsne_perp15",
+   {
+    "pipe": "P1",
+    "rep": "white",
+    "win": "full",
+    "disp": "tsne15",
+    "k": 10,
+    "eps": 0.2
+   }
+  ],
+  [
+   "tsne_perp50",
+   {
+    "pipe": "P1",
+    "rep": "white",
+    "win": "full",
+    "disp": "tsne50",
+    "k": 10,
+    "eps": 0.2
+   }
+  ],
+  [
+   "pca2",
+   {
+    "pipe": "P1",
+    "rep": "white",
+    "win": "full",
+    "disp": "pca2",
+    "k": 10,
+    "eps": 0.2
+   }
+  ],
+  [
+   "mds",
+   {
+    "pipe": "P1",
+    "rep": "white",
+    "win": "full",
+    "disp": "mds",
+    "k": 10,
+    "eps": 0.2
+   }
+  ],
+  [
+   "early_window",
+   {
+    "pipe": "P1",
+    "rep": "white",
+    "win": "early",
+    "disp": "tsne30",
+    "k": 10,
+    "eps": 0.2
+   }
+  ],
+  [
+   "unwhitened",
+   {
+    "pipe": "P1",
+    "rep": "pca",
+    "win": "full",
+    "disp": "tsne30",
+    "k": 10,
+    "eps": 0.2
+   }
+  ]
+ ],
+ "RU": [
+  8,
+  16
+ ],
+ "RH": [
+  8,
+  12,
+  24
+ ],
+ "blocks": [
+  [
+   "F",
+   5
+  ],
+  [
+   "U",
+   8
+  ],
+  [
+   "H",
+   12
+  ]
+ ],
+ "windows": {
+  "full": 0.5,
+  "early": 0.25
+ },
+ "n_splits": 10,
+ "n_sim": 20,
+ "split_base": 4500000,
+ "sim_base": 4600000,
+ "tsne_seeds": [
+  4000101,
+  4000102,
+  4000103
+ ],
+ "mds_seeds": [
+  4000201,
+  4000202,
+  4000203
+ ],
+ "python": "3.13.5",
+ "numpy": "2.1.3",
+ "scipy": "1.15.3",
+ "sklearn": "1.6.1",
+ "started": "2026-09-29 22:42:01"
+}

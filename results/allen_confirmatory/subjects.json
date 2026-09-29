@@ -1,0 +1,72 @@
+[
+ {
+  "subject": 1,
+  "experiment_id": 500964514,
+  "fps": 30.1386377336634,
+  "n_cells": 214,
+  "seconds": 157.77505660057068
+ },
+ {
+  "subject": 2,
+  "experiment_id": 501886692,
+  "fps": 30.14772384670897,
+  "n_cells": 163,
+  "seconds": 158.3107042312622
+ },
+ {
+  "subject": 3,
+  "experiment_id": 501559087,
+  "fps": 30.07518796996759,
+  "n_cells": 174,
+  "seconds": 156.82129096984863
+ },
+ {
+  "subject": 4,
+  "experiment_id": 501794235,
+  "fps": 30.07518796996759,
+  "n_cells": 152,
+  "seconds": 156.91504383087158
+ },
+ {
+  "subject": 5,
+  "experiment_id": 502368172,
+  "fps": 30.1386377336634,
+  "n_cells": 295,
+  "seconds": 156.92297530174255
+ },
+ {
+  "subject": 6,
+  "experiment_id": 503019786,
+  "fps": 30.075187969916175,
+  "n_cells": 359,
+  "seconds": 158.33640694618225
+ },
+ {
+  "subject": 7,
+  "experiment_id": 510705057,
+  "fps": 30.1386377336634,
+  "n_cells": 242,
+  "seconds": 155.98980379104614
+ },
+ {
+  "subject": 8,
+  "experiment_id": 504808661,
+  "fps": 30.14772384670897,
+  "n_cells": 145,
+  "seconds": 151.7266139984131
+ },
+ {
+  "subject": 9,
+  "experiment_id": 510345479,
+  "fps": 30.07518796996759,
+  "n_cells": 331,
+  "seconds": 157.21003413200378
+ },
+ {
+  "subject": 10,
+  "experiment_id": 524848692,
+  "fps": 30.07518796996759,
+  "n_cells": 249,
+  "seconds": 157.237229347229
+ }
+]

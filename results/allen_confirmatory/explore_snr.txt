@@ -1,0 +1,8 @@
+Allen two-photon, mouse V1 (40 reps):
+  image pairs with positive cross-validated d^2: 0.937 (range 0.780-0.971)
+  split-half reliability of the distance matrix: 0.726 (range 0.469-0.906)
+  relative gap, 8th to 20th true neighbor: 0.298 (over images whose 8th cv distance is > 0: median 76 of 118); 8th-neighbor distance 0.397; noise of a 16-rep mean pair 1.653; ratio 0.24
+THINGS-EEG2 (72 reps):
+  image pairs with positive cross-validated d^2: 1.000 (range 0.998-1.000)
+  split-half reliability of the distance matrix: 0.879 (range 0.805-0.938)
+  relative gap, 8th to 20th true neighbor: 0.159 (over images whose 8th cv distance is > 0: median 200 of 200); 8th-neighbor distance 1.545; noise of a 16-rep mean pair 1.683; ratio 0.92

@@ -7,8 +7,8 @@ valid at every tolerance.
 
 **Status (2026-09-29): Gates 1 and 2 passed. The Gate 3 need pilot on THINGS-EEG2 ended
 in the protocol's "reframe" branch, and the reframe's prior-art check ended in its
-"short empirical note" branch. The note's pre-registered confirmatory analysis has been
-run, and its headline held.**
+"short empirical note" branch. The note's pre-registered headline held on THINGS-EEG2
+and on an independent second dataset.**
 - Real EEG replicates showed strong need. Naive neighborhood maps mislabel about 20% of
   points, and most of their "faithful" calls are wrong.
 - They also showed no use. The certificate resolves no point even at 72 repetitions,
@@ -20,6 +20,10 @@ run, and its headline held.**
   At 8 trials, 81–87% of the faithful calls of t-SNE maps are wrong (conservative bound
   64%). For MDS maps of cross-validated distances it is 62–72% (bound 55%). The headline
   holds in 10 of 12 pre-specified variations. The claim at 32 trials fell just short.
+- It was then confirmed independently on a second species and modality
+  ([docs/note_allen_results.md](docs/note_allen_results.md)): Allen two-photon, mouse V1,
+  10 mice. Essentially every faithful call is wrong at 8 and 16 trials (bound 0.997), in all
+  12 variations, and for RSA-style maps too.
 
 Details: [docs/gate3_pilot_things.md](docs/gate3_pilot_things.md) and
 [docs/reframe_prior_art.md](docs/reframe_prior_art.md). The protocol is
@@ -48,6 +52,7 @@ reproduction. `reach/predecessor/` is the predecessor's code, copied verbatim; s
 | `docs/note_protocol.md` | pre-registered confirmatory analysis for the empirical note (plan Amendment 3) |
 | `docs/note_confirmatory_results.md` | its results: verdict, primary cell, RSA pipeline, robustness |
 | `docs/note_protocol_allen.md` | pre-registered second-dataset protocol: Allen two-photon, mouse V1 (plan Amendment 4) |
+| `docs/note_allen_results.md` | its results and the joint conclusion with THINGS-EEG2 |
 | `reach/engines.py` | E-ball, E-pair-t, E-pair-pool and the reference E-cmp (plan Section 4) |
 | `reach/target.py` | reach, its closed-form box bounds, displays, naive maps (plan Section 3) |
 | `reach/noise.py` | the seven noise models (plan Section 5.2) |
@@ -74,12 +79,13 @@ reproduction. `reach/predecessor/` is the predecessor's code, copied verbatim; s
 | `run_allen_confirmatory.py` | the second-dataset analysis of `docs/note_protocol_allen.md` |
 | `analyze_allen_confirmatory.py` | its estimators, decision rules and joint conclusion with THINGS-EEG2 |
 | `tests/test_allen_confirmatory.py` | synthetic checks with the recordings' file layout; opens no recording |
+| `explore_allen_snr.py` | exploratory, post hoc: image structure and neighbor distance against noise, both datasets |
 | `data/things_eeg2/` | the downloaded test files (not tracked) and their SHA-256 manifest (tracked) |
 | `results/gate2/` | raw results (JSONL), logs, manifests and the analysis printout |
 | `results/things_pilot/` | the pilot's records, semi-synthetic runs, diagnostics and printouts |
 | `results/things_confirmatory/` | the confirmatory analysis's test log, rows, semi-synthetic check and printout |
 | `data/allen_2p/` | Allen metadata and recordings (not tracked) and their SHA-256 manifest (tracked) |
-| `results/allen_confirmatory/` | the second-dataset test log (and its results, once run) |
+| `results/allen_confirmatory/` | the second-dataset test log, rows, semi-synthetic check and printouts |
 | `pilot/2026-09-28/` | the scratch pilot and the tail check behind review finding 1 |
 
 ## Reproducing
@@ -116,6 +122,16 @@ The confirmatory analysis:
 
 ```bash
 python3 tests/test_things_confirmatory.py > results/things_confirmatory/test_things_confirmatory.log && python3 run_things_confirmatory.py > results/things_confirmatory/run.log && python3 analyze_things_confirmatory.py
+```
+
+The second dataset downloads 4.4 GB (10 Allen recordings, selected by the protocol's rule):
+
+```bash
+curl -o data/allen_2p/ophys_experiments.json https://allen-brain-observatory.s3.us-west-2.amazonaws.com/visual-coding-2p/ophys_experiments.json && python3 fetch_allen_2p.py > data/allen_2p/fetch.log
+```
+
+```bash
+python3 tests/test_allen_confirmatory.py > results/allen_confirmatory/test_allen_confirmatory.log && python3 run_allen_confirmatory.py > results/allen_confirmatory/run.log && python3 analyze_allen_confirmatory.py && python3 explore_allen_snr.py > results/allen_confirmatory/explore_snr.txt
 ```
 
 On a 36-core workstation the validity runs take about 9 minutes, the power runs under 2, and
