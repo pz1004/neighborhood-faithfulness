@@ -1,0 +1,29 @@
+donor 495726985  experiment 500964514  depth 175 um   414.0 MB
+donor 495726996  experiment 501886692  depth 175 um   344.6 MB
+donor 495727004  experiment 501559087  depth 175 um   354.5 MB
+donor 495727020  experiment 501794235  depth 175 um   317.9 MB
+donor 496001356  experiment 502368172  depth 175 um   543.9 MB
+donor 496001361  experiment 503019786  depth 275 um   632.8 MB
+donor 497258301  experiment 510705057  depth 175 um   456.0 MB
+donor 497589678  experiment 504808661  depth 175 um   314.2 MB
+donor 505143553  experiment 510345479  depth 175 um   598.5 MB
+donor 515909194  experiment 524848692  depth 275 um   465.2 MB
+donor 517649964  experiment 530618157  depth 275 um   492.7 MB
+donor 517650087  experiment 527676626  depth 275 um   496.7 MB
+donor 521013362  experiment 539525014  depth 275 um   742.0 MB
+donor 638236898  experiment 645691416  depth 275 um   395.9 MB
+donor 649496250  experiment 660066712  depth 275 um   333.2 MB
+donor 680974776  experiment 704826374  depth 175 um   281.1 MB
+donor 699502594  experiment 712924011  depth 275 um   339.4 MB
+17 candidate mice; all files together 7.52 GB
+  500964514: 414 MB in 1s, 214 cells, 50x118 table True -> included
+  501886692: 345 MB in 101s, 163 cells, 50x118 table True -> included
+  501559087: 355 MB in 105s, 174 cells, 50x118 table True -> included
+  501794235: 318 MB in 87s, 152 cells, 50x118 table True -> included
+  502368172: 544 MB in 164s, 295 cells, 50x118 table True -> included
+  503019786: 633 MB in 187s, 359 cells, 50x118 table True -> included
+  510705057: 456 MB in 130s, 242 cells, 50x118 table True -> included
+  504808661: 314 MB in 89s, 145 cells, 50x118 table True -> included
+  510345479: 598 MB in 172s, 331 cells, 50x118 table True -> included
+  524848692: 465 MB in 139s, 249 cells, 50x118 table True -> included
+10 included of 10 downloaded
