@@ -1,0 +1,13 @@
+[ok] loader recovers per-presentation responses (0.5 s window)  (fps 30.0, 120 cells)
+[ok] 0.25 s window uses the first 8 frames
+[ok] blocks partition the 50 repetitions
+[ok] user prefixes, reference sub-blocks and halves are stratum-balanced
+   primary R=8: NF 0.835  exact FC 0.076  estimates -0.018 / 0.045
+[ok] primary R=8: an extrapolant lands within 0.10 of the exact false comfort
+   primary R=16: NF 0.867  exact FC 0.046  estimates -0.019 / 0.037
+[ok] primary R=16: an extrapolant lands within 0.10 of the exact false comfort
+[ok] all 12 registered cells run
+[ok] the analysis summary runs on every cell's output
+[ok] semi-synthetic check and bias summary run  (bias FC -0.061, q -0.056 (2 draws))
+
+0 failures

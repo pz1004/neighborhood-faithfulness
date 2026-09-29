@@ -115,3 +115,23 @@ As in `docs/note_protocol.md` Section 7:
 - the code at the pre-registration commit is the code that runs;
 - only errors that are not analysis choices may be fixed, and each fix is logged;
 - every other change is a dated amendment.
+
+## 7. Observations recorded before any response value was read
+
+- **Selection code.** The fetch script's inclusion check first assumed a different
+  stimulus-table layout. After the first file was downloaded, it was corrected to the
+  layout the files actually use: one image index per presentation, with the first and last
+  frames stored separately. This was a reading error, not an analysis choice.
+- **Download size.** The first ten candidates total about 4.4 GB, more than the 2–3.5 GB
+  estimate given when the download was approved. Cux2 recordings are larger than the files
+  sampled for that estimate. The fetch stops and asks the owner if inclusion would need more
+  than 5.0 GB.
+- **What the synthetic check shows about this design.** With the shorter reference
+  (R_h ≤ 24), both extrapolants came out below the exact false comfort. The one linear in
+  R_h^(−1/2) went slightly negative: −0.02 against exact values of 0.05–0.08. The
+  conservative bound L is therefore likely to be strongly conservative on this dataset: it
+  can miss a real effect but not invent one.
+  - This changes nothing in the rules.
+  - If C1 fails here while the point estimates exceed 0.5, the result will be reported as a
+    failure under the registered rule, and this weakness of the design will be reported
+    beside it.

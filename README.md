@@ -47,6 +47,7 @@ reproduction. `reach/predecessor/` is the predecessor's code, copied verbatim; s
 | `docs/reframe_prior_art.md` | prior-art check of the reframed neighborhood noise ceiling: protocol, verdicts, decision |
 | `docs/note_protocol.md` | pre-registered confirmatory analysis for the empirical note (plan Amendment 3) |
 | `docs/note_confirmatory_results.md` | its results: verdict, primary cell, RSA pipeline, robustness |
+| `docs/note_protocol_allen.md` | pre-registered second-dataset protocol: Allen two-photon, mouse V1 (plan Amendment 4) |
 | `reach/engines.py` | E-ball, E-pair-t, E-pair-pool and the reference E-cmp (plan Section 4) |
 | `reach/target.py` | reach, its closed-form box bounds, displays, naive maps (plan Section 3) |
 | `reach/noise.py` | the seven noise models (plan Section 5.2) |
@@ -68,10 +69,17 @@ reproduction. `reach/predecessor/` is the predecessor's code, copied verbatim; s
 | `run_things_confirmatory.py` | the confirmatory analysis of `docs/note_protocol.md`: 12 cells, both pipelines, estimator check |
 | `analyze_things_confirmatory.py` | its estimators, subject bootstrap and pre-registered decision rules |
 | `tests/test_things_confirmatory.py` | synthetic known-truth checks of that code; touches no data |
+| `fetch_allen_2p.py` | applies the Allen selection rule and fetches recordings, SHA-256 recorded |
+| `reach/allen.py` | Allen recordings: per-presentation responses, time strata, blocks, halves |
+| `run_allen_confirmatory.py` | the second-dataset analysis of `docs/note_protocol_allen.md` |
+| `analyze_allen_confirmatory.py` | its estimators, decision rules and joint conclusion with THINGS-EEG2 |
+| `tests/test_allen_confirmatory.py` | synthetic checks with the recordings' file layout; opens no recording |
 | `data/things_eeg2/` | the downloaded test files (not tracked) and their SHA-256 manifest (tracked) |
 | `results/gate2/` | raw results (JSONL), logs, manifests and the analysis printout |
 | `results/things_pilot/` | the pilot's records, semi-synthetic runs, diagnostics and printouts |
 | `results/things_confirmatory/` | the confirmatory analysis's test log, rows, semi-synthetic check and printout |
+| `data/allen_2p/` | Allen metadata and recordings (not tracked) and their SHA-256 manifest (tracked) |
+| `results/allen_confirmatory/` | the second-dataset test log (and its results, once run) |
 | `pilot/2026-09-28/` | the scratch pilot and the tail check behind review finding 1 |
 
 ## Reproducing
