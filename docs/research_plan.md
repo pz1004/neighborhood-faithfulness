@@ -478,3 +478,24 @@ fixes them. One dataset cannot pass Gate 3, which needs two, but it can stop the
 
 **Deviation.** The plan states G3-need at native R. The pilot measures R ≤ 32 directly and
 reaches native R only by extrapolation.
+
+### Amendment 3 (2026-09-29): confirmatory analysis for the empirical note
+
+**When and why.** Written after the reframe's prior-art check (`docs/reframe_prior_art.md`)
+ended in its empirical-note branch, when the owner asked for the confirmatory analysis to
+be written and pre-registered.
+
+**What is registered.**
+- The protocol: `docs/note_protocol.md`.
+- The code that implements it: `run_things_confirmatory.py`, `analyze_things_confirmatory.py`,
+  and the additions to `reach/things.py`.
+- Its synthetic tests: `tests/test_things_confirmatory.py`, with its log in
+  `results/things_confirmatory/`.
+
+All of it is committed together, before the analysis touches the THINGS-EEG2 files.
+
+**Observation from the synthetic check, made before any data.** With a known truth, the
+reference disagreement moved toward the exact false comfort as the reference grew. The
+extrapolant linear in 1/R_h landed closer to the exact value in most cells. The one linear
+in R_h^(−1/2) came out low. The protocol's conservative bound already takes the smaller of
+the two, so this observation changes nothing in it.

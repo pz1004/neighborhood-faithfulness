@@ -93,3 +93,43 @@ def fit_representation(XF, d_pca=100, D=20):
     Z = (M - m0) @ P @ Wh
     V = np.linalg.svd(Z - Z.mean(axis=0), full_matrices=False)[2][:D].T
     return P @ Wh @ V, m0, float(shrink)
+
+
+# ---------------------------------------------------------------------------------------
+# Confirmatory analysis (docs/note_protocol.md, plan Amendment 3)
+# ---------------------------------------------------------------------------------------
+
+def features_window(X, times, t_lo, t_hi):
+    """Samples with t_lo <= t <= t_hi, channels x samples flattened: images x reps x p."""
+    sel = (times >= t_lo - 1e-9) & (times <= t_hi + 1e-9)
+    return X[:, :, :, sel].reshape(X.shape[0], X.shape[1], -1)
+
+
+def fit_pca_representation(XF, D=20):
+    """The unwhitened alternative: PCA of block F's image means to D dimensions."""
+    M = XF.mean(axis=1)
+    m0 = M.mean(axis=0)
+    return np.linalg.svd(M - m0, full_matrices=False)[2][:D].T, m0
+
+
+def halves(R):
+    """Two session-stratified halves of a round-robin block prefix of length R (R % 8 == 0).
+
+    Position p of a prefix holds session p % 4 in row p // 4; even rows form half A and odd
+    rows half B, so each half holds R/8 repetitions of every session.
+    """
+    p = np.arange(R)
+    return p[(p // 4) % 2 == 0], p[(p // 4) % 2 == 1]
+
+
+def cv_sq_dist(Xb, A, B):
+    """Cross-validated squared distances <cA_i - cA_j, cB_i - cB_j>; +inf on the diagonal.
+
+    Unbiased for |mu_i - mu_j|^2 when the two halves have independent noise.
+    """
+    cA, cB = Xb[:, A].mean(axis=1), Xb[:, B].mean(axis=1)
+    G = cA @ cB.T
+    g = np.diag(G)
+    d2 = g[:, None] + g[None, :] - G - G.T
+    np.fill_diagonal(d2, np.inf)
+    return d2

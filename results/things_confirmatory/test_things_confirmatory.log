@@ -1,0 +1,23 @@
+[ok] cross-validated squared distances are unbiased  (max |mean - truth| = 1.25 for noise sd 2)
+[ok] halves of every user prefix hold R/8 repetitions per session
+[ok] time windows select 80 and 46 samples
+[ok] counts are internally consistent
+   primary       R= 8: NF 0.729  exact FC 0.031  d_FC(8) 0.068 d_FC(40) 0.043  estimates 0.021 / 0.036
+[ok] primary R=8: the reference moves toward the truth as R_h grows
+[ok] primary R=8: an extrapolant lands within 0.10 of the exact false comfort
+   primary       R=16: NF 0.731  exact FC 0.039  d_FC(8) 0.066 d_FC(40) 0.050  estimates 0.033 / 0.043
+[ok] primary R=16: the reference moves toward the truth as R_h grows
+[ok] primary R=16: an extrapolant lands within 0.10 of the exact false comfort
+   rsa_cv_mds    R= 8: NF 0.362  exact FC 0.093  d_FC(8) 0.168 d_FC(40) 0.141  estimates 0.112 / 0.129
+   rsa_cv_mds    R=16: NF 0.374  exact FC 0.067  d_FC(8) 0.143 d_FC(40) 0.090  estimates 0.043 / 0.075
+   pca2          R= 8: NF 0.335  exact FC 0.086  d_FC(8) 0.131 d_FC(40) 0.097  estimates 0.060 / 0.082
+   pca2          R=16: NF 0.349  exact FC 0.090  d_FC(8) 0.151 d_FC(40) 0.093  estimates 0.047 / 0.082
+   early_window  R= 8: NF 0.731  exact FC 0.074  d_FC(8) 0.123 d_FC(40) 0.082  estimates 0.050 / 0.075
+   early_window  R=16: NF 0.726  exact FC 0.036  d_FC(8) 0.087 d_FC(40) 0.043  estimates 0.010 / 0.036
+   unwhitened    R= 8: NF 0.710  exact FC 0.049  d_FC(8) 0.076 d_FC(40) 0.048  estimates 0.028 / 0.044
+   unwhitened    R=16: NF 0.749  exact FC 0.033  d_FC(8) 0.057 d_FC(40) 0.040  estimates 0.026 / 0.036
+[ok] semi-synthetic check and bias summary run  (bias FC -0.010, q +0.004 (3 draws))
+[ok] all 12 registered cells run  (12 cells)
+[ok] the analysis summary runs on every cell's output
+
+0 failures

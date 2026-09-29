@@ -7,18 +7,19 @@ valid at every tolerance.
 
 **Status (2026-09-29): Gates 1 and 2 passed. The Gate 3 need pilot on THINGS-EEG2 ended
 in the protocol's "reframe" branch, and the reframe's prior-art check ended in its
-"short empirical note" branch.**
+"short empirical note" branch. The note's confirmatory analysis is pre-registered but not
+yet run.**
 - Real EEG replicates showed strong need. Naive neighborhood maps mislabel about 20% of
   points, and most of their "faithful" calls are wrong.
 - They also showed no use. The certificate resolves no point even at 72 repetitions,
   because of signal-to-noise rather than the error control.
-- The reframed dataset-level "neighborhood noise ceiling" is routine as a method: its
-  target, estimator, planning curve and validation each have direct precedents. Only the
-  empirical finding is new.
+- The reframed "neighborhood noise ceiling" is routine as a method. Only the empirical
+  finding is new, and [docs/note_protocol.md](docs/note_protocol.md) tests it with fixed
+  claims and thresholds.
 
 Details: [docs/gate3_pilot_things.md](docs/gate3_pilot_things.md) and
 [docs/reframe_prior_art.md](docs/reframe_prior_art.md). The protocol is
-[docs/research_plan.md](docs/research_plan.md), with Amendments 1 and 2 at its end. The
+[docs/research_plan.md](docs/research_plan.md), with Amendments 1 to 3 at its end. The
 earlier reports are [docs/gate1_prior_art.md](docs/gate1_prior_art.md) and
 [docs/gate2_report.md](docs/gate2_report.md).
 
@@ -40,6 +41,7 @@ reproduction. `reach/predecessor/` is the predecessor's code, copied verbatim; s
 | `docs/gate2_report.md` | Gate 2: validity under seven noise models, robustness, power, need, planning rule |
 | `docs/gate3_pilot_things.md` | Gate 3 need pilot on THINGS-EEG2: need, use, validity under real noise, diagnostics |
 | `docs/reframe_prior_art.md` | prior-art check of the reframed neighborhood noise ceiling: protocol, verdicts, decision |
+| `docs/note_protocol.md` | pre-registered confirmatory analysis for the empirical note (plan Amendment 3) |
 | `reach/engines.py` | E-ball, E-pair-t, E-pair-pool and the reference E-cmp (plan Section 4) |
 | `reach/target.py` | reach, its closed-form box bounds, displays, naive maps (plan Section 3) |
 | `reach/noise.py` | the seven noise models (plan Section 5.2) |
@@ -58,9 +60,13 @@ reproduction. `reach/predecessor/` is the predecessor's code, copied verbatim; s
 | `run_things_need_pilot.py` | the pilot of plan Amendment 2 |
 | `analyze_things_need_pilot.py` | applies Amendment 2's decision rule |
 | `explore_things_snr.py` | exploratory, post hoc: why nothing resolves, and false comfort |
+| `run_things_confirmatory.py` | the confirmatory analysis of `docs/note_protocol.md`: 12 cells, both pipelines, estimator check |
+| `analyze_things_confirmatory.py` | its estimators, subject bootstrap and pre-registered decision rules |
+| `tests/test_things_confirmatory.py` | synthetic known-truth checks of that code; touches no data |
 | `data/things_eeg2/` | the downloaded test files (not tracked) and their SHA-256 manifest (tracked) |
 | `results/gate2/` | raw results (JSONL), logs, manifests and the analysis printout |
 | `results/things_pilot/` | the pilot's records, semi-synthetic runs, diagnostics and printouts |
+| `results/things_confirmatory/` | the confirmatory analysis's test log (and its results, once run) |
 | `pilot/2026-09-28/` | the scratch pilot and the tail check behind review finding 1 |
 
 ## Reproducing
@@ -91,6 +97,12 @@ python3 fetch_things_eeg2_test.py > data/fetch.log && python3 tests/test_things.
 
 ```bash
 python3 run_things_need_pilot.py > results/things_pilot/run.log && python3 analyze_things_need_pilot.py && python3 explore_things_snr.py > results/things_pilot/explore_snr.txt
+```
+
+The confirmatory analysis (not yet run):
+
+```bash
+python3 tests/test_things_confirmatory.py > results/things_confirmatory/test_things_confirmatory.log && python3 run_things_confirmatory.py > results/things_confirmatory/run.log && python3 analyze_things_confirmatory.py
 ```
 
 On a 36-core workstation the validity runs take about 9 minutes, the power runs under 2, and
