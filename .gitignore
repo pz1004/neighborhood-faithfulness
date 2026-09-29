@@ -5,3 +5,4 @@ data/**/*.npy
 data/**/*.part
 data/allen_2p/*.nwb
 data/allen_2p/*.part
+data/allen_2p/ophys_experiments.json
