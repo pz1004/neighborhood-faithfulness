@@ -7,8 +7,8 @@ valid at every tolerance.
 
 **Status (2026-09-29): Gates 1 and 2 passed. The Gate 3 need pilot on THINGS-EEG2 ended
 in the protocol's "reframe" branch, and the reframe's prior-art check ended in its
-"short empirical note" branch. The note's confirmatory analysis is pre-registered but not
-yet run.**
+"short empirical note" branch. The note's pre-registered confirmatory analysis has been
+run, and its headline held.**
 - Real EEG replicates showed strong need. Naive neighborhood maps mislabel about 20% of
   points, and most of their "faithful" calls are wrong.
 - They also showed no use. The certificate resolves no point even at 72 repetitions,
@@ -16,6 +16,10 @@ yet run.**
 - The reframed "neighborhood noise ceiling" is routine as a method. Only the empirical
   finding is new, and [docs/note_protocol.md](docs/note_protocol.md) tests it with fixed
   claims and thresholds.
+- The finding held ([docs/note_confirmatory_results.md](docs/note_confirmatory_results.md)).
+  At 8 trials, 81–87% of the faithful calls of t-SNE maps are wrong (conservative bound
+  64%). For MDS maps of cross-validated distances it is 62–72% (bound 55%). The headline
+  holds in 10 of 12 pre-specified variations. The claim at 32 trials fell just short.
 
 Details: [docs/gate3_pilot_things.md](docs/gate3_pilot_things.md) and
 [docs/reframe_prior_art.md](docs/reframe_prior_art.md). The protocol is
@@ -42,6 +46,7 @@ reproduction. `reach/predecessor/` is the predecessor's code, copied verbatim; s
 | `docs/gate3_pilot_things.md` | Gate 3 need pilot on THINGS-EEG2: need, use, validity under real noise, diagnostics |
 | `docs/reframe_prior_art.md` | prior-art check of the reframed neighborhood noise ceiling: protocol, verdicts, decision |
 | `docs/note_protocol.md` | pre-registered confirmatory analysis for the empirical note (plan Amendment 3) |
+| `docs/note_confirmatory_results.md` | its results: verdict, primary cell, RSA pipeline, robustness |
 | `reach/engines.py` | E-ball, E-pair-t, E-pair-pool and the reference E-cmp (plan Section 4) |
 | `reach/target.py` | reach, its closed-form box bounds, displays, naive maps (plan Section 3) |
 | `reach/noise.py` | the seven noise models (plan Section 5.2) |
@@ -66,7 +71,7 @@ reproduction. `reach/predecessor/` is the predecessor's code, copied verbatim; s
 | `data/things_eeg2/` | the downloaded test files (not tracked) and their SHA-256 manifest (tracked) |
 | `results/gate2/` | raw results (JSONL), logs, manifests and the analysis printout |
 | `results/things_pilot/` | the pilot's records, semi-synthetic runs, diagnostics and printouts |
-| `results/things_confirmatory/` | the confirmatory analysis's test log (and its results, once run) |
+| `results/things_confirmatory/` | the confirmatory analysis's test log, rows, semi-synthetic check and printout |
 | `pilot/2026-09-28/` | the scratch pilot and the tail check behind review finding 1 |
 
 ## Reproducing
@@ -99,7 +104,7 @@ python3 fetch_things_eeg2_test.py > data/fetch.log && python3 tests/test_things.
 python3 run_things_need_pilot.py > results/things_pilot/run.log && python3 analyze_things_need_pilot.py && python3 explore_things_snr.py > results/things_pilot/explore_snr.txt
 ```
 
-The confirmatory analysis (not yet run):
+The confirmatory analysis:
 
 ```bash
 python3 tests/test_things_confirmatory.py > results/things_confirmatory/test_things_confirmatory.log && python3 run_things_confirmatory.py > results/things_confirmatory/run.log && python3 analyze_things_confirmatory.py
