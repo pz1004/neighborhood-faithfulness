@@ -1,23 +1,25 @@
-% Sources: most entries were opened by the project's prior-art audits (docs/gate1_prior_art.md,
-% docs/reframe_prior_art.md). Entries marked CHECK were added from memory or seen only in a search
-% snippet, and must be checked against the publisher record before submission.
+% Verified on 2026-10-01 against Crossref (DOI records), PubMed (kriegeskorte2008), jmlr.org
+% (vandermaaten2008, venna2010), the arXiv API (schreck2023) and the bioRxiv API (cooley2019).
+% One open item is marked CHECK.
 
-% CHECK gifford2022: the audits opened the preprint; volume and article number are from memory.
 @article{gifford2022,
   author  = {Gifford, Alessandro T. and Dwivedi, Kshitij and Roig, Gemma and Cichy, Radoslaw M.},
   title   = {A large and rich {EEG} dataset for modeling human visual object recognition},
   journal = {NeuroImage},
   volume  = {264},
   pages   = {119754},
-  year    = {2022}
+  year    = {2022},
+  doi     = {10.1016/j.neuroimage.2022.119754}
 }
 @article{devries2020,
   author  = {de Vries, Saskia E. J. and Lecoq, Jerome A. and Buice, Michael A. and others},
   title   = {A large-scale standardized physiological survey reveals functional organization of the mouse visual cortex},
   journal = {Nature Neuroscience},
   volume  = {23},
+  number  = {1},
   pages   = {138--151},
-  year    = {2020}
+  year    = {2020},
+  doi     = {10.1038/s41593-019-0550-9}
 }
 @article{hebart2023,
   author  = {Hebart, Martin N. and others},
@@ -25,16 +27,17 @@
   journal = {eLife},
   volume  = {12},
   pages   = {e82580},
-  year    = {2023}
+  year    = {2023},
+  doi     = {10.7554/eLife.82580}
 }
-% CHECK kriegeskorte2008: from memory.
 @article{kriegeskorte2008,
   author  = {Kriegeskorte, Nikolaus and Mur, Marieke and Bandettini, Peter},
   title   = {Representational similarity analysis -- connecting the branches of systems neuroscience},
   journal = {Frontiers in Systems Neuroscience},
   volume  = {2},
   pages   = {4},
-  year    = {2008}
+  year    = {2008},
+  doi     = {10.3389/neuro.06.004.2008}
 }
 @article{nili2014,
   author  = {Nili, Hamed and Wingfield, Cai and Walther, Alexander and Su, Li and Marslen-Wilson, William and Kriegeskorte, Nikolaus},
@@ -43,7 +46,8 @@
   volume  = {10},
   number  = {4},
   pages   = {e1003553},
-  year    = {2014}
+  year    = {2014},
+  doi     = {10.1371/journal.pcbi.1003553}
 }
 @article{schutt2023,
   author  = {Sch{\"u}tt, Heiko H. and Kipnis, Alexander D. and Diedrichsen, J{\"o}rn and Kriegeskorte, Nikolaus},
@@ -51,7 +55,8 @@
   journal = {eLife},
   volume  = {12},
   pages   = {e82566},
-  year    = {2023}
+  year    = {2023},
+  doi     = {10.7554/eLife.82566}
 }
 @article{walther2016,
   author  = {Walther, Alexander and Nili, Hamed and Ejaz, Naveed and Alink, Arjen and Kriegeskorte, Nikolaus and Diedrichsen, J{\"o}rn},
@@ -59,16 +64,17 @@
   journal = {NeuroImage},
   volume  = {137},
   pages   = {188--200},
-  year    = {2016}
+  year    = {2016},
+  doi     = {10.1016/j.neuroimage.2015.12.012}
 }
-% CHECK guggenmos2018: seen only in a search snippet.
 @article{guggenmos2018,
   author  = {Guggenmos, Matthias and Sterzer, Philipp and Cichy, Radoslaw Martin},
   title   = {Multivariate pattern analysis for {MEG}: A comparison of dissimilarity measures},
   journal = {NeuroImage},
   volume  = {173},
   pages   = {434--447},
-  year    = {2018}
+  year    = {2018},
+  doi     = {10.1016/j.neuroimage.2018.02.044}
 }
 @article{chari2023,
   author  = {Chari, Tara and Pachter, Lior},
@@ -77,21 +83,28 @@
   volume  = {19},
   number  = {8},
   pages   = {e1011288},
-  year    = {2023}
+  year    = {2023},
+  doi     = {10.1371/journal.pcbi.1011288}
 }
 @article{lause2024,
   author  = {Lause, Jan and Berens, Philipp and Kobak, Dmitry},
   title   = {The art of seeing the elephant in the room: {2D} embeddings of single-cell data do make sense},
   journal = {PLoS Computational Biology},
   volume  = {20},
+  number  = {10},
   pages   = {e1012403},
-  year    = {2024}
+  year    = {2024},
+  doi     = {10.1371/journal.pcbi.1012403}
 }
+% CHECK cooley2019: title and authors follow the bioRxiv API for version 8 (2026-05-11), which
+% keeps the original title. Crossref's record for the same DOI gives "...distortion in the analysis
+% of scRNA-seq data". Confirm on the bioRxiv page, which returned HTTP 429 to an automated request.
 @misc{cooley2019,
-  author       = {Cooley, Shamus M. and Hamilton, Timothy and Deeds, Eric J. and Ray, J. Christian J.},
-  title        = {A novel metric reveals previously unrecognized distortion in dimensionality reduction of {scRNA-seq} data},
-  howpublished = {bioRxiv 689851},
-  year         = {2019}
+  author       = {Hamilton, Timothy and Sparta, Breanne and Cooley, Shamus M. and Aragones, Samuel D. and Ray, J. Christian J. and Deeds, Eric J.},
+  title        = {A novel metric reveals previously unrecognized distortion in dimensionality reduction of {scRNA-Seq} data},
+  howpublished = {bioRxiv 689851, version 8 (first posted 2019)},
+  year         = {2026},
+  doi          = {10.1101/689851}
 }
 @article{lin2024,
   author  = {Lin, Justin and Fukuyama, Julia},
@@ -100,7 +113,8 @@
   volume  = {20},
   number  = {9},
   pages   = {e1012427},
-  year    = {2024}
+  year    = {2024},
+  doi     = {10.1371/journal.pcbi.1012427}
 }
 @article{lee2009,
   author  = {Lee, John A. and Verleysen, Michel},
@@ -109,7 +123,8 @@
   volume  = {72},
   number  = {7--9},
   pages   = {1431--1443},
-  year    = {2009}
+  year    = {2009},
+  doi     = {10.1016/j.neucom.2008.12.017}
 }
 @article{venna2010,
   author  = {Venna, Jarkko and Peltonen, Jaakko and Nybo, Kristian and Aidos, Helena and Kaski, Samuel},
@@ -119,7 +134,6 @@
   pages   = {451--490},
   year    = {2010}
 }
-% CHECK vandermaaten2008: from memory.
 @article{vandermaaten2008,
   author  = {van der Maaten, Laurens and Hinton, Geoffrey},
   title   = {Visualizing data using t-{SNE}},
@@ -135,7 +149,8 @@
   volume  = {32},
   number  = {2},
   pages   = {179--197},
-  year    = {1995}
+  year    = {1995},
+  doi     = {10.1111/j.1745-3984.1995.tb00462.x}
 }
 @article{vacek1985,
   author  = {Vacek, Pamela M.},
@@ -144,7 +159,8 @@
   volume  = {41},
   number  = {4},
   pages   = {959--968},
-  year    = {1985}
+  year    = {1985},
+  doi     = {10.2307/2530967}
 }
 @article{cook1994,
   author  = {Cook, J. R. and Stefanski, L. A.},
@@ -153,7 +169,8 @@
   volume  = {89},
   number  = {428},
   pages   = {1314--1328},
-  year    = {1994}
+  year    = {1994},
+  doi     = {10.1080/01621459.1994.10476871}
 }
 @article{devanarayan2002,
   author  = {Devanarayan, Viswanath and Stefanski, Leonard A.},
@@ -162,7 +179,8 @@
   volume  = {59},
   number  = {3},
   pages   = {219--225},
-  year    = {2002}
+  year    = {2002},
+  doi     = {10.1016/S0167-7152(02)00098-6}
 }
 @misc{schreck2023,
   author       = {Schreck, Nicholas and Slynko, Alla and Saadati, Maral and Benner, Axel},
@@ -175,10 +193,11 @@
   title   = {Comparison of transformations for single-cell {RNA}-seq data},
   journal = {Nature Methods},
   volume  = {20},
+  number  = {5},
   pages   = {665--672},
-  year    = {2023}
+  year    = {2023},
+  doi     = {10.1038/s41592-023-01814-1}
 }
-% CHECK ledoit2004: from memory.
 @article{ledoit2004,
   author  = {Ledoit, Olivier and Wolf, Michael},
   title   = {A well-conditioned estimator for large-dimensional covariance matrices},
@@ -186,7 +205,8 @@
   volume  = {88},
   number  = {2},
   pages   = {365--411},
-  year    = {2004}
+  year    = {2004},
+  doi     = {10.1016/S0047-259X(03)00096-4}
 }
 @article{mogstad2024,
   author  = {Mogstad, Magne and Romano, Joseph P. and Shaikh, Azeem M. and Wilhelm, Daniel},
@@ -195,5 +215,6 @@
   volume  = {91},
   number  = {1},
   pages   = {476--518},
-  year    = {2024}
+  year    = {2024},
+  doi     = {10.1093/restud/rdad006}
 }
