@@ -8,7 +8,7 @@ valid at every tolerance.
 **Status (2026-09-29): Gates 1 and 2 passed. The Gate 3 need pilot on THINGS-EEG2 ended
 in the protocol's "reframe" branch, and the reframe's prior-art check ended in its
 "short empirical note" branch. The note's pre-registered headline held on THINGS-EEG2
-and on an independent second dataset.**
+and on an independent second dataset; the note is drafted in [note/](note/).**
 - Real EEG replicates showed strong need. Naive neighborhood maps mislabel about 20% of
   points, and most of their "faithful" calls are wrong.
 - They also showed no use. The certificate resolves no point even at 72 repetitions,
@@ -53,6 +53,7 @@ reproduction. `reach/predecessor/` is the predecessor's code, copied verbatim; s
 | `docs/note_confirmatory_results.md` | its results: verdict, primary cell, RSA pipeline, robustness |
 | `docs/note_protocol_allen.md` | pre-registered second-dataset protocol: Allen two-photon, mouse V1 (plan Amendment 4) |
 | `docs/note_allen_results.md` | its results and the joint conclusion with THINGS-EEG2 |
+| `note/` | the empirical note, draft: `note.tex`, with `make_figures.py` and `make_tables.py` drawing every figure, table and quoted number from the committed results; the PDF is built, not tracked |
 | `reach/engines.py` | E-ball, E-pair-t, E-pair-pool and the reference E-cmp (plan Section 4) |
 | `reach/target.py` | reach, its closed-form box bounds, displays, naive maps (plan Section 3) |
 | `reach/noise.py` | the seven noise models (plan Section 5.2) |
@@ -132,6 +133,12 @@ curl -o data/allen_2p/ophys_experiments.json https://allen-brain-observatory.s3.
 
 ```bash
 python3 tests/test_allen_confirmatory.py > results/allen_confirmatory/test_allen_confirmatory.log && python3 run_allen_confirmatory.py > results/allen_confirmatory/run.log && python3 analyze_allen_confirmatory.py && python3 explore_allen_snr.py > results/allen_confirmatory/explore_snr.txt
+```
+
+The note (needs matplotlib and a LaTeX installation with latexmk):
+
+```bash
+python3 note/make_figures.py && python3 note/make_tables.py && latexmk -pdf -cd note/note.tex
 ```
 
 On a 36-core workstation the validity runs take about 9 minutes, the power runs under 2, and

@@ -6,3 +6,11 @@ data/**/*.part
 data/allen_2p/*.nwb
 data/allen_2p/*.part
 data/allen_2p/ophys_experiments.json
+note/*.aux
+note/*.log
+note/*.out
+note/*.bbl
+note/*.blg
+note/*.fls
+note/*.fdb_latexmk
+note/note.pdf
