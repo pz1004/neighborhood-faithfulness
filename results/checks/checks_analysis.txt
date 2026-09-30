@@ -1,0 +1,83 @@
+COMMON CHECKS AGAINST THE TRUTH (docs/checks_protocol.md): primary cell; medians over
+subjects; pairs are (linear in R_h^-1/2) / (linear in 1/R_h); L, U = conservative bounds
+
+=== THINGS-EEG2, human EEG ===
+Reproduction of the confirmatory maps: 2700 rows compared, 0 differ, 0 missing from the confirmatory rows, 0 confirmatory rows not re-created
+Estimator check (Section 5), R=8: median bias of FC, smaller / larger estimate
+  N     -0.002 / +0.042  (10 subjects)
+  TW    -0.003 / +0.045  (10 subjects)
+  SCD   -0.002 / +0.026  (10 subjects)
+  CV    -0.007 / +0.049  (10 subjects)
+  SEED  +0.002 / +0.028  (10 subjects)
+  BOOT  -0.205 / +0.077  (1 subjects)
+  SH    -0.014 / +0.016  (10 subjects)
+
+check  R   pass    FC (sqrt/inv)    L      U      catch (sqrt/inv)  yield (sqrt/inv)   with N: pass  FC (sqrt/inv)
+N      8  0.188   0.811/0.865   0.642  0.915      -              0.035/0.025      0.188  0.811/0.865
+N     16  0.261   0.646/0.751   0.461  0.808      -              0.090/0.063      0.261  0.646/0.751
+N     32  0.325   0.476/0.635   0.231  0.710      -              0.178/0.125      0.325  0.476/0.635
+TW     8  0.190   0.792/0.853   0.643  0.909   0.280/0.269       0.039/0.027      0.144  0.770/0.838
+TW    16  0.263   0.635/0.742   0.446  0.797   0.279/0.262       0.093/0.066      0.208  0.596/0.715
+TW    32  0.327   0.466/0.627   0.224  0.701   0.288/0.237       0.184/0.129      0.269  0.413/0.589
+SCD    8  0.325   0.863/0.902   0.759  0.938   0.401/0.386       0.049/0.035      0.123  0.767/0.832
+SCD   16  0.403   0.765/0.834   0.642  0.865   0.367/0.329       0.104/0.074      0.186  0.597/0.716
+SCD   32  0.440   0.619/0.736   0.456  0.795   0.448/0.354       0.179/0.127      0.235  0.413/0.589
+CV     8  0.079   0.728/0.805   0.595  0.856   0.739/0.722       0.022/0.016      0.061  0.692/0.780
+CV    16  0.180   0.578/0.702   0.411  0.755   0.538/0.501       0.076/0.054      0.150  0.522/0.662
+CV    32  0.289   0.455/0.619   0.229  0.687   0.367/0.285       0.167/0.117      0.256  0.411/0.588
+SEED   8  0.346   0.870/0.907   0.771  0.943   0.389/0.366       0.046/0.033      0.126  0.781/0.842
+SEED  16  0.422   0.763/0.834   0.608  0.857   0.341/0.318       0.101/0.071      0.192  0.613/0.726
+SEED  32  0.470   0.629/0.741   0.434  0.792   0.373/0.331       0.184/0.129      0.245  0.424/0.597
+BOOT   8  0.000   -0.407/0.000   -0.505  0.423   1.000/1.000       0.000/0.000      0.000  -0.407/0.000   [FC defined in 3 of 10 subjects]
+BOOT  16  0.002   0.004/0.247   -0.342  0.427   1.000/1.000       0.001/0.001      0.001  -0.172/0.141   [FC defined in 7 of 10 subjects]
+BOOT  32  0.015   -0.119/0.147   -0.235  0.271   1.013/0.990       0.017/0.012      0.013  -0.146/0.126
+SH     8  0.012   0.467/0.621   0.383  0.722   0.984/0.974       0.006/0.004      0.008  0.357/0.567
+SH    16  0.058   0.380/0.557   0.262  0.660   0.951/0.905       0.033/0.024      0.040  0.263/0.468
+SH    32  0.144   0.324/0.523   0.204  0.599   0.927/0.805       0.097/0.070      0.098  0.201/0.433
+
+Classification at R = 8 (Section 6):
+  TW    L = 0.643, U = 0.909 -> leaves most false comfort
+  SCD   L = 0.759, U = 0.938 -> leaves most false comfort
+  CV    L = 0.595, U = 0.856 -> leaves most false comfort
+  SEED  L = 0.771, U = 0.943 -> leaves most false comfort
+  BOOT  L = -0.505, U = 0.423 -> not evaluable
+  SH    L = 0.383, U = 0.722 -> undetermined
+
+=== Allen two-photon, mouse V1 ===
+Reproduction of the confirmatory maps: 1800 rows compared, 0 differ, 0 missing from the confirmatory rows, 0 confirmatory rows not re-created
+Estimator check (Section 5), R=8: median bias of FC, smaller / larger estimate
+  N     +0.003 / +0.004  (10 subjects)
+  TW    +0.003 / +0.005  (10 subjects)
+  SCD   +0.004 / +0.006  (10 subjects)
+  CV    +0.002 / +0.008  (10 subjects)
+  SEED  +0.003 / +0.005  (10 subjects)
+  BOOT  +nan / +nan  (0 subjects)
+  SH    +0.000 / +0.000  (4 subjects)
+
+check  R   pass    FC (sqrt/inv)    L      U      catch (sqrt/inv)  yield (sqrt/inv)   with N: pass  FC (sqrt/inv)
+N      8  0.161   1.000/1.000   0.997  1.000      -              0.000/0.000      0.161  1.000/1.000
+N     16  0.172   0.994/0.996   0.977  1.000      -              0.001/0.001      0.172  0.994/0.996
+TW     8  0.163   1.000/1.000   0.998  1.000   0.202/0.203       0.000/0.000      0.127  1.000/1.000
+TW    16  0.174   0.998/0.999   0.977  1.000   0.217/0.217       0.000/0.000      0.135  0.997/0.998
+SCD    8  0.088   1.000/1.000   0.997  1.000   0.675/0.675       0.000/-0.000      0.060  1.000/1.000
+SCD   16  0.086   0.987/0.993   0.970  1.000   0.668/0.665       0.001/0.001      0.058  0.987/0.992
+CV     8  0.023   1.000/1.000   0.979  1.004   0.929/0.930       0.000/-0.000      0.011  1.000/1.000
+CV    16  0.035   0.971/0.982   0.949  1.000   0.869/0.866       0.001/0.001      0.024  0.972/0.983
+SEED   8  0.272   1.000/1.000   0.998  1.000   0.412/0.412       0.000/0.000      0.094  1.000/1.000
+SEED  16  0.249   0.995/0.997   0.984  1.000   0.429/0.429       0.001/0.001      0.098  0.992/0.995
+BOOT   8  0.000   nan/nan   nan  nan   1.000/1.000       0.000/0.000      0.000  nan/nan   [FC defined in 0 of 10 subjects]
+BOOT  16  0.000   nan/nan   nan  nan   1.000/1.000       0.000/0.000      0.000  nan/nan   [FC defined in 0 of 10 subjects]
+SH     8  0.000   1.000/1.000   1.000  1.000   1.000/1.000       0.000/0.000      0.000  1.000/1.000   [FC defined in 4 of 10 subjects]
+SH    16  0.001   1.000/1.000   0.912  1.000   0.998/0.998       0.000/-0.000      0.000  1.000/1.000   [FC defined in 7 of 10 subjects]
+
+Classification at R = 8 (Section 6):
+  TW    L = 0.998, U = 1.000 -> leaves most false comfort
+  SCD   L = 0.997, U = 1.000 -> leaves most false comfort
+  CV    L = 0.979, U = 1.004 -> leaves most false comfort
+  SEED  L = 0.998, U = 1.000 -> leaves most false comfort
+  BOOT  L = nan, U = nan -> not evaluable
+  SH    L = 1.000, U = 1.000 -> not evaluable
+
+What the manuscript may say (Section 6):
+  - none of the common checks removed most false comfort in either dataset
+  - checks that left most false comfort in both datasets: TW, SCD, CV, SEED

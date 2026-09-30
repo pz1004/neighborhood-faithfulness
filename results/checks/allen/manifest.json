@@ -1,0 +1,58 @@
+{
+ "protocol": "docs/checks_protocol.md",
+ "dataset": "allen",
+ "subjects": [
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9,
+  10
+ ],
+ "checks": [
+  "N",
+  "TW",
+  "SCD",
+  "CV",
+  "SEED",
+  "BOOT",
+  "SH"
+ ],
+ "B_boot": 50,
+ "boot_support": 0.95,
+ "scdeed_x": 0.5,
+ "scdeed_pct": 95.0,
+ "n_splits": 10,
+ "n_sim": 10,
+ "sim_R": 8,
+ "tsne_seeds": [
+  4000101,
+  4000102,
+  4000103
+ ],
+ "RU": [
+  8,
+  16
+ ],
+ "RH": [
+  8,
+  12,
+  24
+ ],
+ "H_SIZE": 24,
+ "split_base": 4500000,
+ "boot": 5500000,
+ "perm": 5510000,
+ "sim": 5600000,
+ "sim_boot": 5610000,
+ "sim_perm": 5620000,
+ "python": "3.13.5",
+ "numpy": "2.1.3",
+ "scipy": "1.15.3",
+ "sklearn": "1.6.1",
+ "started": "2026-10-01 02:08:48"
+}

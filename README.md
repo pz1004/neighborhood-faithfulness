@@ -5,10 +5,12 @@ Simultaneous, finite-sample confidence intervals on how far each displayed neigh
 with replicates. From the intervals comes a faithful / distorted / unresolved map that is
 valid at every tolerance.
 
-**Status (2026-09-29): Gates 1 and 2 passed. The Gate 3 need pilot on THINGS-EEG2 ended
+**Status (2026-10-01): Gates 1 and 2 passed. The Gate 3 need pilot on THINGS-EEG2 ended
 in the protocol's "reframe" branch, and the reframe's prior-art check ended in its
 "short empirical note" branch. The note's pre-registered headline held on THINGS-EEG2
-and on an independent second dataset; the note is drafted in [note/](note/).**
+and on an independent second dataset, and a pre-registered comparison found that none of
+six common checks removed the false comfort. The note is in [note/](note/), and the
+Journal of Neuroscience Methods manuscript is in [manuscript/](manuscript/).**
 - Real EEG replicates showed strong need. Naive neighborhood maps mislabel about 20% of
   points, and most of their "faithful" calls are wrong.
 - They also showed no use. The certificate resolves no point even at 72 repetitions,
@@ -24,10 +26,16 @@ and on an independent second dataset; the note is drafted in [note/](note/).**
   ([docs/note_allen_results.md](docs/note_allen_results.md)): Allen two-photon, mouse V1,
   10 mice. Essentially every faithful call is wrong at 8 and 16 trials (bound 0.997), in all
   12 variations, and for RSA-style maps too.
+- Common checks against the truth ([docs/checks_results.md](docs/checks_results.md)):
+  - Four of six checks left most false comfort in both datasets: per-point
+    trustworthiness, scDEED, cross-validated distances and seed recurrence.
+  - The two strict ones, bootstrap and split-half recurrence, passed almost nothing at
+    8 trials.
+  - None removed most false comfort.
 
 Details: [docs/gate3_pilot_things.md](docs/gate3_pilot_things.md) and
 [docs/reframe_prior_art.md](docs/reframe_prior_art.md). The protocol is
-[docs/research_plan.md](docs/research_plan.md), with Amendments 1 to 3 at its end. The
+[docs/research_plan.md](docs/research_plan.md), with Amendments 1 to 5 at its end. The
 earlier reports are [docs/gate1_prior_art.md](docs/gate1_prior_art.md) and
 [docs/gate2_report.md](docs/gate2_report.md).
 
@@ -54,6 +62,15 @@ reproduction. `reach/predecessor/` is the predecessor's code, copied verbatim; s
 | `docs/note_protocol_allen.md` | pre-registered second-dataset protocol: Allen two-photon, mouse V1 (plan Amendment 4) |
 | `docs/note_allen_results.md` | its results and the joint conclusion with THINGS-EEG2 |
 | `note/` | the empirical note, draft: `note.tex`, with `make_figures.py` and `make_tables.py` drawing every figure, table and quoted number from the committed results; the PDF is built, not tracked |
+| `docs/checks_protocol.md` | pre-registered comparison of six common checks against the truth, both datasets (plan Amendment 5) |
+| `docs/checks_results.md` | its results |
+| `reach/checks.py` | the six checks: trustworthiness, scDEED, cross-validated distances, seed, bootstrap and split-half recurrence |
+| `run_checks.py` | the comparison's driver: the confirmatory maps re-created, every check counted against the references |
+| `analyze_checks.py` | its joint-label estimators, subject bootstrap and pre-registered classification |
+| `tests/test_checks.py` | synthetic known-truth checks of that code; touches no data |
+| `describe_allen_subjects.py` | donor, sex, depth and cell count of the included mice, for the manuscript |
+| `results/checks/` | the comparison's test log, rows, semi-synthetic check and printout |
+| `manuscript/` | the Journal of Neuroscience Methods manuscript: `manuscript.tex`, `supplementary.tex`, highlights and cover letter, with `make_figures.py` and `make_tables.py`; PDFs are built, not tracked |
 | `reach/engines.py` | E-ball, E-pair-t, E-pair-pool and the reference E-cmp (plan Section 4) |
 | `reach/target.py` | reach, its closed-form box bounds, displays, naive maps (plan Section 3) |
 | `reach/noise.py` | the seven noise models (plan Section 5.2) |
@@ -133,6 +150,18 @@ curl -o data/allen_2p/ophys_experiments.json https://allen-brain-observatory.s3.
 
 ```bash
 python3 tests/test_allen_confirmatory.py > results/allen_confirmatory/test_allen_confirmatory.log && python3 run_allen_confirmatory.py > results/allen_confirmatory/run.log && python3 analyze_allen_confirmatory.py && python3 explore_allen_snr.py > results/allen_confirmatory/explore_snr.txt
+```
+
+The comparison of common checks (about 65 minutes on 18 cores, both datasets):
+
+```bash
+python3 tests/test_checks.py > results/checks/test_checks.log && python3 run_checks.py --dataset things > results/checks/things/run.log && python3 run_checks.py --dataset allen > results/checks/allen/run.log && python3 analyze_checks.py
+```
+
+The manuscript (needs matplotlib and a LaTeX installation with latexmk):
+
+```bash
+python3 describe_allen_subjects.py && python3 manuscript/make_figures.py && python3 manuscript/make_tables.py && latexmk -pdf -cd manuscript/manuscript.tex && latexmk -pdf -cd manuscript/supplementary.tex
 ```
 
 The note (needs matplotlib and a LaTeX installation with latexmk):
