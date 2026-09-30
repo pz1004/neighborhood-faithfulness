@@ -19,7 +19,7 @@ Journal of Neuroscience Methods manuscript is in [manuscript/](manuscript/).**
   finding is new, and [docs/note_protocol.md](docs/note_protocol.md) tests it with fixed
   claims and thresholds.
 - The finding held ([docs/note_confirmatory_results.md](docs/note_confirmatory_results.md)).
-  At 8 trials, 81–87% of the faithful calls of t-SNE maps are wrong (conservative bound
+  At 8 trials, 81–86% of the faithful calls of t-SNE maps are wrong (conservative bound
   64%). For MDS maps of cross-validated distances it is 62–72% (bound 55%). The headline
   holds in 10 of 12 pre-specified variations. The claim at 32 trials fell just short.
 - It was then confirmed independently on a second species and modality

@@ -90,7 +90,7 @@ facts, not only the share.
 **Can say.** For t-SNE maps of THINGS-EEG2 image responses averaged over 8 trials, most
 neighborhoods that a plug-in check calls faithful are not faithful to the noise-free
 responses:
-- in t-SNE maps: an estimated 81–87%, with a conservative lower bound of 64%;
+- in t-SNE maps: an estimated 81–86%, with a conservative lower bound of 64%;
 - in MDS maps of cross-validated distances: 62–72%, with a bound of 55%, although those
   maps make faithful calls for only 2% of points;
 - the finding holds in 10 of 12 pre-specified variations.

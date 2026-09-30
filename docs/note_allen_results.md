@@ -91,7 +91,7 @@ space. THINGS-EEG2 is shown alongside, with 72 trials.
 **Supported by pre-registered tests on two independent datasets:**
 - In 2-D maps of trial-averaged responses to images, most neighborhoods that a plug-in
   check calls faithful are not faithful to the noise-free responses.
-- This holds for human EEG (THINGS-EEG2: 81–87% at 8 trials) and for mouse V1 two-photon
+- This holds for human EEG (THINGS-EEG2: 81–86% at 8 trials) and for mouse V1 two-photon
   imaging (Allen Brain Observatory: essentially 100% at 8 and 16 trials).
 - It also holds for RSA-style maps of cross-validated distances, where faithful calls are
   rare.
