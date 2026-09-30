@@ -507,3 +507,26 @@ data, and asked for the analysis to be pre-registered. The protocol is
 `docs/note_protocol_allen.md`. It was committed after only the experiment metadata had
 been fetched, before any recording file was downloaded or any response value read. The
 code that implements it is committed separately, before the analysis runs.
+
+### Amendment 5 (2026-10-01): common checks against the truth
+
+**When and why.** The owner chose the Journal of Neuroscience Methods for a full manuscript
+and asked for a comparison with existing methods, pre-registered like the earlier
+analyses. The protocol is `docs/checks_protocol.md`. It measures six common checks
+against the truth, on the confirmatory maps of both datasets:
+- per-point trustworthiness;
+- scDEED's "trustworthy" label;
+- cross-validated distances;
+- recurrence across t-SNE seeds, bootstrap resamples and split halves.
+
+**What is registered, committed together before the analysis touches a data file:**
+- the protocol;
+- its code: `reach/checks.py`, `run_checks.py` and `analyze_checks.py`;
+- its synthetic tests: `tests/test_checks.py`, with its log in `results/checks/`.
+
+**Observation from the synthetic tests, made before any data.** scDEED's null was first
+written to permute the 20 coordinates of the representation. That null kept the signal's
+unequal spread across coordinates, and scDEED then called only 11% of points trustworthy on
+strongly structured data. Permuting the measured features before the fixed representation,
+as scDEED permutes genes before its PCA step, gave 74%. The protocol registers the
+measured-feature null.

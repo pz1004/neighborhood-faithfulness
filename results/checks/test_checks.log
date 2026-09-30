@@ -1,0 +1,36 @@
+[ok] per-point trustworthiness averages to scikit-learn's  (0.878947 vs 0.878947)
+[ok] rank matching passes the requested number without ties
+[ok] rank matching keeps ties at the cutoff
+[ok] scDEED score matches its definition  (max diff 2.2e-16)
+[ok] scDEED score is 1 when the map equals the data
+[ok] scDEED labels few points trustworthy when the data have no structure  (0.000)
+[ok] a neighborhood recurs in its own map
+[ok] bootstrap support is 1 when every resample equals the averages
+[ok] re-created maps reproduce the confirmatory plug-in counts exactly  (48 rows)
+[ok] counts are internally consistent
+[ok] TW passes at least as many points as N, per map
+[ok] joint passes with N are consistent
+   R= 8 N     pass 0.709  exact FC 0.031  estimates 0.018 / 0.030  catch 0.000 / 0.000  with N: pass 0.709 FC 0.018 / 0.030
+   R= 8 TW    pass 0.709  exact FC 0.066  estimates 0.061 / 0.068  catch 0.739 / 0.478  with N: pass 0.664 FC 0.005 / 0.016
+   R= 8 SCD   pass 0.590  exact FC 0.210  estimates 0.210 / 0.212  catch 0.783 / 0.593  with N: pass 0.463 FC 0.006 / 0.018
+   R= 8 CV    pass 0.713  exact FC 0.033  estimates 0.028 / 0.037  catch -0.100 / -0.017  with N: pass 0.703 FC 0.020 / 0.030
+   R= 8 SEED  pass 0.888  exact FC 0.251  estimates 0.246 / 0.249  catch 0.501 / 0.325  with N: pass 0.659 FC 0.010 / 0.021
+   R= 8 BOOT  pass 0.417  exact FC 0.138  estimates 0.129 / 0.134  catch 0.834 / 0.703  with N: pass 0.360 FC 0.006 / 0.017
+   R= 8 SH    pass 0.620  exact FC 0.194  estimates 0.197 / 0.197  catch 1.101 / 0.752  with N: pass 0.497 FC -0.003 / 0.010
+   R=16 N     pass 0.700  exact FC 0.039  estimates 0.013 / 0.033  catch 0.000 / 0.000  with N: pass 0.700 FC 0.013 / 0.033
+   R=16 TW    pass 0.703  exact FC 0.110  estimates 0.080 / 0.093  catch 0.326 / 0.282  with N: pass 0.640 FC 0.010 / 0.026
+   R=16 SCD   pass 0.723  exact FC 0.254  estimates 0.236 / 0.244  catch -0.238 / 0.082  with N: pass 0.561 FC 0.020 / 0.038
+   R=16 CV    pass 0.703  exact FC 0.036  estimates 0.013 / 0.033  catch 0.333 / 0.116  with N: pass 0.698 FC 0.009 / 0.029
+   R=16 SEED  pass 1.000  exact FC 0.315  estimates 0.297 / 0.306  catch 0.000 / 0.000  with N: pass 0.700 FC 0.013 / 0.033
+   R=16 BOOT  pass 0.477  exact FC 0.142  estimates 0.123 / 0.132  catch 1.002 / 0.728  with N: pass 0.412 FC -0.000 / 0.015
+   R=16 SH    pass 0.610  exact FC 0.172  estimates 0.134 / 0.151  catch 1.379 / 0.705  with N: pass 0.510 FC -0.007 / 0.013
+[ok] R=8: N's estimate lands within 0.10 of its exact false comfort
+[ok] R=16: N's estimate lands within 0.10 of its exact false comfort
+[ok] scDEED labels most points trustworthy on strongly structured data  (0.590)
+[ok] R=8: every check passing at least 2% of points lands within 0.15 of its exact FC  (7 checks: N, TW, SCD, CV, SEED, BOOT, SH)
+[ok] the Allen layout runs every check  (12 rows)
+[ok] Allen halves hold R/4 repetitions per stratum
+[ok] semi-synthetic check and bias summary run  (FC bias of N +0.003 / +0.005 (1 draw))
+[ok] classification runs (one subject: not evaluable)
+
+0 failures
