@@ -1,0 +1,30 @@
+\begin{table}[!htb]
+\centering\scriptsize
+\input{tables/tab_s5_checks_eeg.tex}
+\caption{Human EEG: the common checks at every budget, in percent; medians over 10 subjects. N,
+plug-in; TW, trustworthiness; SCD, scDEED; CV, cross-validated distances; SEED, BOOT and SH,
+recurrence across seeds, bootstrap resamples and split halves.
+\emph{Passes}: share of all points passed. \emph{False comfort}: range of the two extrapolants'
+medians; $L$ and $U$: conservative bounds. \emph{Plug-in false comfort flagged}: share of the
+plug-in check's false-comfort neighborhoods that the check fails. \emph{Yield}: share of all points
+passed and faithful. \emph{With plug-in}: the check applied on top of the plug-in check. n.e.: not
+evaluable (fewer than 5 subjects with a passing neighborhood). Extrapolated estimates are not
+clipped and can fall below 0 or above 100\% where few neighborhoods pass. Only the 8-trial
+classification was pre-specified.}
+\end{table}
+
+\begin{table}[!htb]
+\centering\scriptsize
+\input{tables/tab_s6_checks_mouse.tex}
+\caption{Mouse V1: the common checks at every budget, as in Table~S5.}
+\end{table}
+
+\begin{table}[!htb]
+\centering\small
+\input{tables/tab_s7_checks_plasmode.tex}
+\caption{Plasmode check of the estimator for the common checks at 8 trials: the median over
+subjects of the smaller and of the larger estimate minus the exact false comfort (10 draws per
+subject, three map seeds each). \emph{Subjects}: those with at least one passing neighborhood in
+the simulations. The pre-specified guard would have applied if the smaller estimate's bias
+exceeded $+0.05$ or the larger one's fell below $-0.05$.}
+\end{table}

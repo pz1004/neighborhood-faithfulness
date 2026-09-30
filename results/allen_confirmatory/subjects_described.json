@@ -1,0 +1,82 @@
+[
+ {
+  "subject": 1,
+  "experiment_id": 500964514,
+  "donor_id": 495726985,
+  "sex": "F",
+  "imaging_depth": 175,
+  "n_cells": 214
+ },
+ {
+  "subject": 2,
+  "experiment_id": 501886692,
+  "donor_id": 495726996,
+  "sex": "M",
+  "imaging_depth": 175,
+  "n_cells": 163
+ },
+ {
+  "subject": 3,
+  "experiment_id": 501559087,
+  "donor_id": 495727004,
+  "sex": "M",
+  "imaging_depth": 175,
+  "n_cells": 174
+ },
+ {
+  "subject": 4,
+  "experiment_id": 501794235,
+  "donor_id": 495727020,
+  "sex": "M",
+  "imaging_depth": 175,
+  "n_cells": 152
+ },
+ {
+  "subject": 5,
+  "experiment_id": 502368172,
+  "donor_id": 496001356,
+  "sex": "M",
+  "imaging_depth": 175,
+  "n_cells": 295
+ },
+ {
+  "subject": 6,
+  "experiment_id": 503019786,
+  "donor_id": 496001361,
+  "sex": "M",
+  "imaging_depth": 275,
+  "n_cells": 359
+ },
+ {
+  "subject": 7,
+  "experiment_id": 510705057,
+  "donor_id": 497258301,
+  "sex": "M",
+  "imaging_depth": 175,
+  "n_cells": 242
+ },
+ {
+  "subject": 8,
+  "experiment_id": 504808661,
+  "donor_id": 497589678,
+  "sex": "F",
+  "imaging_depth": 175,
+  "n_cells": 145
+ },
+ {
+  "subject": 9,
+  "experiment_id": 510345479,
+  "donor_id": 505143553,
+  "sex": "M",
+  "imaging_depth": 175,
+  "n_cells": 331
+ },
+ {
+  "subject": 10,
+  "experiment_id": 524848692,
+  "donor_id": 515909194,
+  "sex": "F",
+  "imaging_depth": 275,
+  "n_cells": 249
+ }
+]

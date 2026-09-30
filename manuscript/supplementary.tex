@@ -1,0 +1,157 @@
+\documentclass[11pt]{article}
+\ifdefined\pdftrailerid
+  \pdfinfoomitdate=1
+  \pdftrailerid{}
+\fi
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{caption}
+\usepackage[authoryear,round]{natbib}
+\usepackage[hidelinks]{hyperref}
+
+\captionsetup{font=small,labelfont=bf,skip=6pt}
+\setlist{itemsep=2pt,topsep=4pt}
+\renewcommand{\thetable}{S\arabic{table}}
+\renewcommand{\thesection}{S\arabic{section}}
+\newcommand{\todo}[1]{\textcolor{red!70!black}{[TODO: #1]}}
+\input{meta.tex}
+\input{numbers.tex}
+
+\title{Supplementary material for\\ ``\MsTitle''}
+\author{Sooyoung Jang}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{Supplementary methods}
+
+\subsection{Recovering the session of each EEG repetition}
+The THINGS-EEG2 preprocessed test files store the 80 repetitions of each image in one array. The
+authors' preprocessing code concatenates the four sessions along the repetition axis (session 1
+first) and then reorders the repetitions with \texttt{sklearn.utils.shuffle} applied to
+$0,\dots,79$ with the random state 20200220. Replaying that permutation gives the session of every
+stored repetition, 20 per session. Blocks were then drawn within session, so that every block and
+every prefix of the analyst's block is balanced over sessions. Only the session labels were
+reconstructed; no data value was changed.
+
+\subsection{Why the extrapolation removes the reference's bias as well as its noise}
+Reference labels use plug-in distances between sub-block means. For two images the squared
+plug-in distance has expectation $\|\mu_i-\mu_j\|^2+\operatorname{tr}(\Sigma_i+\Sigma_j)/R_h$,
+where $\Sigma_i$ is the trial covariance of image $i$. In the whitened representation the trace
+terms are nearly equal across images, so they barely change the ranks, and whatever effect they
+have vanishes as $R_h\to\infty$, together with the reference's noise. The extrapolation targets
+exactly that limit.
+
+\subsection{Why checks computed from the analyst's own trials cannot see the error}
+This argument was written into the protocol of the comparison before it was run. Let the
+analyst's trials of image $i$ be $x_{it}=\mu_i+e_{it}$, $t=1,\dots,R$, with independent Gaussian
+noise of a common covariance. Split the trials into two halves $A$ and $B$ of equal size, and write
+the averages $c_i=(c^A_i+c^B_i)/2$ and the half-difference $\delta_i=(c^A_i-c^B_i)/2$. Then
+\begin{itemize}[leftmargin=*]
+  \item the halves are $c^A_i=c_i+\delta_i$ and $c^B_i=c_i-\delta_i$, and $\delta$ is independent
+  of $c$: a noise-only perturbation;
+  \item the cross-validated squared distances are
+  $\langle c^A_i-c^A_j,c^B_i-c^B_j\rangle=\|c_i-c_j\|^2-\|\delta_i-\delta_j\|^2$, the plug-in squared
+  distances minus a noise-only term;
+  \item a bootstrap resample is $c_i$ plus resampled residuals.
+\end{itemize}
+The averages carry all the information the trials hold about the $\mu_i$; the residuals add only
+information about the size of the noise. Every check of the comparison is therefore a function of
+the averages, the noise level and randomization. It can be stricter than the plug-in check, but
+it cannot tell where the averages themselves are wrong. The certificates of our earlier pilot,
+which used the averages and the noise level with family-wise error control, resolved no
+neighborhood of THINGS-EEG2 even at 72 trials.
+
+\subsection{The scDEED null}
+scDEED \citep{xia2024} permutes every gene independently across cells and then applies the
+pipeline's PCA step to the permuted data. Our pipeline's dimension-reduction step is the fixed
+representation fitted on block $F$. We therefore permuted every measured feature of the analyst's
+averages (EEG channel-time samples; mouse cells) independently across images and passed the
+permuted averages through the same representation. Permuting the 20 coordinates of the
+representation instead would keep the signal's unequal spread across coordinates. In the
+synthetic tests of the code, that null resembled structured data so closely that scDEED called
+11\% of points trustworthy, against 74\% with the measured-feature null. The protocol registers
+the measured-feature null.
+
+\subsection{The pilot's certificates}
+Before the analyses reported here, an exploratory pilot on THINGS-EEG2 (protocol committed at
+\texttt{5024fe6}) tested per-point certificates. For each displayed neighborhood, it bounded the
+reach simultaneously, from studentized bounds on all pairwise distances with family-wise error
+control. In semi-synthetic draws with resampled real noise, the certificates made no false
+statement in 3000 draws. On the real data they resolved no neighborhood as faithful or distorted at
+$k'=20$, at 8, 16, 32 or 72 repetitions per image, while the plug-in check called 17.5\% (8
+repetitions) to 38.1\% (72) of the points faithful. The obstacle was the signal-to-noise ratio,
+not the multiplicity correction (main text, Table~4).
+
+\section{Supplementary tables}
+
+\begin{table}[!htb]
+\centering\small
+\input{tables/tab_s1_cells_eeg.tex}
+\caption{Human EEG: every pre-specified variation and budget, in percent. Ranges span the two
+extrapolants' medians over 10 subjects; $L$ is the conservative lower bound of false comfort.}
+\end{table}
+
+\begin{table}[!htb]
+\centering\small
+\input{tables/tab_s2_cells_mouse.tex}
+\caption{Mouse V1: every pre-specified variation and budget, in percent, as in
+Table~S1.}
+\end{table}
+
+\begin{table}[!htb]
+\centering\small
+\input{tables/tab_s3_subjects.tex}
+\caption{Per-subject estimates in the primary analysis at 8 trials, in percent: the share called
+faithful (NF) and the false comfort under each extrapolant. Estimates are extrapolations and are
+not clipped, so they can slightly exceed 100\% where the reference disagreement is already near
+100\%.}
+\end{table}
+
+\begin{table}[!htb]
+\centering\small
+\input{tables/tab_s4_plasmode.tex}
+\caption{Plasmode check of the confirmatory estimator: the smaller of the two estimates minus the
+exact value, per subject, for the false comfort and the mislabel rate at 8 trials in the primary
+analysis (20 draws per subject). The pre-specified guard would have applied above $+0.05$.}
+\end{table}
+
+\input{supp_checks.tex}
+
+\begin{table}[!htb]
+\centering\small
+\begin{tabular}{llp{0.62\linewidth}}
+\toprule
+Commit & Date & What it fixed or recorded \\
+\midrule
+\texttt{ce69f4e} & 2026-09-28 & Research plan, before any analysis \\
+\texttt{5024fe6} & 2026-09-29 & Amendment 2: the exploratory THINGS-EEG2 pilot, before its data were loaded \\
+\texttt{c7e5a93} & 2026-09-29 & Pilot results \\
+\texttt{598562e} & 2026-09-29 & Amendment 3: the confirmatory EEG protocol, its code and synthetic tests \\
+\texttt{5c2bd7f} & 2026-09-29 & Confirmatory EEG results \\
+\texttt{985098d} & 2026-09-29 & Amendment 4: the mouse V1 protocol, before any recording was downloaded \\
+\texttt{ea36f1d} & 2026-09-29 & Mouse V1 code and synthetic tests, before any response value was read \\
+\texttt{0782aa2} & 2026-09-29 & Mouse V1 recordings downloaded, with SHA-256 digests \\
+\texttt{a2f39ca} & 2026-09-29 & Mouse V1 results \\
+\texttt{766e4b7} & 2026-10-01 & Amendment 5: the comparison of common checks, its code and synthetic tests \\
+\ChecksResultsCommit & 2026-10-01 & Results of the comparison \\
+\bottomrule
+\end{tabular}
+\caption{The pre-registration trail, in the version-controlled repository
+(\todo{repository URL}). Each protocol and its code were committed before the analysis they
+govern was run.}
+\end{table}
+
+\clearpage
+\bibliographystyle{plainnat}
+\bibliography{refs}
+
+\end{document}

@@ -1,0 +1,7 @@
+Highlights
+
+- Checks of 2-D maps against the averaged data share the averages' noise
+- Held-out repetitions estimate how many passing neighborhoods are not faithful
+- At 8 trials, 81-86% (EEG) and ~100% (mouse V1) of passing neighborhoods are wrong
+- Four of six common checks left most false comfort; none removed it
+- Claims were pre-specified; the mouse V1 data were an independent test

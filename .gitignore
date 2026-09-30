@@ -14,3 +14,11 @@ note/*.blg
 note/*.fls
 note/*.fdb_latexmk
 note/note.pdf
+manuscript/*.aux
+manuscript/*.log
+manuscript/*.out
+manuscript/*.bbl
+manuscript/*.blg
+manuscript/*.fls
+manuscript/*.fdb_latexmk
+manuscript/*.pdf

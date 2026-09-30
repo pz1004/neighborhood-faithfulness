@@ -1,0 +1,58 @@
+\documentclass[11pt]{letter}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=1in]{geometry}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\setlist{itemsep=2pt,topsep=4pt}
+\newcommand{\todo}[1]{\textcolor{red!70!black}{[TODO: #1]}}
+\input{meta.tex}
+\input{numbers.tex}
+\signature{Sooyoung Jang\\ Hanbat National University\\ \texttt{syjang@hanbat.ac.kr}}
+\address{Sooyoung Jang\\ Hanbat National University\\ \todo{department and postal address}\\ Daejeon, Republic of Korea}
+
+\begin{document}
+\begin{letter}{Editor-in-Chief\\ Journal of Neuroscience Methods}
+\opening{Dear Editor,}
+
+Please consider the enclosed research article, ``\MsTitle'', for publication in the
+\emph{Journal of Neuroscience Methods}.
+
+Two-dimensional maps of trial-averaged responses, made with t-SNE or multidimensional scaling, are
+read neighbor by neighbor throughout systems neuroscience, and analysts check them against the
+averaged data or for stability across runs, resamples and halves of the trials. The manuscript
+asks how often a neighborhood that passes such a check is faithful to the noise-free responses,
+and answers with a method that estimates this from held-out repetitions.
+
+The study reanalyzes two public datasets, THINGS-EEG2 and the Allen Brain Observatory two-photon
+survey, and I am aware of the journal's policy for such work. I believe it meets that policy on
+all three of its grounds:
+\begin{itemize}[leftmargin=*]
+  \item \textbf{Methodological innovation.} An estimator of the ``false comfort'' of any
+  neighborhood check: held-out reference blocks, a simulation--extrapolation correction for the
+  reference's own noise, subject-level bootstrap bounds, and validation in plasmode simulations.
+  \item \textbf{Rigorous benchmarking.} A pre-specified comparison of six existing checks against the
+  truth: per-point trustworthiness, scDEED, cross-validated distances, and recurrence across t-SNE
+  seeds, bootstrap resamples and split halves. Four of the six left most false comfort in both
+  datasets, the two strict resampling checks passed almost no neighborhoods, and none removed most
+  false comfort.
+  \item \textbf{Insight for experimental methodology.} At 8 trials, \EegFCeight\% of the
+  neighborhoods that pass the usual check are not faithful in human EEG, and essentially all in
+  mouse V1. An exploratory analysis relates the difference to the ratio of neighbor distance to
+  trial noise, which bears directly on how many trials a study needs before its maps can be read
+  locally.
+\end{itemize}
+Every claim, threshold and robustness variation was fixed in a protocol committed before the
+analysis it governs was run, and the mouse data were selected by rule and analyzed only after
+their protocol was fixed. The code, protocols and results will be public at \todo{repository URL}.
+
+The manuscript has not been published and is not under consideration elsewhere. The author
+declares no competing interests. \todo{confirm} As described in the manuscript's declaration and
+Methods, the analyses were implemented and run, and the text drafted, by an AI assistant (Claude,
+Anthropic) under the author's direction; the author reviewed all of it and takes full
+responsibility for the content.
+
+\closing{Sincerely,}
+\end{letter}
+\end{document}

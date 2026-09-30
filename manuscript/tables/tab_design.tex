@@ -1,0 +1,15 @@
+\begin{tabular}{p{0.26\linewidth}p{0.32\linewidth}p{0.32\linewidth}}
+\toprule
+ & Human EEG (THINGS-EEG2) & Mouse V1 (Allen Brain Observatory) \\
+\midrule
+Subjects & 10 adults (8 female, 2 male) & 10 mice (7 male, 3 female), one experiment each \\
+Stimuli & 200 object images & 118 natural scenes \\
+Repetitions per image & 80, over 4 sessions & 50, early and late strata of 25 \\
+Features per trial & 17 channels $\times$ 80 samples (0--0.79\,s) & 145--359 cells, mean $\Delta F/F$ over 0.5\,s \\
+Blocks $F$ / $U$ / $H$ & 8 / 32 / 40 & 10 / 16 / 24 \\
+Analyst's budgets $R$ & 8, 16, 32 & 8, 16 \\
+Reference sizes $R_h$ (sub-blocks) & 8 (5), 20 (2), 40 (1) & 8 (3), 12 (2), 24 (1) \\
+Random splits per subject & 10 & 10 \\
+Representation, fitted on $F$ & \multicolumn{2}{l}{PCA to 100, Ledoit--Wolf whitening, PCA to $D=20$} \\
+\bottomrule
+\end{tabular}

@@ -1,0 +1,69 @@
+% Discussion. discussion_checks.tex and conclusions.tex are written from the comparison's results.
+
+A 2-D map of trial-averaged responses can agree with the averaged data, neighborhood by
+neighborhood, and still say little about the responses that the averaging estimates. In two
+independent datasets, with claims fixed in advance, most neighborhoods that passed the plug-in
+check at 8 trials were not faithful to the noise-free responses: \EegFCeight\% in human EEG and
+essentially all in mouse V1. Cross-validated distances made the check stricter but not accurate,
+and the result held across the pre-specified variations of the neighborhood definition, the map
+and the representation.
+
+\subsection{Implications for practice}
+
+The maps in these data are not meaningless. In both datasets most image pairs were reliably
+distinguishable and the distance matrix replicated across independent trials
+(Table~\ref{tab:snr}), so the global arrangement of a map, which an RSA noise ceiling would
+certify, can be trusted more than its neighborhoods. What fails is the local ordering: the distance
+from an image to its 8th nearest neighbor is comparable to, or smaller than, the noise between
+two 16-trial means. Five practical consequences follow.
+\begin{enumerate}[leftmargin=*]
+  \item Neighbor-level readings of maps of few-trial averages (which stimulus sits next to which)
+  should be treated as hypotheses, not findings, unless their false comfort has been estimated.
+  \item When the design has repetitions to spare, hold some out. With the estimator of
+  Section~\ref{sec:est}, a held-out block at two or more sub-block sizes gives the false comfort of
+  the analyst's map and of any check the analyst uses, with a conservative bound.
+  \item Report that estimate with the map, as one reports a noise ceiling with a model comparison.
+  \item Checks computed from the same trials are no substitute. Scores against the averages and
+  consistency across t-SNE runs pass many unfaithful neighborhoods. A strict resampling check, such
+  as recurrence in maps of both halves of the trials, is the safer of these: at small budgets it
+  passes almost nothing, and what it passes is more often faithful than what the permissive checks
+  pass.
+  \item More trials help slowly. In EEG, false comfort fell from \EegFCeight\% at 8 trials to
+  \EegFCthirtytwo\% at 32. Where the ratio of neighbor distance to trial noise is well below one,
+  as in mouse V1, no budget in the range studied gives faithful neighborhoods.
+\end{enumerate}
+
+\input{discussion_checks.tex}
+
+\subsection{Limitations}
+
+Several limitations apply.
+\begin{itemize}[leftmargin=*]
+  \item \textbf{Scope of the data.} Both datasets are visual responses to static images. Other
+  modalities (fMRI, spiking data), other stimulus sets and other response windows may have
+  different ratios of neighbor distance to trial noise, and the effect may be weaker where that
+  ratio is large.
+  \item \textbf{One neighborhood definition.} The definition ($k=10$, $\varepsilon=0.2$,
+  $k'=2k$) was varied one factor at a time, not jointly. We tested t-SNE, MDS and PCA maps, but not
+  UMAP.
+  \item \textbf{The extrapolation assumes a functional form.} We report two extrapolants and judge
+  every claim on the more conservative one. The plasmode check found negligible bias, but its truth
+  is itself a finite average of held-out trials, so it checks the estimator under the data's noise
+  rather than against an exact truth.
+  \item \textbf{Shared noise counts as signal.} Noise shared by the analyst's and the reference
+  repetitions, such as slow drift within a session, is indistinguishable from signal here. Blocks
+  were balanced over sessions (EEG) or over halves of the session (mouse V1) to limit it.
+  \item \textbf{Pre-specification.} The EEG confirmation reused the pilot's data with new splits
+  and seeds, and pre-specification was by commits to a version-controlled repository rather than
+  by an external registry \citep{nosek2018}. The mouse data are the independent test.
+  \item \textbf{Representation.} The representation was noise-normalized. Without whitening,
+  false comfort in EEG rose to \EegUnwhitenedFC\% at 8 trials; in mouse V1 it was total either way.
+  \item \textbf{Sex.} The EEG participants were 8 female and 2 male, and the mice \MouseMale{} male
+  and \MouseFemale{} female. With 10 subjects per dataset, we did not analyze sex or gender and
+  cannot exclude that either affects the ratio of neighbor distance to trial noise.
+  \item \textbf{The comparison of checks} used the primary analysis of each dataset only.
+\end{itemize}
+
+\subsection{Conclusions}
+
+\input{conclusions.tex}
