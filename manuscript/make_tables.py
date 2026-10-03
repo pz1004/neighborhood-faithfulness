@@ -1,13 +1,23 @@
 #!/usr/bin/env python3
-"""Tables and in-text numbers for manuscript/manuscript.tex and supplementary.tex, drawn only from
-committed results. Nothing is re-measured here.
+"""Tables and in-text numbers for manuscript.tex, supplementary.tex and cover_letter.tex, drawn only
+from committed results. Nothing is re-measured here.
 
-  tables/tab_design.tex   Table 1: datasets and design
-  tables/tab_primary.tex  Table 2: called faithful, truly faithful, mislabel rate, false comfort
-  tables/tab_checks.tex   Table 3: common checks against the truth at 8 trials
-  tables/tab_snr.tex      Table 4: exploratory signal-to-noise
-  tables/tab_s*.tex       Supplementary Tables S1-S6
-  numbers.tex             every number the text quotes, as macros, so text and tables cannot drift
+The script writes into those files between "% BEGIN make_tables.py <name>" and
+"% END make_tables.py <name>" lines, and nowhere else:
+
+  tab_design              Table 1: datasets and design
+  tab_primary             Table 2: called faithful, truly faithful, mislabel rate, false comfort
+  tab_checks              Table 3: common checks against the truth at 8 trials
+  tab_snr                 Table 4: exploratory signal-to-noise
+  tab_supp_*              Supplementary Tables, numbered in the order the text cites them: S1 per
+                          subject, S3 plasmode (confirmatory), S4 plasmode (checks), S5 and S6
+                          every variation (EEG, mouse), S7 and S8 the checks at every budget (EEG,
+                          mouse). S2, the pre-registration trail, is written in supplementary.tex.
+  numbers                 every number the text quotes, as macros, so text and tables cannot drift;
+                          each file's block defines the macros that file uses
+
+With --check nothing is written: the script shows the difference and exits with an error if any
+block differs from what the committed results give.
 
 Sources:
 - results/things_confirmatory/{rows.jsonl, confirmatory_summary.json};
@@ -15,11 +25,14 @@ Sources:
   subjects_described.json};
 - results/checks/checks_summary.json.
 """
-import json, re, sys
+import difflib, json, re, sys
 from pathlib import Path
 
 import numpy as np
 
+if sys.argv[1:] not in ([], ["--check"]):
+    sys.exit("usage: make_tables.py [--check]")
+CHECK_ONLY = sys.argv[1:] == ["--check"]
 ROOT = Path(__file__).resolve().parent.parent
 OUT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
@@ -65,8 +78,12 @@ def L(S, cell, R, q, d=0):
     return pct(get(S, cell, R, q)["L"], d)
 
 
+TABLES = {}
+
+
 def write(name, text):
-    (OUT / "tables" / name).write_text(text)
+    """Keep a table's body; it goes into its block at the end."""
+    TABLES[name] = text
 
 
 # ---------------------------------------------------------------------------------------------
@@ -74,7 +91,7 @@ def write(name, text):
 # ---------------------------------------------------------------------------------------------
 cells = [m["n_cells"] for m in MICE]
 n_f = sum(m["sex"] == "F" for m in MICE)
-write("tab_design.tex", "\\begin{tabular}{p{0.26\\linewidth}p{0.32\\linewidth}p{0.32\\linewidth}}\n\\toprule\n"
+write("tab_design", "\\begin{tabular}{>{\\raggedright\\arraybackslash}p{0.26\\linewidth}>{\\raggedright\\arraybackslash}p{0.32\\linewidth}>{\\raggedright\\arraybackslash}p{0.32\\linewidth}}\n\\toprule\n"
       " & Human EEG (THINGS-EEG2) & Mouse V1 (Allen Brain Observatory) \\\\\n\\midrule\n"
       "Subjects & 10 adults (8 female, 2 male) & "
       f"10 mice ({10 - n_f} male, {n_f} female), one experiment each \\\\\n"
@@ -101,7 +118,7 @@ for name, S, Rs in (("Human EEG", TH, (8, 16, 32)), ("Mouse V1", AL, (8, 16))):
                         f"{rng(S, cell, R, 'TF', 1)} & {rng(S, cell, R, 'q', 1)} & "
                         f"{rng(S, cell, R, 'FC', d)} & {L(S, cell, R, 'FC', d)} \\\\")
         rows.append("\\addlinespace")
-write("tab_primary.tex", "\\begin{tabular}{llrrrrrr}\n\\toprule\n"
+write("tab_primary", "\\begin{tabular}{llrrrrrr}\n\\toprule\n"
       " & & & Called & Truly & Mislabel & False & Bound \\\\\n"
       "Data & Map & Trials & faithful & faithful & rate & comfort & $L$ \\\\\n"
       "\\midrule\n" + "\n".join(rows[:-1]) + "\n\\bottomrule\n\\end{tabular}\n")
@@ -118,7 +135,7 @@ S2 = {key: dict(pos=grab(b, r"positive cross-validated d\^2: ([\d.]+)"),
                 noise=grab(b, r"16-rep mean pair ([\d.]+)"),
                 ratio=grab(b, r"ratio ([\d.]+)"),
                 n_pos8=grab(b, r"median (\d+) of")) for key, b in blocks.items()}
-write("tab_snr.tex", "\\begin{tabular}{lrr}\n\\toprule\n & Human EEG & Mouse V1 \\\\\n\\midrule\n"
+write("tab_snr", "\\begin{tabular}{lrr}\n\\toprule\n & Human EEG & Mouse V1 \\\\\n\\midrule\n"
       f"Image pairs with a positive cross-validated distance & {S2['things']['pos']:.3f} & {S2['allen']['pos']:.3f} \\\\\n"
       f"Split-half reliability of the distance matrix & {S2['things']['rel']:.3f} & {S2['allen']['rel']:.3f} \\\\\n"
       f"Distance to the 8th nearest image, $d_{{(8)}}$ & {S2['things']['d8']:.2f} & {S2['allen']['d8']:.2f} \\\\\n"
@@ -127,9 +144,9 @@ write("tab_snr.tex", "\\begin{tabular}{lrr}\n\\toprule\n & Human EEG & Mouse V1 
       "\\bottomrule\n\\end{tabular}\n")
 
 # ---------------------------------------------------------------------------------------------
-# Supplementary Tables S1, S2: every cell and budget
+# Supplementary Tables S5, S6: every cell and budget
 # ---------------------------------------------------------------------------------------------
-for tab, S, Rs, d in (("tab_s1_cells_eeg.tex", TH, (8, 16, 32), 1), ("tab_s2_cells_mouse.tex", AL, (8, 16), 1)):
+for tab, S, Rs, d in (("tab_supp_cells_eeg", TH, (8, 16, 32), 1), ("tab_supp_cells_mouse", AL, (8, 16), 1)):
     body = []
     for cell in CELL_ORDER:
         for R in Rs:
@@ -143,7 +160,7 @@ for tab, S, Rs, d in (("tab_s1_cells_eeg.tex", TH, (8, 16, 32), 1), ("tab_s2_cel
           + "\n".join(body[:-1]) + "\n\\bottomrule\n\\end{tabular}\n")
 
 # ---------------------------------------------------------------------------------------------
-# Supplementary Table S3: per-subject estimates, primary cell, 8 trials
+# Supplementary Table S1: per-subject estimates, primary cell, 8 trials, with each mouse's sex and age
 # ---------------------------------------------------------------------------------------------
 def per_subject(path, mod):
     """Per-subject estimates of the primary cell at 8 trials, with the registered estimator."""
@@ -157,15 +174,16 @@ body = []
 for s in range(1, 11):
     a, b = est_th[(s, "primary", 8)], est_al[(s, "primary", 8)]
     fmt = lambda e: f"{pct(e['NF'], 1)} & {pct(e['FC'][0], 1)} & {pct(e['FC'][1], 1)}"
-    body.append(f"{s} & {fmt(a)} & {fmt(b)} & {MICE[s - 1]['n_cells']} \\\\")
-write("tab_s3_subjects.tex", "\\begin{tabular}{rrrrrrrr}\n\\toprule\n"
-      " & \\multicolumn{3}{c}{Human EEG} & \\multicolumn{4}{c}{Mouse V1} \\\\\n"
-      "\\cmidrule(lr){2-4}\\cmidrule(lr){5-8}\n"
-      "Subject & NF & FC, $R_h^{-1/2}$ & FC, $1/R_h$ & NF & FC, $R_h^{-1/2}$ & FC, $1/R_h$ & Cells \\\\\n\\midrule\n"
+    mouse = MICE[s - 1]
+    body.append(f"{s} & {fmt(a)} & {fmt(b)} & {mouse['sex']} & {mouse['age_days']} & {mouse['n_cells']} \\\\")
+write("tab_supp_subjects", "\\begin{tabular}{rrrrrrrrrr}\n\\toprule\n"
+      " & \\multicolumn{3}{c}{Human EEG} & \\multicolumn{6}{c}{Mouse V1} \\\\\n"
+      "\\cmidrule(lr){2-4}\\cmidrule(lr){5-10}\n"
+      "Subject & NF & FC, $R_h^{-1/2}$ & FC, $1/R_h$ & NF & FC, $R_h^{-1/2}$ & FC, $1/R_h$ & Sex & Age (days) & Cells \\\\\n\\midrule\n"
       + "\n".join(body) + "\n\\bottomrule\n\\end{tabular}\n")
 
 # ---------------------------------------------------------------------------------------------
-# Supplementary Table S4: plasmode bias per subject, primary cell, 8 trials (confirmatory check)
+# Supplementary Table S3: plasmode bias per subject, primary cell, 8 trials (confirmatory check)
 # ---------------------------------------------------------------------------------------------
 body = []
 for s in range(10):
@@ -174,7 +192,7 @@ for s in range(10):
 body.append("\\midrule")
 body.append(f"Median & {TH['bias']['FC']['median_bias']:+.3f} & {TH['bias']['q']['median_bias']:+.3f} & "
             f"{AL['bias']['FC']['median_bias']:+.3f} & {AL['bias']['q']['median_bias']:+.3f} \\\\")
-write("tab_s4_plasmode.tex", "\\begin{tabular}{rrrrr}\n\\toprule\n"
+write("tab_supp_plasmode", "\\begin{tabular}{rrrrr}\n\\toprule\n"
       " & \\multicolumn{2}{c}{Human EEG} & \\multicolumn{2}{c}{Mouse V1} \\\\\n"
       "\\cmidrule(lr){2-3}\\cmidrule(lr){4-5}\n"
       "Subject & FC & $q$ & FC & $q$ \\\\\n\\midrule\n" + "\n".join(body) + "\n\\bottomrule\n\\end{tabular}\n")
@@ -207,12 +225,14 @@ M = {
     "PosMouse": pct(S2["allen"]["pos"]), "MouseNonPos": str(118 - int(S2["allen"]["n_pos8"])),
     "MouseCellsMin": str(min(cells)), "MouseCellsMax": str(max(cells)),
     "MouseMale": str(10 - n_f), "MouseFemale": str(n_f),
+    "MouseAgeMin": str(min(m["age_days"] for m in MICE)), "MouseAgeMax": str(max(m["age_days"] for m in MICE)),
+    "MouseExperimentIDs": ", ".join(str(m["experiment_id"]) for m in MICE[:-1]) + f" and {MICE[-1]['experiment_id']}",
 }
 assert [c for c in CELL_ORDER if c not in TH["cells_holding"]] == ["k20", "pca2"]
 assert [c for c in CELL_ORDER if c not in AL["cells_holding"]] == []
 
 # ---------------------------------------------------------------------------------------------
-# The common checks (Table 3, Supplementary Tables S5 and S6, and their numbers)
+# The common checks (Table 3, Supplementary Tables S4, S7 and S8, and their numbers)
 # ---------------------------------------------------------------------------------------------
 CK = json.load(open(ROOT / "results/checks/checks_summary.json"))
 DS = {"things": ("Human EEG", (8, 16, 32)), "allen": ("Mouse V1", (8, 16))}
@@ -270,12 +290,12 @@ for ds, (name, Rs) in DS.items():
         body.append(f"\\quad {CHECK_LABEL[X]} & {ck_pass(ds, X, 8)} & {ck_rng(ds, X, 8, 'FC', d)} & "
                     f"{ck_bound(ds, X, 8, 'L', d)}, {ck_bound(ds, X, 8, 'U', d)} & {catch} & {withn} & {cls} \\\\")
     body.append("\\addlinespace")
-write("tab_checks.tex", "\\begin{tabular}{lrrrrrl}\n\\toprule\n"
+write("tab_checks", "\\begin{tabular}{lrrrrrl}\n\\toprule\n"
       " & & False & Bounds & Plug-in false & With & \\\\\n"
       "Check & Passes & comfort & $L$, $U$ & comfort flagged & plug-in & Classification \\\\\n\\midrule\n"
       + "\n".join(body[:-1]) + "\n\\bottomrule\n\\end{tabular}\n")
 
-for tab, ds in (("tab_s5_checks_eeg.tex", "things"), ("tab_s6_checks_mouse.tex", "allen")):
+for tab, ds in (("tab_supp_checks_eeg", "things"), ("tab_supp_checks_mouse", "allen")):
     name, Rs = DS[ds]
     body = []
     for X in CHECKS:
@@ -299,7 +319,7 @@ for X in CHECKS:
         cells_.append(f"{b['bias_lo']:+.3f} & {b['bias_hi']:+.3f} & {b['n']}"
                       if b["n"] else "-- & -- & 0")
     body.append(f"{CHECK_LABEL[X]} & " + " & ".join(cells_) + " \\\\")
-write("tab_s7_checks_plasmode.tex", "\\begin{tabular}{lrrrrrr}\n\\toprule\n"
+write("tab_supp_checks_plasmode", "\\begin{tabular}{lrrrrrr}\n\\toprule\n"
       " & \\multicolumn{3}{c}{Human EEG} & \\multicolumn{3}{c}{Mouse V1} \\\\\n"
       "\\cmidrule(lr){2-4}\\cmidrule(lr){5-7}\n"
       "Check & Smaller & Larger & Subjects & Smaller & Larger & Subjects \\\\\n\\midrule\n"
@@ -333,6 +353,35 @@ M["ChkEegMinL"] = pct(min(ck("things", X, 8, "FC")["L"] for X in ("TW", "SCD", "
 M["ChkEegExtraSCD"] = pct(ck("things", "SCD", 8, "PASS")["med"] - ck("things", "SCD", 8, "PASS_NX")["med"])
 M["ChkEegExtraSEED"] = pct(ck("things", "SEED", 8, "PASS")["med"] - ck("things", "SEED", 8, "PASS_NX")["med"])
 
-(OUT / "numbers.tex").write_text("% generated by make_tables.py from committed results; do not edit\n"
-                                 + "".join(f"\\newcommand{{\\{k}}}{{{v}}}\n" for k, v in M.items()))
-print((OUT / "numbers.tex").read_text())
+# ---------------------------------------------------------------------------------------------
+# Write the tables and numbers into their blocks
+# ---------------------------------------------------------------------------------------------
+BLOCK = re.compile(r"^% BEGIN make_tables\.py (\S+)\n.*?^% END make_tables\.py \1\n", re.S | re.M)
+placed, stale = [], []
+for doc in ("manuscript.tex", "supplementary.tex", "cover_letter.tex"):
+    old = (OUT / doc).read_text()
+    outside = BLOCK.sub("", old)
+
+    def fill(m):
+        name = m.group(1)
+        placed.append(name)
+        if name == "numbers":                       # the macros this file uses, in the order above
+            text = "".join(f"\\newcommand{{\\{k}}}{{{v}}}\n" for k, v in M.items()
+                           if re.search(rf"\\{k}(?![A-Za-z])", outside))
+        else:
+            assert name in TABLES, f"{doc}: no table called {name}"
+            text = TABLES[name]
+        return f"% BEGIN make_tables.py {name}\n{text}% END make_tables.py {name}\n"
+    new = BLOCK.sub(fill, old)
+    if new != old:
+        stale.append(doc)
+        if CHECK_ONLY:
+            sys.stdout.writelines(difflib.unified_diff(old.splitlines(True), new.splitlines(True),
+                                                       doc, doc + " from the results"))
+        else:
+            (OUT / doc).write_text(new)
+assert sorted(n for n in placed if n != "numbers") == sorted(TABLES), "each table needs exactly one block"
+if CHECK_ONLY and stale:
+    sys.exit("blocks differ from the committed results in " + ", ".join(stale) + "; run make_tables.py")
+print(("rewrote blocks in " + ", ".join(stale)) if stale and not CHECK_ONLY else
+      "every table and number matches the committed results")

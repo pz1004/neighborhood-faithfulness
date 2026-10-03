@@ -68,9 +68,9 @@ reproduction. `reach/predecessor/` is the predecessor's code, copied verbatim; s
 | `run_checks.py` | the comparison's driver: the confirmatory maps re-created, every check counted against the references |
 | `analyze_checks.py` | its joint-label estimators, subject bootstrap and pre-registered classification |
 | `tests/test_checks.py` | synthetic known-truth checks of that code; touches no data |
-| `describe_allen_subjects.py` | donor, sex, depth and cell count of the included mice, for the manuscript |
+| `describe_allen_subjects.py` | donor, sex, genotype, age at recording, depth and cell count of the included mice, for the manuscript |
 | `results/checks/` | the comparison's test log, rows, semi-synthetic check and printout |
-| `manuscript/` | the Journal of Neuroscience Methods manuscript: `manuscript.tex`, `supplementary.tex`, highlights and cover letter, with `make_figures.py` and `make_tables.py`; PDFs are built, not tracked |
+| `manuscript/` | the Journal of Neuroscience Methods manuscript: `manuscript.tex`, `supplementary.tex` and `cover_letter.tex`, each one self-contained file, with `refs.bib`, `highlights.txt` and `figures/`; `make_figures.py` draws the figures, and `make_tables.py` writes the tables and every quoted number into the `.tex` files from the committed results (`--check` only verifies them); PDFs are built, not tracked |
 | `reach/engines.py` | E-ball, E-pair-t, E-pair-pool and the reference E-cmp (plan Section 4) |
 | `reach/target.py` | reach, its closed-form box bounds, displays, naive maps (plan Section 3) |
 | `reach/noise.py` | the seven noise models (plan Section 5.2) |
@@ -161,7 +161,7 @@ python3 tests/test_checks.py > results/checks/test_checks.log && python3 run_che
 The manuscript (needs matplotlib and a LaTeX installation with latexmk):
 
 ```bash
-python3 describe_allen_subjects.py && python3 manuscript/make_figures.py && python3 manuscript/make_tables.py && latexmk -pdf -cd manuscript/manuscript.tex && latexmk -pdf -cd manuscript/supplementary.tex
+python3 describe_allen_subjects.py && python3 manuscript/make_figures.py && python3 manuscript/make_tables.py && latexmk -pdf -cd manuscript/manuscript.tex && latexmk -pdf -cd manuscript/supplementary.tex && latexmk -pdf -cd manuscript/cover_letter.tex
 ```
 
 The note (needs matplotlib and a LaTeX installation with latexmk):

@@ -1,7 +1,14 @@
 % Verified on 2026-10-01 against Crossref (DOI records), PubMed (kriegeskorte2008), jmlr.org
 % (vandermaaten2008, venna2010), the arXiv API (schreck2023) and the bioRxiv API (cooley2019).
 % The entries after "Added for the manuscript" were verified on 2026-10-01 against their Crossref
-% DOI records; xia2024 also against its full text in Europe PMC. One open item is marked CHECK.
+% DOI records; xia2024 also against its full text in Europe PMC.
+% 2026-10-02, for the JNM guide for authors: every DOI re-checked against Crossref; author lists
+% taken from Crossref, all names up to 10 authors and the first 10 with "et al." beyond that; schreck2023 replaced by its peer-reviewed version (Stat. Med. 2024);
+% venna2001 completed with its editors and LNCS volume (2130, from the standard LNCS citation:
+% DBLP and SpringerLink answered with bot challenges); issue numbers added; dataset references
+% (marked [dataset]) checked against DataCite and the Allen Institute's citation guidance;
+% software and ARRIVE references checked against Crossref and jmlr.org. cooley2019 was updated by
+% the author to bioRxiv version 8 and its Crossref title.
 
 @article{gifford2022,
   author  = {Gifford, Alessandro T. and Dwivedi, Kshitij and Roig, Gemma and Cichy, Radoslaw M.},
@@ -13,7 +20,7 @@
   doi     = {10.1016/j.neuroimage.2022.119754}
 }
 @article{devries2020,
-  author  = {de Vries, Saskia E. J. and Lecoq, Jerome A. and Buice, Michael A. and others},
+  author  = {de Vries, Saskia E. J. and Lecoq, Jerome A. and Buice, Michael A. and Groblewski, Peter A. and Ocker, Gabriel K. and Oliver, Michael and Feng, David and Cain, Nicholas and Ledochowitsch, Peter and Millman, Daniel and others},
   title   = {A large-scale standardized physiological survey reveals functional organization of the mouse visual cortex},
   journal = {Nature Neuroscience},
   volume  = {23},
@@ -23,7 +30,7 @@
   doi     = {10.1038/s41593-019-0550-9}
 }
 @article{hebart2023,
-  author  = {Hebart, Martin N. and others},
+  author  = {Hebart, Martin N. and Contier, Oliver and Teichmann, Lina and Rockter, Adam H. and Zheng, Charles Y. and Kidder, Alexis and Corriveau, Anna and Vaziri-Pashkam, Maryam and Baker, Chris I.},
   title   = {{THINGS}-data, a multimodal collection of large-scale datasets for investigating object representations in human brain and behavior},
   journal = {eLife},
   volume  = {12},
@@ -97,13 +104,10 @@
   year    = {2024},
   doi     = {10.1371/journal.pcbi.1012403}
 }
-% CHECK cooley2019: title and authors follow the bioRxiv API for version 8 (2026-05-11), which
-% keeps the original title. Crossref's record for the same DOI gives "...distortion in the analysis
-% of scRNA-seq data". Confirm on the bioRxiv page, which returned HTTP 429 to an automated request.
-@misc{cooley2019,
-  author       = {Hamilton, Timothy and Sparta, Breanne and Cooley, Shamus M. and Aragones, Samuel D. and Ray, J. Christian J. and Deeds, Eric J.},
-  title        = {A novel metric reveals previously unrecognized distortion in dimensionality reduction of {scRNA-Seq} data},
-  howpublished = {bioRxiv 689851, version 8 (first posted 2019)},
+@article{cooley2019,
+  author       = {Hamilton, Timothy and Sparta, Breanne and Cooley, Shamus and Aragones, Samuel D. and Ray, J. Christian J. and Deeds, Eric J.},
+  title        = {A novel metric reveals previously unrecognized distortion in the analysis of {scRNA-seq} data},
+  journal = {bioRxiv},
   year         = {2026},
   doi          = {10.1101/689851}
 }
@@ -133,7 +137,8 @@
   journal = {Journal of Machine Learning Research},
   volume  = {11},
   pages   = {451--490},
-  year    = {2010}
+  year    = {2010},
+  url     = {https://www.jmlr.org/papers/v11/venna10a.html}
 }
 @article{vandermaaten2008,
   author  = {van der Maaten, Laurens and Hinton, Geoffrey},
@@ -141,7 +146,8 @@
   journal = {Journal of Machine Learning Research},
   volume  = {9},
   pages   = {2579--2605},
-  year    = {2008}
+  year    = {2008},
+  url     = {https://www.jmlr.org/papers/v9/vandermaaten08a.html}
 }
 @article{livingston1995,
   author  = {Livingston, Samuel A. and Lewis, Charles},
@@ -183,11 +189,15 @@
   year    = {2002},
   doi     = {10.1016/S0167-7152(02)00098-6}
 }
-@misc{schreck2023,
-  author       = {Schreck, Nicholas and Slynko, Alla and Saadati, Maral and Benner, Axel},
-  title        = {Statistical plasmode simulations -- potentials, challenges and recommendations},
-  howpublished = {arXiv:2305.06028},
-  year         = {2023}
+@article{schreck2024,
+  author  = {Schreck, Nicholas and Slynko, Alla and Saadati, Maral and Benner, Axel},
+  title   = {Statistical plasmode simulations--Potentials, challenges and recommendations},
+  journal = {Statistics in Medicine},
+  volume  = {43},
+  number  = {9},
+  pages   = {1804--1825},
+  year    = {2024},
+  doi     = {10.1002/sim.10012}
 }
 @article{ahlmann2023,
   author  = {Ahlmann-Eltze, Constantin and Huber, Wolfgang},
@@ -277,6 +287,7 @@
   title   = {The art of using t-{SNE} for single-cell transcriptomics},
   journal = {Nature Communications},
   volume  = {10},
+  number  = {1},
   pages   = {5416},
   year    = {2019},
   doi     = {10.1038/s41467-019-13056-x}
@@ -295,7 +306,9 @@
   author    = {Venna, Jarkko and Kaski, Samuel},
   title     = {Neighborhood preservation in nonlinear projection methods: An experimental study},
   booktitle = {Artificial Neural Networks --- {ICANN} 2001},
+  editor    = {Dorffner, Georg and Bischof, Horst and Hornik, Kurt},
   series    = {Lecture Notes in Computer Science},
+  volume    = {2130},
   publisher = {Springer},
   address   = {Berlin, Heidelberg},
   pages     = {485--491},
@@ -307,6 +320,7 @@
   title   = {Trustworthiness and metrics in visualizing similarity of gene expression},
   journal = {BMC Bioinformatics},
   volume  = {4},
+  number  = {1},
   pages   = {48},
   year    = {2003},
   doi     = {10.1186/1471-2105-4-48}
@@ -326,6 +340,7 @@
   title   = {Statistical method {scDEED} for detecting dubious {2D} single-cell embeddings and optimizing t-{SNE} and {UMAP} hyperparameters},
   journal = {Nature Communications},
   volume  = {15},
+  number  = {1},
   pages   = {1753},
   year    = {2024},
   doi     = {10.1038/s41467-024-45891-y}
@@ -355,6 +370,7 @@
   title   = {Assessing and improving reliability of neighbor embedding methods: a map-continuity perspective},
   journal = {Nature Communications},
   volume  = {16},
+  number  = {1},
   pages   = {5037},
   year    = {2025},
   doi     = {10.1038/s41467-025-60434-9}
@@ -388,4 +404,80 @@
   pages   = {2600--2606},
   year    = {2018},
   doi     = {10.1073/pnas.1708274114}
+}
+
+% ---------------------------------------------------------------------------------------------
+% Added for the JNM guide for authors (2026-10-02): data, software and reporting guidelines
+% ---------------------------------------------------------------------------------------------
+@misc{gifford2021data,
+  author       = {Gifford, Alessandro T.},
+  title        = {A large and rich {EEG} dataset for modeling human visual object recognition [dataset]},
+  howpublished = {OSF},
+  year         = {2021},
+  doi          = {10.17605/OSF.IO/3JK45},
+  note         = {Preprocessed data component: \url{https://osf.io/anp5v/}; accessed 29 September 2026}
+}
+@misc{allen2016data,
+  author       = {{Allen Institute MindScope Program}},
+  title        = {Allen {Brain Observatory} -- 2-photon {Visual Coding} [dataset]},
+  howpublished = {\url{https://observatory.brain-map.org/visualcoding}},
+  year         = {2016},
+  note         = {Accessed 29 September 2026}
+}
+@misc{jang2026code,
+  author       = {Jang, Sooyoung},
+  title        = {{Code, protocols and results for ``\MsTitle''} [dataset]},
+  howpublished = {\todo{repository name, e.g. Zenodo}},
+  year         = {2026},
+  note         = {\todo{DOI of the deposit}}
+}
+@article{pedregosa2011,
+  author  = {Pedregosa, Fabian and Varoquaux, Ga{\"e}l and Gramfort, Alexandre and Michel, Vincent and Thirion, Bertrand and Grisel, Olivier and Blondel, Mathieu and Prettenhofer, Peter and Weiss, Ron and Dubourg, Vincent and others},
+  title   = {Scikit-learn: Machine learning in {Python}},
+  journal = {Journal of Machine Learning Research},
+  volume  = {12},
+  number  = {85},
+  pages   = {2825--2830},
+  year    = {2011},
+  url     = {https://www.jmlr.org/papers/v12/pedregosa11a.html}
+}
+@article{harris2020,
+  author  = {Harris, Charles R. and Millman, K. Jarrod and van der Walt, St{\'e}fan J. and Gommers, Ralf and Virtanen, Pauli and Cournapeau, David and Wieser, Eric and Taylor, Julian and Berg, Sebastian and Smith, Nathaniel J. and others},
+  title   = {Array programming with {NumPy}},
+  journal = {Nature},
+  volume  = {585},
+  number  = {7825},
+  pages   = {357--362},
+  year    = {2020},
+  doi     = {10.1038/s41586-020-2649-2}
+}
+@article{virtanen2020,
+  author  = {Virtanen, Pauli and Gommers, Ralf and Oliphant, Travis E. and Haberland, Matt and Reddy, Tyler and Cournapeau, David and Burovski, Evgeni and Peterson, Pearu and Weckesser, Warren and Bright, Jonathan and others},
+  title   = {{SciPy} 1.0: Fundamental algorithms for scientific computing in {Python}},
+  journal = {Nature Methods},
+  volume  = {17},
+  number  = {3},
+  pages   = {261--272},
+  year    = {2020},
+  doi     = {10.1038/s41592-019-0686-2}
+}
+@article{hunter2007,
+  author  = {Hunter, John D.},
+  title   = {Matplotlib: A {2D} graphics environment},
+  journal = {Computing in Science \& Engineering},
+  volume  = {9},
+  number  = {3},
+  pages   = {90--95},
+  year    = {2007},
+  doi     = {10.1109/MCSE.2007.55}
+}
+@article{percie2020,
+  author  = {Percie du Sert, Nathalie and Hurst, Viki and Ahluwalia, Amrita and Alam, Sabina and Avey, Marc T. and Baker, Monya and Browne, William J. and Clark, Alejandra and Cuthill, Innes C. and Dirnagl, Ulrich and others},
+  title   = {The {ARRIVE} guidelines 2.0: Updated guidelines for reporting animal research},
+  journal = {PLoS Biology},
+  volume  = {18},
+  number  = {7},
+  pages   = {e3000410},
+  year    = {2020},
+  doi     = {10.1371/journal.pbio.3000410}
 }

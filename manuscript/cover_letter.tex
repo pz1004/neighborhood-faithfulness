@@ -7,14 +7,18 @@
 \usepackage{enumitem}
 \setlist{itemsep=2pt,topsep=4pt}
 \newcommand{\todo}[1]{\textcolor{red!70!black}{[TODO: #1]}}
-\input{meta.tex}
-\input{numbers.tex}
+\newcommand{\MsTitle}{Most faithful-looking neighborhoods in two-dimensional maps of trial-averaged neural responses are spurious: estimates from held-out repetitions}
+% The number the letter quotes is written by make_tables.py from the committed results,
+% between its BEGIN and END lines; python3 make_tables.py --check verifies it.
+% BEGIN make_tables.py numbers
+\newcommand{\EegFCeight}{81--86}
+% END make_tables.py numbers
 \signature{Sooyoung Jang\\ Hanbat National University\\ \texttt{syjang@hanbat.ac.kr}}
-\address{Sooyoung Jang\\ Hanbat National University\\ \todo{department and postal address}\\ Daejeon, Republic of Korea}
+\address{Sooyoung Jang\\ \todo{department}\\ Hanbat National University\\ 125 Dongseo-daero, Yuseong-gu\\ Daejeon 34158, Republic of Korea}
 
 \begin{document}
-\begin{letter}{Editor-in-Chief\\ Journal of Neuroscience Methods}
-\opening{Dear Editor,}
+\begin{letter}{Professor Giuseppe Di Giovanni\\ Editor-in-Chief\\ Journal of Neuroscience Methods}
+\opening{Dear Professor Di Giovanni,}
 
 Please consider the enclosed research article, ``\MsTitle'', for publication in the
 \emph{Journal of Neuroscience Methods}.
@@ -45,13 +49,15 @@ all three of its grounds:
 \end{itemize}
 Every claim, threshold and robustness variation was fixed in a protocol committed before the
 analysis it governs was run, and the mouse data were selected by rule and analyzed only after
-their protocol was fixed. The code, protocols and results will be public at \todo{repository URL}.
+their protocol was fixed. In line with the journal's research data policy, the code, protocols and
+derived results are deposited at \todo{repository and DOI} and cited in the article; the raw data
+remain openly available from their providers.
 
 The manuscript has not been published and is not under consideration elsewhere. The author
-declares no competing interests. \todo{confirm} As described in the manuscript's declaration and
-Methods, the analyses were implemented and run, and the text drafted, by an AI assistant (Claude,
-Anthropic) under the author's direction; the author reviewed all of it and takes full
-responsibility for the content.
+declares no competing interests. \todo{confirm} As described in the manuscript's Methods and its
+declaration of generative AI use, an AI assistant (Claude, Anthropic) was used under the author's
+direction to design, implement and run the analyses and to draft the text, figures and tables; the
+author reviewed and edited the content and takes full responsibility for it.
 
 \closing{Sincerely,}
 \end{letter}

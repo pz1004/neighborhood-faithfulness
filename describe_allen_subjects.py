@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
-"""Describe the 10 included Allen experiments for the manuscript's Methods: donor, sex, depth and
-cell count, from the downloaded experiment metadata (not tracked) and the tracked manifest.
+"""Describe the 10 included Allen experiments for the manuscript's Methods: donor, sex, genotype,
+age at the recording session, depth and cell count, from the downloaded experiment metadata (not
+tracked) and the tracked manifest. Sex and genotype are the donor record's fields; the age is the
+number of days from the donor's date of birth to the experiment's date of acquisition.
 
 Writes results/allen_confirmatory/subjects_described.json, in the analysis's subject order.
 """
+import datetime as dt
 import json
 
 subs = json.load(open("results/allen_confirmatory/subjects.json"))
@@ -25,11 +28,19 @@ def donor_sex(e):
     raise KeyError("no sex field")
 
 
+def day(stamp):
+    return dt.datetime.fromisoformat(stamp.replace("Z", "+00:00"))
+
+
 out = []
 for s in subs:
     e, m = meta[int(s["experiment_id"])], man[s["experiment_id"]]
+    donor = e["specimen"]["donor"]
+    assert donor["id"] == m["donor_id"] and donor["sex"] == donor_sex(e)
     out.append(dict(subject=s["subject"], experiment_id=s["experiment_id"], donor_id=m["donor_id"],
-                    sex=donor_sex(e), imaging_depth=e["imaging_depth"], n_cells=s["n_cells"]))
+                    sex=donor_sex(e), genotype=donor["full_genotype"],
+                    age_days=(day(e["date_of_acquisition"]) - day(donor["date_of_birth"])).days,
+                    imaging_depth=e["imaging_depth"], n_cells=s["n_cells"]))
 json.dump(out, open("results/allen_confirmatory/subjects_described.json", "w"), indent=1)
 for r in out:
     print(r)

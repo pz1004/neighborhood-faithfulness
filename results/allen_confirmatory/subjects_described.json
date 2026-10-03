@@ -4,6 +4,8 @@
   "experiment_id": 500964514,
   "donor_id": 495726985,
   "sex": "F",
+  "genotype": "Cux2-CreERT2/wt;Camk2a-tTA/wt;Ai93(TITL-GCaMP6f)/Ai93(TITL-GCaMP6f)",
+  "age_days": 97,
   "imaging_depth": 175,
   "n_cells": 214
  },
@@ -12,6 +14,8 @@
   "experiment_id": 501886692,
   "donor_id": 495726996,
   "sex": "M",
+  "genotype": "Cux2-CreERT2/Cux2-CreERT2;Camk2a-tTA/wt;Ai93(TITL-GCaMP6f)/Ai93(TITL-GCaMP6f)",
+  "age_days": 109,
   "imaging_depth": 175,
   "n_cells": 163
  },
@@ -20,6 +24,8 @@
   "experiment_id": 501559087,
   "donor_id": 495727004,
   "sex": "M",
+  "genotype": "Cux2-CreERT2/wt;Camk2a-tTA/wt;Ai93(TITL-GCaMP6f)/Ai93(TITL-GCaMP6f)",
+  "age_days": 103,
   "imaging_depth": 175,
   "n_cells": 174
  },
@@ -28,6 +34,8 @@
   "experiment_id": 501794235,
   "donor_id": 495727020,
   "sex": "M",
+  "genotype": "Cux2-CreERT2/wt;Camk2a-tTA/wt;Ai93(TITL-GCaMP6f)/Ai93(TITL-GCaMP6f)",
+  "age_days": 107,
   "imaging_depth": 175,
   "n_cells": 152
  },
@@ -36,6 +44,8 @@
   "experiment_id": 502368172,
   "donor_id": 496001356,
   "sex": "M",
+  "genotype": "Cux2-CreERT2/wt;Camk2a-tTA/wt;Ai93(TITL-GCaMP6f)/Ai93(TITL-GCaMP6f)",
+  "age_days": 95,
   "imaging_depth": 175,
   "n_cells": 295
  },
@@ -44,6 +54,8 @@
   "experiment_id": 503019786,
   "donor_id": 496001361,
   "sex": "M",
+  "genotype": "Cux2-CreERT2/wt;Camk2a-tTA/wt;Ai93(TITL-GCaMP6f)/Ai93(TITL-GCaMP6f)",
+  "age_days": 101,
   "imaging_depth": 275,
   "n_cells": 359
  },
@@ -52,6 +64,8 @@
   "experiment_id": 510705057,
   "donor_id": 497258301,
   "sex": "M",
+  "genotype": "Cux2-CreERT2/Cux2-CreERT2;Camk2a-tTA/wt;Ai93(TITL-GCaMP6f)/Ai93(TITL-GCaMP6f)",
+  "age_days": 105,
   "imaging_depth": 175,
   "n_cells": 242
  },
@@ -60,6 +74,8 @@
   "experiment_id": 504808661,
   "donor_id": 497589678,
   "sex": "F",
+  "genotype": "Cux2-CreERT2/wt;Camk2a-tTA/wt;Ai93(TITL-GCaMP6f)/Ai93(TITL-GCaMP6f)",
+  "age_days": 84,
   "imaging_depth": 175,
   "n_cells": 145
  },
@@ -68,6 +84,8 @@
   "experiment_id": 510345479,
   "donor_id": 505143553,
   "sex": "M",
+  "genotype": "Cux2-CreERT2/Cux2-CreERT2;Camk2a-tTA/wt;Ai93(TITL-GCaMP6f)/Ai93(TITL-GCaMP6f)",
+  "age_days": 87,
   "imaging_depth": 175,
   "n_cells": 331
  },
@@ -76,6 +94,8 @@
   "experiment_id": 524848692,
   "donor_id": 515909194,
   "sex": "F",
+  "genotype": "Cux2-CreERT2/Cux2-CreERT2;Camk2a-tTA/wt;Ai93(TITL-GCaMP6f)/Ai93(TITL-GCaMP6f)",
+  "age_days": 103,
   "imaging_depth": 275,
   "n_cells": 249
  }
