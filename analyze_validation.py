@@ -92,6 +92,7 @@ def record(c, L, exact_key=("exact", 0)):
     dq = [c[("plug", h)][2] / c[("plug", h)][4] for h in RH]
     rec["q_sqrt"], rec["q_inv"] = intercept(RH, dq, "sqrt"), intercept(RH, dq, "inv")
     rec["q_smaller"] = min(rec["q_sqrt"], rec["q_inv"])
+    rec["obs_q"] = observables(dq, RH, rec["q_sqrt"], rec["q_inv"])     # Section 4 on the q curve itself
     rec["q_exact"] = c[exact_key][2] / c[exact_key][4] if exact_key in c else np.nan
     rec["curve"] = {f"plug|{h}": fc(c, "plug", h) for h in RH + (ex,) if ("plug", h) in c}
     rec["curve"].update({f"deep|{h}": fc(c, "deep", h) for h in L["deep"] if ("deep", h) in c})
@@ -182,6 +183,8 @@ def summarize_cells(B, th, est_family):
         rows[f"{cell}|{R}"] = dict(bracket=bracket(recs), diagnostic=any(t in cell for t in DIAGNOSTIC),
             status=status(recs, th, est_family), exact=float(np.nanmedian([r["exact"] for r in recs])),
             obs={k: float(np.nanmedian([r["obs_plug"][k] for r in recs])) for k in ("dmax", "fall", "fd", "div")},
+            status_q=status(recs, th, "q"),
+            obs_q={k: float(np.nanmedian([r["obs_q"][k] for r in recs])) for k in ("dmax", "fall", "fd", "div")},
             perf={e: performance(recs, e) for e in ESTIMATORS},
             perf_q={e: performance(recs, f"q_{e}", exact="q_exact") for e in ("sqrt", "inv", "smaller")})
     return rows

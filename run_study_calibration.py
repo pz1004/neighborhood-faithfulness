@@ -23,6 +23,7 @@ Seeds: studies (7,000,000, ...), oracle (7,500,000, ...).
 
     python3 run_study_calibration.py --dataset EEG --scenario T1 --map tsne --oracle
     python3 run_study_calibration.py --dataset EEG --scenario T1 --map tsne --studies 1000
+    python3 run_study_calibration.py --dataset mouse --scenario T1 --R 16 --no-guard --studies 1000
 """
 import os
 for _v in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS"):
@@ -51,7 +52,7 @@ def base_of(ds, s):
     return sim.Base(ds, s)
 
 
-def setup(ds, scenario, s, lam, mp):
+def setup(ds, scenario, s, lam, mp, R=R):
     dec = json.load(open(RV.DECISIONS))
     base = base_of(ds, s)
     mu = sim.truth(base, scenario, r=dec["r"], alpha=dec["alpha"][ds])
@@ -59,11 +60,11 @@ def setup(ds, scenario, s, lam, mp):
     return base, mu, cell
 
 
-def study_unit(ds, scenario, mp, study, j, v, guard):
+def study_unit(ds, scenario, mp, study, j, v, guard, R=R):
     """One virtual subject of one study: the published procedure's pooled counts, and the guard's plasmode."""
     s, lam = POPULATION[v]
-    base, mu, cell = setup(ds, scenario, s, lam, mp)
-    seed = (STUDY_SEED, RV.DS_INDEX[ds], SCEN[scenario], MAPS[mp], study, j)
+    base, mu, cell = setup(ds, scenario, s, lam, mp, R)
+    seed = (STUDY_SEED, RV.DS_INDEX[ds], SCEN[scenario], MAPS[mp], R, study, j)
     rep = sim.Repetition(base, cell, mu, np.random.default_rng(seed + (0,)))
     L, acc, first = base.L, {}, None
     for k in range(10):
@@ -112,11 +113,11 @@ def plasmode(base, first, rng):
     return {f"{k[0]}|{k[1]}": a.tolist() for k, a in acc.items()}
 
 
-def oracle_unit(ds, scenario, mp, v, d):
+def oracle_unit(ds, scenario, mp, v, d, R=R):
     """One independent dataset of virtual subject v: one random split, three maps, exact counts only."""
     s, lam = POPULATION[v]
-    base, mu, cell = setup(ds, scenario, s, lam, mp)
-    seed = (ORACLE_SEED, RV.DS_INDEX[ds], SCEN[scenario], MAPS[mp], v, d)
+    base, mu, cell = setup(ds, scenario, s, lam, mp, R)
+    seed = (ORACLE_SEED, RV.DS_INDEX[ds], SCEN[scenario], MAPS[mp], R, v, d)
     rep = sim.Repetition(base, cell, mu, np.random.default_rng(seed + (0,)))
     b, X, W, m0 = rep.split(np.random.default_rng(seed + (1,)))
     Y = (X - m0) @ W
@@ -132,12 +133,12 @@ def oracle_unit(ds, scenario, mp, v, d):
 
 
 def task(args):
-    kind, ds, scenario, mp, units = args
+    kind, ds, scenario, mp, units, R_, guard = args
     t0 = time.time()
     if kind == "oracle":
-        rows = [oracle_unit(ds, scenario, mp, v, d) for v, d in units]
+        rows = [oracle_unit(ds, scenario, mp, v, d, R_) for v, d in units]
     else:
-        rows = [study_unit(ds, scenario, mp, st, j, v, st < N_GUARD) for st, j, v in units]
+        rows = [study_unit(ds, scenario, mp, st, j, v, guard and st < N_GUARD, R_) for st, j, v in units]
     return rows, time.time() - t0, len(units)
 
 
@@ -149,14 +150,16 @@ def main():
     ap.add_argument("--oracle", action="store_true")
     ap.add_argument("--studies", type=int, default=1000)
     ap.add_argument("--workers", type=int, default=35)
+    ap.add_argument("--R", type=int, default=R, help="the analyst's budget")
+    ap.add_argument("--no-guard", action="store_true", help="skip the plasmode: the guard applies to false comfort only")
     a = ap.parse_args()
     RV.require_committed([RV.ADDENDUM, RV.DECISIONS])
-    tag = f"{a.dataset}_{a.scenario}_{a.map}"
+    tag = f"{a.dataset}_{a.scenario}_{a.map}_R{a.R}"
     os.makedirs(OUT, exist_ok=True)
     if a.oracle:
         units = [(v, d) for v in range(len(POPULATION)) for d in range(N_ORACLE)]
         chunks = [units[i:i + 20] for i in range(0, len(units), 20)]       # one virtual subject per chunk
-        jobs = [("oracle", a.dataset, a.scenario, a.map, c) for c in chunks]
+        jobs = [("oracle", a.dataset, a.scenario, a.map, c, a.R, False) for c in chunks]
         path = f"{OUT}/oracle_{tag}.jsonl.gz"
     else:
         units = []
@@ -165,10 +168,11 @@ def main():
             units += [(st, j, int(v)) for j, v in enumerate(pick.integers(0, len(POPULATION), size=SUBJECTS))]
         units.sort(key=lambda u: (POPULATION[u[2]][0], u[0] >= N_GUARD, u[0], u[1]))   # by base subject: one load per run
         chunks = [units[i:i + 10] for i in range(0, len(units), 10)]
-        jobs = [("study", a.dataset, a.scenario, a.map, c) for c in chunks]
+        jobs = [("study", a.dataset, a.scenario, a.map, c, a.R, not a.no_guard) for c in chunks]
         path = f"{OUT}/studies_{tag}.jsonl.gz"
     json.dump(dict(protocol="docs/revision_protocol.md", addendum="docs/revision_addendum.md", dataset=a.dataset,
-                   scenario=a.scenario, map=a.map, population=POPULATION, oracle=a.oracle, studies=a.studies,
+                   scenario=a.scenario, map=a.map, R=a.R, guard=not a.no_guard, population=POPULATION,
+                   oracle=a.oracle, studies=a.studies,
                    n_oracle=N_ORACLE, n_guard=N_GUARD, seeds=dict(study=STUDY_SEED, oracle=ORACLE_SEED),
                    started=time.strftime("%Y-%m-%d %H:%M:%S")),
               open(path.replace(".jsonl.gz", "_manifest.json"), "w"), indent=1)

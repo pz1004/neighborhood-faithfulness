@@ -49,17 +49,17 @@ check("an oracle unit counts three maps against the truth", o["n1"] > 0 and 0 <=
 tmp = tempfile.mkdtemp()
 SC.OUT = tmp
 SC.SUBJECTS = 2
-with gzip.open(f"{tmp}/oracle_EEG_T1_tsne.jsonl.gz", "wt") as f:
+with gzip.open(f"{tmp}/oracle_EEG_T1_tsne_R8.jsonl.gz", "wt") as f:
     for v in range(3):
         for d in range(5):
             f.write(json.dumps(SC.oracle_unit("EEG", "T1", "tsne", v, d)) + "\n")
-with gzip.open(f"{tmp}/studies_EEG_T1_tsne.jsonl.gz", "wt") as f:
+with gzip.open(f"{tmp}/studies_EEG_T1_tsne_R8.jsonl.gz", "wt") as f:
     for st in range(3):
         for j in range(2):
             f.write(json.dumps(SC.study_unit("EEG", "T1", "tsne", st, j, (st + j) % 3, guard=st < 2)) + "\n")
 sys.argv = ["analyze_study_calibration.py", "--scenario", "T1"]
 AS.main()
-res = json.load(open(f"{tmp}/calibration_EEG_T1_tsne.json"))
+res = json.load(open(f"{tmp}/calibration_EEG_T1_tsne_R8.json"))
 check("the analysis runs end to end, with the guard computed where the plasmode ran",
       res["studies"] == 3 and res["guard"]["studies"] == 2 and 0 <= res["Theta"] <= 1,
       f"Theta {res['Theta']:.3f}, study medians sqrt {res['medians']['sqrt']:.3f}")

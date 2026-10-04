@@ -2,7 +2,8 @@
 """Gate A: each real result's status and reporting class (docs/revision_protocol.md, Section 5, as
 applied by docs/revision_addendum.md, Section 2).
 
-Every real cell gets the observable status of Section 4, under the frozen thresholds. Real cells are
+Every real cell gets the observable status of Section 4, under the frozen thresholds, computed on the
+quantity's own disagreement curve (false comfort, or the mislabel rate). Real cells are
 dataset x confirmatory cell x budget, for false comfort, the mislabel rate (claim C3) and each common
 check. Its matching validation cells are then those of the same dataset and map type, with the same
 status, whose median d(R_h,max) and fall lie within 0.05 of the real cell's. The dependent-noise and
@@ -58,9 +59,12 @@ def pooled_checks(path):
     return acc
 
 
-def deepest(recs, L, rng):
-    """Median finite-reference disagreement at the deepest reference, with a 95% subject-bootstrap interval."""
-    v = np.array([r["curve"][f"plug|{L['RH'][-1]}"] for r in recs], float)
+def deepest(subj, L, rng, quantity):
+    """Median finite-reference disagreement at the deepest reference, with a 95% subject-bootstrap interval:
+    d_FC = n10 / (n1 nb) for false comfort, d_q = dis / (n nb) for the mislabel rate."""
+    key = ("plug", L["RH"][-1])
+    v = np.array([(c[key][2] / c[key][4]) if quantity == "q" else (c[key][1] / c[key][0] if c[key][0] else np.nan)
+                  for s, c in sorted(subj.items())], float)
     v = v[np.isfinite(v)]
     if len(v) < 2:
         return dict(median=float(np.nanmedian(v)) if len(v) else np.nan, ci=[np.nan, np.nan], n=len(v))
@@ -111,17 +115,19 @@ def main():
             if qn == "q":
                 for r in recs:                                    # judge the claim on the q curve's own estimates
                     r["smaller"], r["larger"] = r["q_smaller"], max(r["q_sqrt"], r["q_inv"])
-            st = AV.status(recs, th, "plug")
-            obs = {k: float(np.nanmedian([r["obs_plug"][k] for r in recs])) for k in ("dmax", "fall", "fd", "div")}
+            fam = "q" if qn == "q" else "plug"              # Section 4's observables on the quantity's own curve
+            st = AV.status(recs, th, fam)
+            obs = {k: float(np.nanmedian([r[f"obs_{fam}"][k] for r in recs])) for k in ("dmax", "fall", "fd", "div")}
+            vst, vobs = ("status_q", "obs_q") if qn == "q" else ("status", "obs")
             mp = "tsne" if cell.startswith("check:") else MAP_OF.get(cell, "tsne")
             matches = [v for k, v in vcells.items()
-                       if ("cvmds" in k) == (mp == "mds_cv") and mp in ("tsne", "mds_cv") and v["status"] == st
-                       and abs(v["obs"]["dmax"] - obs["dmax"]) <= 0.05 and abs(v["obs"]["fall"] - obs["fall"]) <= 0.05]
+                       if ("cvmds" in k) == (mp == "mds_cv") and mp in ("tsne", "mds_cv") and v[vst] == st
+                       and abs(v[vobs]["dmax"] - obs["dmax"]) <= 0.05 and abs(v[vobs]["fall"] - obs["fall"]) <= 0.05]
             names = [k for k, v in vcells.items() if any(v is m for m in matches)]
             strict, local, acc = classify(st, matches, qn)
             worst = max(acc, key=lambda a: abs(a[0])) if acc else (np.nan, np.nan)
             lo, hi = (float(np.nanmedian([r["smaller"] for r in recs])), float(np.nanmedian([r["larger"] for r in recs])))
-            fin = deepest(recs, L, rng)
+            fin = deepest(subj, L, rng, qn)
             claim = CLAIMS.get((ds, cell, R, qn), "")
             key = f"{cell}|{R}|{qn}"
             out_json.setdefault(ds, {})[key] = dict(claim=claim, map=mp, status=st, obs=obs, range=[lo, hi],

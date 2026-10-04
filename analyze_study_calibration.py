@@ -42,8 +42,9 @@ def main():
     ap.add_argument("--dataset", default="EEG")
     ap.add_argument("--scenario", required=True)
     ap.add_argument("--map", default="tsne")
+    ap.add_argument("--R", type=int, default=SC.R)
     a = ap.parse_args()
-    tag = f"{a.dataset}_{a.scenario}_{a.map}"
+    tag = f"{a.dataset}_{a.scenario}_{a.map}_R{a.R}"
     L = sim.LAYOUT[a.dataset]
     # the truth
     orc = collections.defaultdict(list)
@@ -71,7 +72,7 @@ def main():
         e1 = np.array([x["sqrt"] for x in recs])
         e2 = np.array([x["inv"] for x in recs])
         rng = np.random.default_rng((SC.STUDY_SEED, 0 if a.dataset == "EEG" else 1, SC.SCEN[a.scenario],
-                                     SC.MAPS[a.map], study, 99))
+                                     SC.MAPS[a.map], a.R, study, 99))
         idx = rng.integers(0, len(recs), size=(B, len(recs)))
         m1, m2 = np.nanmedian(e1[idx], axis=1), np.nanmedian(e2[idx], axis=1)
         Lb, Ub = float(np.percentile(np.minimum(m1, m2), 2.5)), float(np.percentile(np.maximum(m1, m2), 97.5))
@@ -113,7 +114,7 @@ def main():
                           median_bias=float(np.median(guards)) if guards else None),
                medians=dict(sqrt=float(np.median([r["med_sqrt"] for r in res])),
                             inv=float(np.median([r["med_inv"] for r in res]))))
-    lines = [f"LAYER C ({a.dataset}, truth {a.scenario}, {a.map} maps, R = {SC.R}): {len(res)} virtual studies of"
+    lines = [f"LAYER C ({a.dataset}, truth {a.scenario}, {a.map} maps, R = {a.R}): {len(res)} virtual studies of"
              f" {SC.SUBJECTS} subjects from a population of {len(theta)}",
              f"  population target Theta = {Theta:.3f} (theta_v {min(theta.values()):.3f}-{max(theta.values()):.3f},"
              f" Monte Carlo error per theta_v up to {max(theta_se.values()):.3f})",
