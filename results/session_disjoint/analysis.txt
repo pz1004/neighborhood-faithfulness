@@ -1,0 +1,8 @@
+EEG BLOCKS FROM SEPARATE SESSIONS (analyze_session_disjoint.py): estimator 'smaller', thresholds {'A_min': 20, 'c_sat': 0.95, 'f_sat': 0.02, 'c_fd': 0.03, 'c_div': 0.1}
+medians over 10 subjects; d(R_h) is the reference disagreement; 'random' is a matched random selection
+  R= 8 control   d = 0.970 0.913 0.881   sqrt 0.810  inv 0.863  chosen (smaller) 0.810  random 0.937   status: estimable
+  R= 8 disjoint  d = 0.972 0.930 0.900   sqrt 0.848  inv 0.889  chosen (smaller) 0.848  random 0.945   status: estimable
+  R= 8 separate sessions minus control, per subject: d40 median +0.031 (range -0.016 to +0.059); smaller median +0.052 (range -0.019 to +0.103); random median +0.012 (range -0.003 to +0.039)
+  R=16 control   d = 0.954 0.857 0.767   sqrt 0.632  inv 0.744  chosen (smaller) 0.632  random 0.851   status: extrapolation unresolved
+  R=16 disjoint  d = 0.957 0.878 0.810   sqrt 0.696  inv 0.790  chosen (smaller) 0.696  random 0.888   status: estimable
+  R=16 separate sessions minus control, per subject: d40 median +0.047 (range -0.001 to +0.089); smaller median +0.076 (range -0.001 to +0.149); random median +0.027 (range -0.002 to +0.057)
