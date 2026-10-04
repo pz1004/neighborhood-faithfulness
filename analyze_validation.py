@@ -16,7 +16,7 @@ The development phase applies the rules of Section 3.7, in this order:
 It writes results/revision/dev/decisions.json, which the validation run reads once it is
 committed with the addendum.
 """
-import argparse, collections, functools, itertools, json, os
+import argparse, collections, functools, gzip, itertools, json, os
 import numpy as np
 
 import analyze_allen_confirmatory as AA
@@ -32,13 +32,27 @@ ESTIMATORS = ("sqrt", "inv", "smaller", "larger") + CANDIDATES
 FAMILY_OF = {"sqrt": "plug", "inv": "plug", "smaller": "plug", "larger": "plug", "a": "plug", "b": "plug", "c": "cv"}
 BIAS_OK, RMSE_OK = 0.03, 0.08         # estimable cells must meet these (Sections 3.5, 4)
 STATUSES = ("estimable", "extrapolation unresolved", "reference saturated", "insufficient acceptance")
+DIAGNOSTIC = ("_D", "_S")             # dependent-noise and stress cells: diagnostics, never matching cells
+# How Section 5 is applied, fixed by the addendum before any validation seed is used.
+GATE_A = dict(
+    accuracy_of="the smaller of the two published extrapolants, on which the bound L rests; the published range "
+                "[smaller, larger] is reported with its bracket coverage",
+    matching="validation cells of the same dataset and map type, with the same status, whose median d(R_h,max) and "
+             "fall are both within 0.05 of the real cell's; the dependent-noise (D) and stress (S) cells are "
+             "diagnostics and never match",
+    criterion="every matching cell must meet the accuracy criterion (the worst matching cell decides)",
+    readings="two classifications are reported: strict (Section 3.5: no candidate qualified, so every latent "
+             "estimate is model-dependent) and local (Section 5, cell by cell); the author chooses at Gate A",
+    layer_c="under the local reading, for real cells classified estimable with their matching cells accurate; the "
+            "guard in the first 200 studies only, as the timing check projects over 6 h per scenario with it",
+)
 
 
 @functools.lru_cache(maxsize=None)
 def load(phase, ds):
     """{(cell, base, rep, layer, regen, R): {(ref, Rh): counts}} from a run's rows."""
     reps = collections.defaultdict(dict)
-    for line in open(f"{OUT}/{phase}/{ds}.jsonl"):
+    for line in gzip.open(f"{OUT}/{phase}/{ds}.jsonl.gz", "rt"):
         r = json.loads(line)
         key = (r["cell"], r["base"], r["rep"], r["layer"], r["regen"], r["R"])
         reps[key][(r["ref"], r["Rh"])] = np.array([r[f] for f in sim.FIELDS], float)
@@ -151,20 +165,30 @@ def layer_a(phase, ds):
     return out
 
 
+def bracket(recs):
+    """Share of repetitions whose exact value lies within the published range [smaller, larger]."""
+    ok = [r for r in recs if np.isfinite(r["smaller"]) and np.isfinite(r["exact"])]
+    return float(np.mean([r["smaller"] <= r["exact"] <= r["larger"] for r in ok])) if ok else np.nan
+
+
 def summarize_cells(B, th, est_family):
     rows = {}
     for (cell, R), recs in sorted(B.items()):
-        rows[f"{cell}|{R}"] = dict(
+        rows[f"{cell}|{R}"] = dict(bracket=bracket(recs), diagnostic=any(t in cell for t in DIAGNOSTIC),
             status=status(recs, th, est_family), exact=float(np.nanmedian([r["exact"] for r in recs])),
             obs={k: float(np.nanmedian([r["obs_plug"][k] for r in recs])) for k in ("dmax", "fall", "fd", "div")},
             perf={e: performance(recs, e) for e in ESTIMATORS})
     return rows
 
 
-def choose_estimator(B):
+def choose_estimator(B, narrow=False):
     """Section 3.5: among candidates with |median bias| <= 0.03 in every unsaturated cell (under the
-    default thresholds, excluding cells with too few faithful calls), the smallest RMSE; ties go to (a)."""
+    default thresholds, excluding cells with too few faithful calls), the smallest RMSE; ties go to (a).
+    narrow=True is a sensitivity, not the rule: screening cells with default status 'estimable' only."""
     usable = {k: v for k, v in B.items() if status(v, DEFAULT) in ("estimable", "extrapolation unresolved")}
+    if narrow:
+        usable = {k: v for k, v in usable.items() if status(v, DEFAULT) == "estimable"
+                  and k[0].split(":")[1].split("_")[1].startswith("l")}
     table = {}
     for e in CANDIDATES:
         biases = {f"{k[0]}|{k[1]}": performance(v, e).get("median_bias", np.nan) for k, v in usable.items()}
@@ -210,19 +234,20 @@ def coverage(rows):
 def print_cells(name, rows, est_show=("sqrt", "inv", "a", "b", "c")):
     print(f"\n{name}: per cell and budget, medians over repetitions; bias = median of estimate minus exact")
     print(f"  {'cell':12s} {'R':>3s}  {'exact':>6s}  {'d_max':>6s} {'fall':>6s} {'fd':>7s} {'div':>6s}  status"
-          "                     " + "  ".join(f"{e:>14s}" for e in est_show))
+          "                     " + "  ".join(f"{e:>14s}" for e in est_show) + "  bracket")
     for key, v in rows.items():
         cell, R = key.split("|")
         o = v["obs"]
         perf = "  ".join((f"{v['perf'][e]['median_bias']:+.3f} ({v['perf'][e]['rmse']:.3f})"
                           if v["perf"][e].get("n", 0) >= 2 else f"{'n/a':>14s}") for e in est_show)
         print(f"  {cell:12s} {R:>3s}  {v['exact']:6.3f}  {o['dmax']:6.3f} {o['fall']:6.3f} {o['fd']:+7.3f} {o['div']:6.3f}"
-              f"  {v['status']:26s} {perf}")
+              f"  {v['status']:26s} {perf}  {v['bracket']:5.2f}")
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--phase", choices=("dev", "validation"), required=True)
+    ap.add_argument("--lams", default="0.1,0.5,1,2", help="development: the noise grid the validation will use")
     a = ap.parse_args()
     out = {}
     if a.phase == "dev":
@@ -241,11 +266,23 @@ def main():
             worst = max((abs(b) for b in t["median_bias"].values()), default=np.nan)
             print(f"  ({e}) qualifies {t['qualifies']}, pooled RMSE {t['rmse']:.3f}, largest |median bias| {worst:.3f}")
         print(f"  -> chosen: {est}")
+        est_n, table_n, usable_n = choose_estimator(Ball, narrow=True)
+        print(f"Sensitivity, not the rule (screening cells estimable under the defaults, {len(usable_n)} cells): "
+              + ", ".join(f"({e}) {'qualifies' if t['qualifies'] else 'fails'}" for e, t in table_n.items())
+              + f" -> {est_n}")
         th, n_est = tune_thresholds(Ball, est)
-        print(f"Thresholds: {th} ({n_est} estimable development cells)")
+        tuned = th is not None
+        if not tuned:
+            th = dict(DEFAULT)
+            n_est = sum(status(v, th, FAMILY_OF.get(est, "plug")) == "estimable" for v in Ball.values())
+        print(f"Thresholds: {th} ({'tuned' if tuned else 'no set met the criterion, so the defaults stand'};"
+              f" {n_est} estimable development cells)")
         al = json.load(open(f"{OUT}/dev/alpha.json"))
-        dec = dict(r=al["r"], alpha={ds: al[ds]["alpha"] for ds in ("EEG", "mouse")}, lams=[0.1, 0.5, 1.0, 2.0],
-                   estimator=est, thresholds=th, n_estimable_dev_cells=n_est,
+        dec = dict(r=al["r"], alpha={ds: al[ds]["alpha"] for ds in ("EEG", "mouse")},
+                   lams=[float(x) for x in a.lams.split(",")],
+                   estimator=est, thresholds=th, thresholds_tuned=tuned, n_estimable_dev_cells=n_est, gate_a=GATE_A,
+                   sensitivity_narrow=dict(estimator=est_n, usable_cells=usable_n,
+                                           qualifies={e: t["qualifies"] for e, t in table_n.items()}),
                    selection={e: {k: v for k, v in t.items()} for e, t in table.items()}, usable_cells=usable,
                    coverage={ds: dict(bins=out[ds]["coverage"], ok=out[ds]["coverage_ok"]) for ds in out},
                    cells={ds: out[ds]["rows"] for ds in out})
@@ -278,6 +315,7 @@ def main():
         for s in STATUSES:
             recs = [r for (cell, R), v in B.items() for r in v if rows[f"{cell}|{R}"]["status"] == s]
             by_status[s] = {e: performance(recs, e) for e in ESTIMATORS}
+            by_status[s]["bracket"] = bracket(recs)
         summary[ds] = dict(cells=rows, layer_a=la, by_status=by_status)
     json.dump(summary, open(f"{OUT}/validation/summary.json", "w"), indent=1, default=float)
     print(f"-> {OUT}/validation/summary.json")

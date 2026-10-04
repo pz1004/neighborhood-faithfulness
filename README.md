@@ -90,6 +90,12 @@ reproduction. `reach/predecessor/` is the predecessor's code, copied verbatim; s
 | `run_validation.py` | its driver: development pilot and validation, Layers A and B, with disjoint seed ranges; a validation run needs the addendum committed |
 | `analyze_validation.py` | its estimators, observable statuses, the development pilot's decisions, and the validation summary |
 | `tests/test_validation.py` | synthetic known-truth checks of the simulation code; touches no data |
+| `docs/revision_addendum.md` | what the development pilot decided (the noise grid, the estimator, the thresholds, how Gate A is applied), committed before any validation seed |
+| `make_trial_manifest.py` | every trial's session, chronological rank within its session (EEG) or onset and epoch (mouse), and block per split; the mouse overlap accounting |
+| `run_session_disjoint.py`, `analyze_session_disjoint.py` | EEG blocks drawn from separate sessions against a balanced control: a sensitivity analysis |
+| `run_points.py` | per-point rerun of the primary and cv-MDS maps and every check, reproducing every committed count, with the scores and references the benchmark needs |
+| `analyze_benchmark.py` | the checks against a matched random selection, at native and matched acceptance, with yield, overlap and the cv-MDS diagnostics |
+| `tests/test_stage2.py` | synthetic checks of that code; touches no data |
 | `results/revision/` | the revision's test logs, and the development and validation runs |
 | `describe_allen_subjects.py` | donor, sex, genotype, age at recording, depth and cell count of the included mice, for the manuscript |
 | `results/checks/` | the comparison's test log, rows, semi-synthetic check and printout |
@@ -191,11 +197,17 @@ The simulation study of the revision (plan Amendment 6): the development pilot, 
 addendum committed, the validation:
 
 ```bash
-python3 tests/test_validation.py > results/revision/test_validation.log && python3 run_validation.py --phase dev --alpha && python3 run_validation.py --phase dev > results/revision/dev/run.log && python3 analyze_validation.py --phase dev > results/revision/dev/analysis.txt
+python3 tests/test_validation.py > results/revision/test_validation.log && python3 run_validation.py --phase dev --alpha && python3 run_validation.py --phase dev > results/revision/dev/run.log && python3 run_validation.py --phase dev --lams 0.25,0.35 --append --cells T1_l0.25,T2_l0.25,T3_l0.25,T1_l0.35,T2_l0.35,T3_l0.35 > results/revision/dev/run_extension.log && python3 analyze_validation.py --phase dev --lams 0.1,0.25,0.35,0.5,1,2 > results/revision/dev/analysis.txt
 ```
 
 ```bash
 python3 run_validation.py --phase validation > results/revision/validation/run.log && python3 analyze_validation.py --phase validation > results/revision/validation/analysis.txt
+```
+
+The revision's descriptive analyses on the real data (about 1.5 hours, most of it the per-point rerun):
+
+```bash
+python3 tests/test_stage2.py > results/revision/test_stage2.log && python3 make_trial_manifest.py && python3 run_session_disjoint.py > results/session_disjoint/run.log && python3 analyze_session_disjoint.py && python3 run_points.py --dataset things > results/points/things.log && python3 run_points.py --dataset allen > results/points/allen.log && python3 analyze_benchmark.py
 ```
 
 The manuscript (needs matplotlib and a LaTeX installation with latexmk):

@@ -7,7 +7,7 @@
 
 One task is one dataset, cell and base subject. A task loads its subject's data, checked against
 the recorded SHA-256, builds the base (reach/sim.py) and runs its repetitions. The rows go to
-results/revision/<phase>/<dataset>.jsonl and the times to time.jsonl.
+results/revision/<phase>/<dataset>.jsonl.gz and the times to time.jsonl.
 
 Development and validation seeds start at 6,000,000 and 6,500,000 (protocol Section 9). A
 validation run refuses to start unless the addendum and the decisions file are committed
@@ -16,7 +16,7 @@ validation run refuses to start unless the addendum and the decisions file are c
 import os
 for _v in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS"):
     os.environ.setdefault(_v, "1")
-import argparse, json, platform, re, subprocess, time, zlib
+import argparse, gzip, json, platform, re, subprocess, time, zlib
 from concurrent.futures import ProcessPoolExecutor, as_completed
 import numpy as np
 import scipy, sklearn
@@ -120,7 +120,10 @@ def main():
     ap.add_argument("--datasets", default="EEG,mouse")
     ap.add_argument("--cells", default="", help="comma-separated subset of cell names")
     ap.add_argument("--workers", type=int, default=35)
+    ap.add_argument("--lams", default="", help="development only: noise scales of the screening cells")
+    ap.add_argument("--append", action="store_true", help="development only: add rows to an earlier run")
     a = ap.parse_args()
+    assert a.phase == "dev" or not (a.lams or a.append), "the validation's grid comes from the decisions file"
     if a.alpha:
         assert a.phase == "dev", "alpha is chosen in the development pilot"
         return run_alpha(a.workers)
@@ -130,7 +133,8 @@ def main():
         r, alpha, lams = dec["r"], dec["alpha"], tuple(dec["lams"])
     else:
         al = json.load(open(f"{OUT}/dev/alpha.json"))
-        r, alpha, lams = al["r"], {ds: al[ds]["alpha"] for ds in DS_INDEX}, LAMS
+        r, alpha = al["r"], {ds: al[ds]["alpha"] for ds in DS_INDEX}
+        lams = tuple(float(x) for x in a.lams.split(",")) if a.lams else LAMS
     dss = a.datasets.split(",")
     keep = set(filter(None, a.cells.split(",")))
     jobs = []
@@ -144,15 +148,16 @@ def main():
     jobs.sort(key=lambda j: (-len(j[2]["R_list"]), j[2]["map"] != "mds_cv", j[1] != "EEG"))
     out = f"{OUT}/{a.phase}"
     os.makedirs(out, exist_ok=True)
+    mode = "a" if a.append else "w"
     json.dump(dict(protocol="docs/revision_protocol.md", phase=a.phase, seed_base=SEED_BASE[a.phase],
                    reps_per_base=REPS[a.phase], r=r, alpha=alpha, lams=lams, datasets=dss,
                    cells={ds: cells(ds, lams) for ds in dss}, python=platform.python_version(),
                    numpy=np.__version__, scipy=scipy.__version__, sklearn=sklearn.__version__,
                    started=time.strftime("%Y-%m-%d %H:%M:%S")),
-              open(f"{out}/manifest.json", "w"), indent=1, default=list)
+              open(f"{out}/manifest{'_' + a.lams.replace(',', '_') if a.append else ''}.json", "w"), indent=1, default=list)
     t0 = time.time()
-    files = {ds: open(f"{out}/{ds}.jsonl", "w") for ds in dss}
-    with ProcessPoolExecutor(a.workers) as ex, open(f"{out}/time.jsonl", "w") as ft:
+    files = {ds: gzip.open(f"{out}/{ds}.jsonl.gz", mode + "t") for ds in dss}
+    with ProcessPoolExecutor(a.workers) as ex, open(f"{out}/time.jsonl", mode) as ft:
         futs = [ex.submit(task, j) for j in jobs]
         for i, fu in enumerate(as_completed(futs), 1):
             (phase, ds, cell, s, reps, _, _), rows, times, sec = fu.result()

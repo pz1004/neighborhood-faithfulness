@@ -1,0 +1,10 @@
+[ok] per-point rerun: every check's labels equal labels_for_budget's, with the same generators  (passes per check: N 72, TW 72, SCD 53, CV 72, SEED 80, BOOT 61, SH 66)
+[ok] per-point rerun: the stored scores give the labels by the published rules
+[ok] the continuous overlap reaches m exactly where the reach is at most k'  (40 faithful of 80)
+[ok] Kruskal stress-1 is 0 for an exact fit and positive otherwise
+[ok] session-disjoint blocks: F from one session, U from another, H balanced over the other two
+[ok] control blocks: 2, 4 and 10 repetitions per session, every prefix of U balanced
+[ok] EEG manifest: chronological ranks are a permutation of 0-19 within every session  (800 rows)
+[ok] EEG manifest: every repetition has a block in each confirmatory split
+
+0 failures

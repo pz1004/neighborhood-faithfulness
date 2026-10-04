@@ -1,0 +1,366 @@
+{
+ "protocol": "docs/revision_protocol.md",
+ "phase": "dev",
+ "seed_base": 6000000,
+ "reps_per_base": 2,
+ "r": 5,
+ "alpha": {
+  "EEG": 0.45,
+  "mouse": 0.0
+ },
+ "lams": [
+  0.25,
+  0.35
+ ],
+ "datasets": [
+  "EEG",
+  "mouse"
+ ],
+ "cells": {
+  "EEG": [
+   {
+    "name": "T1_l0.25",
+    "family": "T1",
+    "map": "tsne",
+    "R_list": [
+     8
+    ],
+    "lam_F": 0.25,
+    "lam_U": 0.25,
+    "lam_H": 0.25,
+    "rho": 0.0
+   },
+   {
+    "name": "T1_l0.35",
+    "family": "T1",
+    "map": "tsne",
+    "R_list": [
+     8
+    ],
+    "lam_F": 0.35,
+    "lam_U": 0.35,
+    "lam_H": 0.35,
+    "rho": 0.0
+   },
+   {
+    "name": "T2_l0.25",
+    "family": "T2",
+    "map": "tsne",
+    "R_list": [
+     8
+    ],
+    "lam_F": 0.25,
+    "lam_U": 0.25,
+    "lam_H": 0.25,
+    "rho": 0.0
+   },
+   {
+    "name": "T2_l0.35",
+    "family": "T2",
+    "map": "tsne",
+    "R_list": [
+     8
+    ],
+    "lam_F": 0.35,
+    "lam_U": 0.35,
+    "lam_H": 0.35,
+    "rho": 0.0
+   },
+   {
+    "name": "T3_l0.25",
+    "family": "T3",
+    "map": "tsne",
+    "R_list": [
+     8
+    ],
+    "lam_F": 0.25,
+    "lam_U": 0.25,
+    "lam_H": 0.25,
+    "rho": 0.0
+   },
+   {
+    "name": "T3_l0.35",
+    "family": "T3",
+    "map": "tsne",
+    "R_list": [
+     8
+    ],
+    "lam_F": 0.35,
+    "lam_U": 0.35,
+    "lam_H": 0.35,
+    "rho": 0.0
+   },
+   {
+    "name": "T1_zero",
+    "family": "T1",
+    "map": "tsne",
+    "R_list": [
+     8
+    ],
+    "lam_F": 1.0,
+    "lam_U": 0.0,
+    "lam_H": 0.0,
+    "rho": 0.0
+   },
+   {
+    "name": "T1_D0.1",
+    "family": "T1",
+    "map": "tsne",
+    "R_list": [
+     8
+    ],
+    "lam_F": 1.0,
+    "lam_U": 1.0,
+    "lam_H": 1.0,
+    "rho": 0.1
+   },
+   {
+    "name": "T1_D0.3",
+    "family": "T1",
+    "map": "tsne",
+    "R_list": [
+     8
+    ],
+    "lam_F": 1.0,
+    "lam_U": 1.0,
+    "lam_H": 1.0,
+    "rho": 0.3
+   },
+   {
+    "name": "T1_S",
+    "family": "T1",
+    "map": "tsne",
+    "R_list": [
+     8
+    ],
+    "lam_F": 1.0,
+    "lam_U": 0.1,
+    "lam_H": 1.0,
+    "rho": 0.0
+   },
+   {
+    "name": "T2_S",
+    "family": "T2",
+    "map": "tsne",
+    "R_list": [
+     8
+    ],
+    "lam_F": 1.0,
+    "lam_U": 0.1,
+    "lam_H": 1.0,
+    "rho": 0.0
+   },
+   {
+    "name": "T1_cvmds",
+    "family": "T1",
+    "map": "mds_cv",
+    "R_list": [
+     8
+    ],
+    "lam_F": 1.0,
+    "lam_U": 1.0,
+    "lam_H": 1.0,
+    "rho": 0.0
+   },
+   {
+    "name": "T2_cvmds",
+    "family": "T2",
+    "map": "mds_cv",
+    "R_list": [
+     8
+    ],
+    "lam_F": 1.0,
+    "lam_U": 1.0,
+    "lam_H": 1.0,
+    "rho": 0.0
+   },
+   {
+    "name": "T3_cvmds",
+    "family": "T3",
+    "map": "mds_cv",
+    "R_list": [
+     8
+    ],
+    "lam_F": 1.0,
+    "lam_U": 1.0,
+    "lam_H": 1.0,
+    "rho": 0.0
+   }
+  ],
+  "mouse": [
+   {
+    "name": "T1_l0.25",
+    "family": "T1",
+    "map": "tsne",
+    "R_list": [
+     8
+    ],
+    "lam_F": 0.25,
+    "lam_U": 0.25,
+    "lam_H": 0.25,
+    "rho": 0.0
+   },
+   {
+    "name": "T1_l0.35",
+    "family": "T1",
+    "map": "tsne",
+    "R_list": [
+     8
+    ],
+    "lam_F": 0.35,
+    "lam_U": 0.35,
+    "lam_H": 0.35,
+    "rho": 0.0
+   },
+   {
+    "name": "T2_l0.25",
+    "family": "T2",
+    "map": "tsne",
+    "R_list": [
+     8
+    ],
+    "lam_F": 0.25,
+    "lam_U": 0.25,
+    "lam_H": 0.25,
+    "rho": 0.0
+   },
+   {
+    "name": "T2_l0.35",
+    "family": "T2",
+    "map": "tsne",
+    "R_list": [
+     8
+    ],
+    "lam_F": 0.35,
+    "lam_U": 0.35,
+    "lam_H": 0.35,
+    "rho": 0.0
+   },
+   {
+    "name": "T3_l0.25",
+    "family": "T3",
+    "map": "tsne",
+    "R_list": [
+     8
+    ],
+    "lam_F": 0.25,
+    "lam_U": 0.25,
+    "lam_H": 0.25,
+    "rho": 0.0
+   },
+   {
+    "name": "T3_l0.35",
+    "family": "T3",
+    "map": "tsne",
+    "R_list": [
+     8
+    ],
+    "lam_F": 0.35,
+    "lam_U": 0.35,
+    "lam_H": 0.35,
+    "rho": 0.0
+   },
+   {
+    "name": "T1_zero",
+    "family": "T1",
+    "map": "tsne",
+    "R_list": [
+     8
+    ],
+    "lam_F": 1.0,
+    "lam_U": 0.0,
+    "lam_H": 0.0,
+    "rho": 0.0
+   },
+   {
+    "name": "T1_D0.1",
+    "family": "T1",
+    "map": "tsne",
+    "R_list": [
+     8
+    ],
+    "lam_F": 1.0,
+    "lam_U": 1.0,
+    "lam_H": 1.0,
+    "rho": 0.1
+   },
+   {
+    "name": "T1_D0.3",
+    "family": "T1",
+    "map": "tsne",
+    "R_list": [
+     8
+    ],
+    "lam_F": 1.0,
+    "lam_U": 1.0,
+    "lam_H": 1.0,
+    "rho": 0.3
+   },
+   {
+    "name": "T1_S",
+    "family": "T1",
+    "map": "tsne",
+    "R_list": [
+     8
+    ],
+    "lam_F": 1.0,
+    "lam_U": 0.1,
+    "lam_H": 1.0,
+    "rho": 0.0
+   },
+   {
+    "name": "T2_S",
+    "family": "T2",
+    "map": "tsne",
+    "R_list": [
+     8
+    ],
+    "lam_F": 1.0,
+    "lam_U": 0.1,
+    "lam_H": 1.0,
+    "rho": 0.0
+   },
+   {
+    "name": "T1_cvmds",
+    "family": "T1",
+    "map": "mds_cv",
+    "R_list": [
+     8
+    ],
+    "lam_F": 1.0,
+    "lam_U": 1.0,
+    "lam_H": 1.0,
+    "rho": 0.0
+   },
+   {
+    "name": "T2_cvmds",
+    "family": "T2",
+    "map": "mds_cv",
+    "R_list": [
+     8
+    ],
+    "lam_F": 1.0,
+    "lam_U": 1.0,
+    "lam_H": 1.0,
+    "rho": 0.0
+   },
+   {
+    "name": "T3_cvmds",
+    "family": "T3",
+    "map": "mds_cv",
+    "R_list": [
+     8
+    ],
+    "lam_F": 1.0,
+    "lam_U": 1.0,
+    "lam_H": 1.0,
+    "rho": 0.0
+   }
+  ]
+ },
+ "python": "3.13.5",
+ "numpy": "2.1.3",
+ "scipy": "1.15.3",
+ "sklearn": "1.6.1",
+ "started": "2026-10-04 12:36:55"
+}
