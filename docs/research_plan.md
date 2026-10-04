@@ -530,3 +530,29 @@ unequal spread across coordinates, and scDEED then called only 11% of points tru
 strongly structured data. Permuting the measured features before the fixed representation,
 as scDEED permutes genes before its PCA step, gave 74%. The protocol registers the
 measured-feature null.
+
+### Amendment 6 (2026-10-04): validating the estimator, in response to a colleague's review
+
+**When and why.** On 2026-10-04 a colleague sent a revision plan for the JNM manuscript
+(`docs/review_comments.md`). It asks that the estimator be validated end to end before the
+paper decides what to claim. The audit of that plan (`docs/review_audit.md`) confirmed the
+concern from the committed rows (`analyze_review_audit.py`):
+- the estimator had been checked at one budget and for one map only;
+- its larger extrapolant overstates at 16 and 32 trials;
+- the mouse references are saturated;
+- the subject-bootstrap bound is under-covered for a population median.
+
+The protocol is `docs/revision_protocol.md`. It specifies:
+- a simulation study in three layers;
+- observable statuses for every result;
+- reporting rules fixed before any new result;
+- descriptive revision analyses on the real data.
+
+**What is registered, committed together before any of its analyses run:**
+- the protocol;
+- the audit script;
+- the correctness tests: `tests/test_estimand.py`, with its log in `results/revision/`.
+
+A dated addendum, fixing what the development pilot decides, is committed before any
+validation seed is used. The original claims keep their recorded verdicts. The manuscript
+at tag `jnm-baseline` is the archived baseline.

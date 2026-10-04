@@ -32,10 +32,22 @@ Journal of Neuroscience Methods manuscript is in [manuscript/](manuscript/).**
   - The two strict ones, bootstrap and split-half recurrence, passed almost nothing at
     8 trials.
   - None removed most false comfort.
+- **Under revision (2026-10-04).** A colleague's review
+  ([docs/review_comments.md](docs/review_comments.md)) asked that the estimator be validated
+  end to end before the paper decides what to claim. The audit
+  ([docs/review_audit.md](docs/review_audit.md)) confirmed the concern from the committed
+  rows:
+  - the estimator had been checked only at 8 trials and for the t-SNE map;
+  - its larger extrapolant overstates at 16 and 32 trials;
+  - the mouse references are saturated, so the mouse estimate is not resolved.
+
+  The claims above stand as recorded. How they may be reported is decided by the validation
+  in [docs/revision_protocol.md](docs/revision_protocol.md) (plan Amendment 6). The
+  manuscript before the revision is tagged `jnm-baseline`.
 
 Details: [docs/gate3_pilot_things.md](docs/gate3_pilot_things.md) and
 [docs/reframe_prior_art.md](docs/reframe_prior_art.md). The protocol is
-[docs/research_plan.md](docs/research_plan.md), with Amendments 1 to 5 at its end. The
+[docs/research_plan.md](docs/research_plan.md), with Amendments 1 to 6 at its end. The
 earlier reports are [docs/gate1_prior_art.md](docs/gate1_prior_art.md) and
 [docs/gate2_report.md](docs/gate2_report.md).
 
@@ -68,6 +80,13 @@ reproduction. `reach/predecessor/` is the predecessor's code, copied verbatim; s
 | `run_checks.py` | the comparison's driver: the confirmatory maps re-created, every check counted against the references |
 | `analyze_checks.py` | its joint-label estimators, subject bootstrap and pre-registered classification |
 | `tests/test_checks.py` | synthetic known-truth checks of that code; touches no data |
+| `docs/review_comments.md` | a colleague's revision plan for the manuscript (2026-10-04), as received |
+| `docs/review_audit.md` | its audit: evidence recomputed from the committed rows, a verdict on each comment, comments added |
+| `analyze_review_audit.py` | recomputes the audit's evidence from the committed rows; opens no data file |
+| `results/review_audit/` | the audit's printout and summary |
+| `docs/revision_protocol.md` | the revision: the estimator validated in three layers, observable statuses, reporting rules, descriptive revision analyses (plan Amendment 6) |
+| `tests/test_estimand.py` | the estimator's limiting cases and count identities, checked also on every committed row; touches no data |
+| `results/revision/` | the revision's test log |
 | `describe_allen_subjects.py` | donor, sex, genotype, age at recording, depth and cell count of the included mice, for the manuscript |
 | `results/checks/` | the comparison's test log, rows, semi-synthetic check and printout |
 | `manuscript/` | the Journal of Neuroscience Methods manuscript: `manuscript.tex`, `supplementary.tex` and `cover_letter.tex`, each one self-contained file, with `refs.bib`, `highlights.txt` and `figures/`; `make_figures.py` draws the figures, and `make_tables.py` writes the tables and every quoted number into the `.tex` files from the committed results (`--check` only verifies them); PDFs are built, not tracked |
@@ -156,6 +175,12 @@ The comparison of common checks (about 65 minutes on 18 cores, both datasets):
 
 ```bash
 python3 tests/test_checks.py > results/checks/test_checks.log && python3 run_checks.py --dataset things > results/checks/things/run.log && python3 run_checks.py --dataset allen > results/checks/allen/run.log && python3 analyze_checks.py
+```
+
+The review audit and the estimator's correctness tests (seconds; no data file is opened):
+
+```bash
+python3 analyze_review_audit.py && python3 tests/test_estimand.py > results/revision/test_estimand.log
 ```
 
 The manuscript (needs matplotlib and a LaTeX installation with latexmk):

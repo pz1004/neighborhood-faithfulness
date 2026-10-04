@@ -1,0 +1,272 @@
+REVIEW AUDIT: evidence recomputed from the committed rows (analyze_review_audit.py)
+
+EEG: plasmode, per budget (errors are estimate minus exact; over subjects)
+  R= 8 FC  exact 0.687-0.973
+         sqrt    median -0.008  rmse +0.030  min -0.066  max +0.025
+         inv     median +0.042  rmse +0.046  min +0.014  max +0.065
+         smaller median -0.008  rmse +0.030  min -0.066  max +0.025
+       q   sqrt median -0.003  rmse +0.006   inv median -0.002  rmse +0.004
+  R=16 FC  exact 0.481-0.874
+         sqrt    median +0.006  rmse +0.043  min -0.069  max +0.053
+         inv     median +0.098  rmse +0.102  min +0.076  max +0.137
+         smaller median +0.006  rmse +0.043  min -0.069  max +0.053
+       q   sqrt median -0.005  rmse +0.009   inv median +0.007  rmse +0.008
+  R=32 FC  exact 0.333-0.721
+         sqrt    median +0.026  rmse +0.071  min -0.077  max +0.135
+         inv     median +0.179  rmse +0.179  min +0.125  max +0.242
+         smaller median +0.026  rmse +0.071  min -0.077  max +0.135
+       q   sqrt median -0.001  rmse +0.013   inv median +0.027  rmse +0.027
+
+EEG: reference disagreement d_FC (medians over subjects), its fall from the shallowest to
+  the deepest reference, subjects whose curve is saturated (deepest >= 0.95 and fall <= 0.02),
+  and the finite-depth error (two shallower sizes predict the deepest), per extrapolant
+  primary       R= 8  d = 0.971 0.922 0.877  fall 0.091  saturated 1/10  fd sqrt +0.011  inv +0.022
+  primary       R=16  d = 0.955 0.852 0.779  fall 0.175  saturated 0/10  fd sqrt +0.023  inv +0.043
+  primary       R=32  d = 0.939 0.792 0.673  fall 0.266  saturated 0/10  fd sqrt +0.040  inv +0.065
+  rsa_cv_mds    R= 8  d = 0.931 0.819 0.754  fall 0.161  saturated 1/10  fd sqrt -0.002  inv +0.011
+  rsa_cv_mds    R=16  d = 0.918 0.805 0.737  fall 0.187  saturated 0/10  fd sqrt +0.032  inv +0.044
+  rsa_cv_mds    R=32  d = 0.910 0.746 0.646  fall 0.261  saturated 0/10  fd sqrt +0.034  inv +0.054
+  k5            R= 8  d = 0.981 0.950 0.925  fall 0.056  saturated 1/10  fd sqrt +0.009  inv +0.014
+  k5            R=16  d = 0.963 0.891 0.826  fall 0.139  saturated 0/10  fd sqrt +0.023  inv +0.037
+  k5            R=32  d = 0.950 0.840 0.728  fall 0.223  saturated 0/10  fd sqrt +0.047  inv +0.068
+  k20           R= 8  d = 0.891 0.751 0.675  fall 0.234  saturated 0/10  fd sqrt +0.014  inv +0.028
+  k20           R=16  d = 0.864 0.679 0.564  fall 0.315  saturated 0/10  fd sqrt +0.012  inv +0.045
+  k20           R=32  d = 0.839 0.607 0.459  fall 0.377  saturated 0/10  fd sqrt +0.032  inv +0.072
+  eps0.1        R= 8  d = 0.989 0.968 0.948  fall 0.042  saturated 1/10  fd sqrt +0.008  inv +0.012
+  eps0.1        R=16  d = 0.981 0.922 0.861  fall 0.122  saturated 0/10  fd sqrt +0.033  inv +0.041
+  eps0.1        R=32  d = 0.972 0.880 0.770  fall 0.203  saturated 0/10  fd sqrt +0.043  inv +0.064
+  eps0.3        R= 8  d = 0.938 0.851 0.795  fall 0.136  saturated 0/10  fd sqrt +0.011  inv +0.027
+  eps0.3        R=16  d = 0.905 0.759 0.669  fall 0.234  saturated 0/10  fd sqrt +0.016  inv +0.041
+  eps0.3        R=32  d = 0.881 0.686 0.540  fall 0.335  saturated 0/10  fd sqrt +0.045  inv +0.069
+  tsne_perp15   R= 8  d = 0.968 0.922 0.886  fall 0.078  saturated 1/10  fd sqrt +0.005  inv +0.019
+  tsne_perp15   R=16  d = 0.953 0.856 0.787  fall 0.177  saturated 0/10  fd sqrt +0.027  inv +0.045
+  tsne_perp15   R=32  d = 0.937 0.795 0.679  fall 0.258  saturated 0/10  fd sqrt +0.039  inv +0.069
+  tsne_perp50   R= 8  d = 0.962 0.902 0.855  fall 0.106  saturated 1/10  fd sqrt +0.011  inv +0.024
+  tsne_perp50   R=16  d = 0.950 0.849 0.761  fall 0.188  saturated 0/10  fd sqrt +0.028  inv +0.050
+  tsne_perp50   R=32  d = 0.932 0.783 0.662  fall 0.270  saturated 0/10  fd sqrt +0.044  inv +0.071
+  pca2          R= 8  d = 0.894 0.753 0.677  fall 0.206  saturated 0/10  fd sqrt -0.008  inv +0.017
+  pca2          R=16  d = 0.884 0.702 0.618  fall 0.293  saturated 0/10  fd sqrt +0.021  inv +0.052
+  pca2          R=32  d = 0.875 0.669 0.535  fall 0.324  saturated 0/10  fd sqrt +0.045  inv +0.073
+  mds           R= 8  d = 0.949 0.871 0.827  fall 0.122  saturated 1/10  fd sqrt +0.009  inv +0.013
+  mds           R=16  d = 0.932 0.817 0.737  fall 0.184  saturated 0/10  fd sqrt +0.028  inv +0.040
+  mds           R=32  d = 0.914 0.767 0.658  fall 0.249  saturated 0/10  fd sqrt +0.038  inv +0.057
+  early_window  R= 8  d = 0.963 0.903 0.862  fall 0.101  saturated 1/10  fd sqrt +0.011  inv +0.026
+  early_window  R=16  d = 0.937 0.831 0.737  fall 0.204  saturated 0/10  fd sqrt +0.032  inv +0.056
+  early_window  R=32  d = 0.918 0.759 0.634  fall 0.291  saturated 0/10  fd sqrt +0.038  inv +0.066
+  unwhitened    R= 8  d = 1.000 1.000 1.000  fall 0.000  saturated 10/10  fd sqrt +0.000  inv +0.000
+  unwhitened    R=16  d = 1.000 1.000 0.999  fall 0.001  saturated 7/10  fd sqrt +0.001  inv +0.001
+  unwhitened    R=32  d = 1.000 0.999 0.994  fall 0.006  saturated 6/10  fd sqrt +0.005  inv +0.005
+  plasmode (primary cell): finite-depth error, medians over subjects
+  plasmode      R= 8  d = 0.981 0.929 0.889  fd sqrt +0.011  inv +0.016
+  plasmode      R=16  d = 0.956 0.874 0.792  fd sqrt +0.026  inv +0.043
+  plasmode      R=32  d = 0.945 0.824 0.703  fd sqrt +0.052  inv +0.077
+
+EEG: plug-in label vs a random selection matched per map (medians over subjects;
+  pairs are sqrt / inv extrapolants); enrichment = precision / random precision
+  primary       R= 8  FC 0.811/0.865  random 0.934/0.953  enrichment 2.8/2.8
+  primary       R=16  FC 0.646/0.751  random 0.860/0.902  enrichment 2.5/2.5
+  primary       R=32  FC 0.476/0.635  random 0.766/0.836  enrichment 2.3/2.4
+  rsa_cv_mds    R= 8  FC 0.623/0.720  random 0.964/0.974  enrichment 10.2/10.2
+  rsa_cv_mds    R=16  FC 0.600/0.706  random 0.930/0.950  enrichment 6.7/6.7
+  rsa_cv_mds    R=32  FC 0.445/0.598  random 0.912/0.936  enrichment 6.1/6.1
+  k5            R= 8  FC 0.884/0.917  random 0.938/0.956  enrichment 1.9/1.9
+  k5            R=16  FC 0.727/0.810  random 0.849/0.895  enrichment 1.8/1.8
+  k5            R=32  FC 0.570/0.703  random 0.762/0.834  enrichment 1.8/1.8
+  k20           R= 8  FC 0.493/0.633  random 0.838/0.882  enrichment 3.1/3.1
+  k20           R=16  FC 0.320/0.508  random 0.718/0.798  enrichment 2.4/2.4
+  k20           R=32  FC 0.164/0.393  random 0.606/0.717  enrichment 2.1/2.1
+  eps0.1        R= 8  FC 0.918/0.943  random 0.982/0.988  enrichment 5.0/5.0
+  eps0.1        R=16  FC 0.774/0.847  random 0.954/0.968  enrichment 4.6/4.5
+  eps0.1        R=32  FC 0.631/0.751  random 0.904/0.935  enrichment 4.1/4.1
+  eps0.3        R= 8  FC 0.687/0.770  random 0.834/0.880  enrichment 1.9/1.9
+  eps0.3        R=16  FC 0.484/0.627  random 0.706/0.786  enrichment 1.7/1.7
+  eps0.3        R=32  FC 0.284/0.487  random 0.562/0.686  enrichment 1.6/1.6
+  tsne_perp15   R= 8  FC 0.825/0.874  random 0.949/0.964  enrichment 3.3/3.4
+  tsne_perp15   R=16  FC 0.658/0.761  random 0.878/0.914  enrichment 3.0/3.0
+  tsne_perp15   R=32  FC 0.488/0.642  random 0.791/0.854  enrichment 2.6/2.6
+  tsne_perp50   R= 8  FC 0.774/0.837  random 0.921/0.944  enrichment 3.0/3.0
+  tsne_perp50   R=16  FC 0.624/0.736  random 0.858/0.900  enrichment 2.6/2.6
+  tsne_perp50   R=32  FC 0.462/0.624  random 0.776/0.843  enrichment 2.4/2.5
+  pca2          R= 8  FC 0.512/0.637  random 0.942/0.959  enrichment 9.0/9.0
+  pca2          R=16  FC 0.416/0.566  random 0.920/0.943  enrichment 7.2/7.3
+  pca2          R=32  FC 0.279/0.479  random 0.891/0.925  enrichment 5.7/5.8
+  mds           R= 8  FC 0.730/0.804  random 0.965/0.974  enrichment 7.9/8.3
+  mds           R=16  FC 0.592/0.703  random 0.941/0.958  enrichment 7.0/7.0
+  mds           R=32  FC 0.468/0.619  random 0.914/0.939  enrichment 6.0/6.1
+  early_window  R= 8  FC 0.785/0.845  random 0.929/0.949  enrichment 2.9/2.9
+  early_window  R=16  FC 0.591/0.710  random 0.845/0.889  enrichment 2.8/2.8
+  early_window  R=32  FC 0.417/0.591  random 0.771/0.838  enrichment 2.5/2.5
+  unwhitened    R= 8  FC 1.000/1.000  random 1.000/1.000  enrichment n.d./n.d.
+  unwhitened    R=16  FC 0.999/0.999  random 0.999/1.000  enrichment 2.9/2.9
+  unwhitened    R=32  FC 0.991/0.994  random 0.997/0.998  enrichment 2.7/2.7
+
+EEG: checks vs a random selection matched per map (medians over subjects with passes;
+  pairs are sqrt / inv); enrichment = precision / random precision
+  N     R= 8  FC 0.811/0.865  random 0.934/0.953  enrichment 2.8/2.8  (10 subjects)
+  TW    R= 8  FC 0.792/0.853  random 0.934/0.953  enrichment 3.1/3.1  (10 subjects)
+  SCD   R= 8  FC 0.863/0.902  random 0.934/0.954  enrichment 2.2/2.2  (10 subjects)
+  CV    R= 8  FC 0.728/0.805  random 0.935/0.954  enrichment 4.2/4.2  (10 subjects)
+  SEED  R= 8  FC 0.870/0.907  random 0.934/0.954  enrichment 2.0/2.0  (10 subjects)
+  BOOT  R= 8  FC -0.407/0.000  random 0.866/0.901  enrichment 8.5/9.3  (3 subjects)
+  SH    R= 8  FC 0.467/0.621  random 0.934/0.954  enrichment 5.7/6.1  (10 subjects)
+  N     R=16  FC 0.646/0.751  random 0.860/0.902  enrichment 2.5/2.5  (10 subjects)
+  TW    R=16  FC 0.635/0.742  random 0.861/0.902  enrichment 2.7/2.7  (10 subjects)
+  SCD   R=16  FC 0.765/0.834  random 0.861/0.903  enrichment 1.8/1.8  (10 subjects)
+  CV    R=16  FC 0.578/0.702  random 0.860/0.901  enrichment 2.9/2.9  (10 subjects)
+  SEED  R=16  FC 0.763/0.834  random 0.861/0.902  enrichment 1.9/1.9  (10 subjects)
+  BOOT  R=16  FC 0.004/0.247  random 0.843/0.890  enrichment 4.8/5.0  (7 subjects)
+  SH    R=16  FC 0.380/0.557  random 0.859/0.901  enrichment 4.3/4.4  (10 subjects)
+  N     R=32  FC 0.476/0.635  random 0.766/0.836  enrichment 2.3/2.4  (10 subjects)
+  TW    R=32  FC 0.466/0.627  random 0.766/0.836  enrichment 2.4/2.4  (10 subjects)
+  SCD   R=32  FC 0.619/0.736  random 0.768/0.838  enrichment 1.8/1.8  (10 subjects)
+  CV    R=32  FC 0.455/0.619  random 0.765/0.836  enrichment 2.4/2.4  (10 subjects)
+  SEED  R=32  FC 0.629/0.741  random 0.767/0.837  enrichment 1.6/1.6  (10 subjects)
+  BOOT  R=32  FC -0.119/0.147  random 0.760/0.832  enrichment 4.2/4.6  (10 subjects)
+  SH    R=32  FC 0.324/0.523  random 0.766/0.836  enrichment 2.8/2.9  (10 subjects)
+  (each check's FC equals analyze_checks.py's to within 6.7e-16)
+
+EEG: the lower bound L and the order statistics x(k) of the subjects' smaller estimates
+  (as a lower bound for a population median from 10 subjects, x(2) errs with probability 0.0107, x(3) with 0.0547; the nominal one-sided level is 0.025)
+  C1           L 0.642   x(1) 0.549  x(2) 0.605  x(3) 0.642   L = x(3)
+  C1-RSA       L 0.550   x(1) 0.514  x(2) 0.530  x(3) 0.550   L = x(3)
+  C2           L 0.231   x(1) 0.200  x(2) 0.215  x(3) 0.231   L = x(3)
+  C3 (R=8)     L 0.159   x(1) 0.108  x(2) 0.151  x(3) 0.162
+  C3 (R=16)    L 0.180   x(1) 0.156  x(2) 0.177  x(3) 0.181
+  C3 (R=32)    L 0.158   x(1) 0.140  x(2) 0.149  x(3) 0.158   L = x(3)
+  checks at R = 8: L against x(2), x(3) of the smaller estimates; U against x(8), x(9) of the larger
+  TW    L 0.643 (x(2) 0.591, x(3) 0.643)   U 0.909 (x(8) 0.904, x(9) 0.917)
+  SCD   L 0.759 (x(2) 0.688, x(3) 0.785)   U 0.938 (x(8) 0.938, x(9) 0.940)
+  CV    L 0.595 (x(2) 0.521, x(3) 0.604)   U 0.856 (x(8) 0.856, x(9) 0.888)
+  SEED  L 0.771 (x(2) 0.693, x(3) 0.788)   U 0.943 (x(8) 0.943, x(9) 0.945)
+  BOOT  3 of 10 subjects with passes: order statistics not compared
+  SH    L 0.383 (x(2) 0.311, x(3) 0.453)   U 0.722 (x(8) 0.721, x(9) 0.795)
+
+EEG: R = 8, R_h = 40: pooled ratio vs mean of per-map ratios (medians over subjects), largest difference in a subject, and the share of maps passing nothing
+  N     pooled 0.877  per-map 0.878  max diff 0.003   maps passing nothing: median 0.00, max 0.00
+  TW    pooled 0.865  per-map 0.866  max diff 0.005   maps passing nothing: median 0.00, max 0.00
+  SCD   pooled 0.912  per-map 0.910  max diff 0.005   maps passing nothing: median 0.00, max 0.00
+  CV    pooled 0.824  per-map 0.824  max diff 0.020   maps passing nothing: median 0.00, max 0.03
+  SEED  pooled 0.916  per-map 0.916  max diff 0.007   maps passing nothing: median 0.00, max 0.00
+  BOOT  pooled 0.000  per-map 0.000  max diff 0.000   maps passing nothing: median 1.00, max 1.00
+  SH    pooled 0.654  per-map 0.651  max diff 0.090   maps passing nothing: median 0.17, max 0.93
+
+mouse: plasmode, per budget (errors are estimate minus exact; over subjects)
+  R= 8 FC  exact 0.965-1.000
+         sqrt    median +0.003  rmse +0.012  min -0.016  max +0.020
+         inv     median +0.004  rmse +0.011  min -0.004  max +0.019
+         smaller median +0.003  rmse +0.011  min -0.016  max +0.019
+       q   sqrt median +0.001  rmse +0.001   inv median +0.000  rmse +0.001
+  R=16 FC  exact 0.875-0.988
+         sqrt    median +0.038  rmse +0.045  min +0.005  max +0.081
+         inv     median +0.048  rmse +0.050  min +0.008  max +0.091
+         smaller median +0.038  rmse +0.044  min +0.005  max +0.081
+       q   sqrt median +0.003  rmse +0.005   inv median +0.004  rmse +0.004
+
+mouse: reference disagreement d_FC (medians over subjects), its fall from the shallowest to
+  the deepest reference, subjects whose curve is saturated (deepest >= 0.95 and fall <= 0.02),
+  and the finite-depth error (two shallower sizes predict the deepest), per extrapolant
+  primary       R= 8  d = 1.000 1.000 1.000  fall 0.000  saturated 10/10  fd sqrt +0.000  inv +0.000
+  primary       R=16  d = 1.000 0.999 0.997  fall 0.002  saturated 10/10  fd sqrt +0.002  inv +0.002
+  rsa_cv_mds    R= 8  d = 1.000 1.000 1.000  fall 0.000  saturated 10/10  fd sqrt +0.000  inv +0.000
+  rsa_cv_mds    R=16  d = 1.000 1.000 1.000  fall 0.000  saturated 10/10  fd sqrt +0.000  inv +0.000
+  k5            R= 8  d = 0.999 0.999 0.995  fall 0.004  saturated 9/10  fd sqrt +0.000  inv +0.001
+  k5            R=16  d = 0.998 0.995 0.990  fall 0.008  saturated 7/10  fd sqrt +0.002  inv +0.002
+  k20           R= 8  d = 1.000 1.000 0.998  fall 0.001  saturated 10/10  fd sqrt +0.000  inv +0.000
+  k20           R=16  d = 1.000 0.999 0.997  fall 0.003  saturated 8/10  fd sqrt +0.002  inv +0.002
+  eps0.1        R= 8  d = 1.000 1.000 1.000  fall 0.000  saturated 10/10  fd sqrt +0.000  inv +0.000
+  eps0.1        R=16  d = 1.000 1.000 1.000  fall 0.000  saturated 10/10  fd sqrt +0.000  inv +0.000
+  eps0.3        R= 8  d = 0.998 0.998 0.995  fall 0.003  saturated 10/10  fd sqrt +0.001  inv +0.001
+  eps0.3        R=16  d = 0.996 0.996 0.991  fall 0.007  saturated 7/10  fd sqrt +0.003  inv +0.003
+  tsne_perp15   R= 8  d = 1.000 1.000 1.000  fall 0.000  saturated 10/10  fd sqrt +0.000  inv +0.000
+  tsne_perp15   R=16  d = 1.000 1.000 1.000  fall 0.000  saturated 9/10  fd sqrt +0.001  inv +0.001
+  tsne_perp50   R= 8  d = 1.000 1.000 0.999  fall 0.001  saturated 10/10  fd sqrt +0.000  inv +0.000
+  tsne_perp50   R=16  d = 1.000 1.000 0.998  fall 0.001  saturated 10/10  fd sqrt +0.003  inv +0.003
+  pca2          R= 8  d = 1.000 1.000 1.000  fall 0.000  saturated 10/10  fd sqrt +0.000  inv +0.000
+  pca2          R=16  d = 1.000 1.000 1.000  fall 0.000  saturated 9/10  fd sqrt +0.000  inv +0.000
+  mds           R= 8  d = 1.000 1.000 1.000  fall 0.000  saturated 10/10  fd sqrt +0.000  inv +0.000
+  mds           R=16  d = 1.000 1.000 1.000  fall 0.000  saturated 10/10  fd sqrt +0.000  inv +0.000
+  early_window  R= 8  d = 1.000 1.000 1.000  fall 0.000  saturated 10/10  fd sqrt +0.000  inv +0.000
+  early_window  R=16  d = 1.000 1.000 1.000  fall 0.000  saturated 9/10  fd sqrt +0.000  inv +0.000
+  unwhitened    R= 8  d = 1.000 1.000 1.000  fall 0.000  saturated 10/10  fd sqrt +0.000  inv +0.000
+  unwhitened    R=16  d = 1.000 1.000 1.000  fall 0.000  saturated 10/10  fd sqrt +0.000  inv +0.000
+  plasmode (primary cell): finite-depth error, medians over subjects
+  plasmode      R= 8  d = 1.000 0.998 0.997  fd sqrt +0.000  inv +0.000
+  plasmode      R=16  d = 0.998 0.996 0.990  fd sqrt -0.001  inv +0.001
+
+mouse: plug-in label vs a random selection matched per map (medians over subjects;
+  pairs are sqrt / inv extrapolants); enrichment = precision / random precision
+  primary       R= 8  FC 1.000/1.000  random 1.000/1.000  enrichment n.d./n.d.
+  primary       R=16  FC 0.994/0.996  random 0.997/0.998  enrichment 3.4/3.3
+  rsa_cv_mds    R= 8  FC 1.000/1.000  random 1.000/1.000  enrichment n.d./n.d.
+  rsa_cv_mds    R=16  FC 1.000/1.000  random 0.999/1.000  enrichment n.d./n.d.
+  k5            R= 8  FC 0.990/0.994  random 0.996/0.998  enrichment 3.0/2.7
+  k5            R=16  FC 0.977/0.986  random 0.990/0.993  enrichment 2.2/2.2
+  k20           R= 8  FC 0.997/0.998  random 0.999/0.999  enrichment 2.7/n.d.
+  k20           R=16  FC 0.993/0.996  random 0.997/0.998  enrichment 2.3/2.9
+  eps0.1        R= 8  FC 1.000/1.000  random 1.000/1.000  enrichment n.d./n.d.
+  eps0.1        R=16  FC 1.000/1.000  random 1.000/1.000  enrichment 3.3/n.d.
+  eps0.3        R= 8  FC 0.991/0.994  random 0.996/0.997  enrichment 2.0/2.1
+  eps0.3        R=16  FC 0.982/0.988  random 0.986/0.991  enrichment 2.2/2.2
+  tsne_perp15   R= 8  FC 1.000/1.000  random 1.000/1.000  enrichment n.d./n.d.
+  tsne_perp15   R=16  FC 1.000/1.000  random 0.999/0.999  enrichment 5.0/4.9
+  tsne_perp50   R= 8  FC 0.997/0.998  random 1.000/1.000  enrichment 2.8/n.d.
+  tsne_perp50   R=16  FC 0.997/0.998  random 0.999/0.999  enrichment 3.2/3.1
+  pca2          R= 8  FC 1.000/1.000  random 1.000/1.000  enrichment n.d./n.d.
+  pca2          R=16  FC 1.000/1.000  random 1.000/1.000  enrichment n.d./n.d.
+  mds           R= 8  FC 1.000/1.000  random 1.000/1.000  enrichment n.d./n.d.
+  mds           R=16  FC 1.000/1.000  random 0.999/1.000  enrichment 2.9/n.d.
+  early_window  R= 8  FC 1.000/1.000  random 1.000/1.000  enrichment n.d./n.d.
+  early_window  R=16  FC 1.000/1.000  random 1.000/1.000  enrichment 3.0/3.0
+  unwhitened    R= 8  FC 1.000/1.000  random 1.000/1.000  enrichment 2.6/n.d.
+  unwhitened    R=16  FC 1.000/1.000  random 1.000/1.000  enrichment 1.7/1.7
+
+mouse: checks vs a random selection matched per map (medians over subjects with passes;
+  pairs are sqrt / inv); enrichment = precision / random precision
+  N     R= 8  FC 1.000/1.000  random 1.000/1.000  enrichment n.d./n.d.  (10 subjects)
+  TW    R= 8  FC 1.000/1.000  random 1.000/1.000  enrichment n.d./n.d.  (10 subjects)
+  SCD   R= 8  FC 1.000/1.000  random 1.000/1.000  enrichment n.d./n.d.  (10 subjects)
+  CV    R= 8  FC 1.000/1.000  random 0.999/1.000  enrichment n.d./n.d.  (10 subjects)
+  SEED  R= 8  FC 1.000/1.000  random 1.000/1.000  enrichment n.d./n.d.  (10 subjects)
+  BOOT  R= 8  no subject passes in every map pool
+  SH    R= 8  FC 1.000/1.000  random 1.000/1.000  enrichment n.d./n.d.  (4 subjects)
+  N     R=16  FC 0.994/0.996  random 0.997/0.998  enrichment 3.4/3.3  (10 subjects)
+  TW    R=16  FC 0.998/0.999  random 0.997/0.998  enrichment 3.3/3.2  (10 subjects)
+  SCD   R=16  FC 0.987/0.993  random 0.997/0.998  enrichment 4.7/3.1  (10 subjects)
+  CV    R=16  FC 0.971/0.982  random 0.998/0.998  enrichment 7.4/10.6  (10 subjects)
+  SEED  R=16  FC 0.995/0.997  random 0.998/0.999  enrichment 3.0/3.0  (10 subjects)
+  BOOT  R=16  no subject passes in every map pool
+  SH    R=16  FC 1.000/1.000  random 0.999/0.999  enrichment 5.9/6.7  (7 subjects)
+  (each check's FC equals analyze_checks.py's to within 6.7e-16)
+
+mouse: the lower bound L and the order statistics x(k) of the subjects' smaller estimates
+  (as a lower bound for a population median from 10 subjects, x(2) errs with probability 0.0107, x(3) with 0.0547; the nominal one-sided level is 0.025)
+  C1           L 0.997   x(1) 0.994  x(2) 0.997  x(3) 0.997   L = x(3)
+  C1-RSA       L 1.000   x(1) 0.996  x(2) 1.000  x(3) 1.000   L = x(2)
+  C3 (R=8)     L 0.154   x(1) 0.138  x(2) 0.153  x(3) 0.154   L = x(3)
+  C3 (R=16)    L 0.158   x(1) 0.139  x(2) 0.152  x(3) 0.158   L = x(3)
+  checks at R = 8: L against x(2), x(3) of the smaller estimates; U against x(8), x(9) of the larger
+  TW    L 0.998 (x(2) 0.997, x(3) 1.000)   U 1.000 (x(8) 1.000, x(9) 1.001)
+  SCD   L 0.997 (x(2) 0.993, x(3) 1.000)   U 1.000 (x(8) 1.000, x(9) 1.000)
+  CV    L 0.979 (x(2) 0.961, x(3) 0.979)   U 1.004 (x(8) 1.000, x(9) 1.008)
+  SEED  L 0.998 (x(2) 0.998, x(3) 0.998)   U 1.000 (x(8) 1.000, x(9) 1.000)
+  BOOT  0 of 10 subjects with passes: order statistics not compared
+  SH    4 of 10 subjects with passes: order statistics not compared
+
+mouse: R = 8, R_h = 24: pooled ratio vs mean of per-map ratios (medians over subjects), largest difference in a subject, and the share of maps passing nothing
+  N     pooled 1.000  per-map 1.000  max diff 0.001   maps passing nothing: median 0.00, max 0.00
+  TW    pooled 1.000  per-map 1.000  max diff 0.000   maps passing nothing: median 0.00, max 0.00
+  SCD   pooled 1.000  per-map 1.000  max diff 0.001   maps passing nothing: median 0.00, max 0.03
+  CV    pooled 1.000  per-map 1.000  max diff 0.005   maps passing nothing: median 0.13, max 0.37
+  SEED  pooled 1.000  per-map 1.000  max diff 0.001   maps passing nothing: median 0.00, max 0.00
+  BOOT  no passes                                          maps passing nothing: median 1.00, max 1.00
+  SH    pooled 1.000  per-map 1.000  max diff 0.000   maps passing nothing: median 1.00, max 1.00
+
+E7: maps simulated by the plasmode checks
+  results/things_confirmatory/semi_synthetic.jsonl: primary (no cell field)
+  results/allen_confirmatory/semi_synthetic.jsonl: primary (no cell field)
+  results/checks/things/semi_synthetic.jsonl: primary (no cell field)
+  results/checks/allen/semi_synthetic.jsonl: primary (no cell field)
+
+E8: the pilot's certificates in simulation (results/things_pilot/semi_synthetic.jsonl)
+  900 draws recorded issuance: draws resolving any neighborhood at k' = 10, 20, 40: 0, 0, 0
+  3000 validity draws record only pair_viol, reach_viol: 0 pairwise and 0 reach violations

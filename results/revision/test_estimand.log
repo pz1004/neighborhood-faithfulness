@@ -1,0 +1,18 @@
+[ok] zero noise: naive labels equal the truth at every reference size and against the truth  (4 rows)
+[ok] zero noise: both extrapolants return 0 for FC and q  (FC (0.0, 0.0), q (0.0, 0.0))
+[ok] exact references: every sub-block's counts equal the exact counts  (exact FC 0.028 from 143 faithful calls)
+[ok] exact references: both extrapolants return the exact false comfort  (estimates (0.027972027972027972, 0.027972027972027972))
+[ok] zero acceptance: false comfort is NaN, not 0
+[ok] zero acceptance: 4 of 10 subjects with a pass give 'not evaluable'  (SH defined in 4 subjects)
+[ok] zero acceptance of the plug-in check: its false comfort is NaN
+[ok] full acceptance: FC = 1 - TF for a check that passes everything  (max |diff| 3.3e-16)
+[ok] ties: equal distances are ranked by object index  (row 2 ranks [1, 2, 5, 3, 4])
+[ok] ties: displayed neighbors are deterministic
+[ok] count identities hold in every synthetic map  (90 rows)
+[ok] count identities hold in every committed row  (61900 rows in 8 files, 0 violations)
+[ok] within each subject, acceptance = faithful yield + unfaithful yield  (max |diff| 0.0e+00)
+[ok] weighting: proportionally more sub-blocks leave every disagreement unchanged  (max |diff| 0.0e+00)
+[ok] weighting: every map has the same number of sub-blocks at each reference size, in every committed file
+[ok] weighting: more splits with identical counts change no estimate and no bound  (L 0.8192 vs 0.8192)
+
+0 failures
