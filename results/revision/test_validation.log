@@ -1,0 +1,35 @@
+[ok] EEG: T1 is block H's mean in split 0
+[ok] EEG: T2 has rank 5 about its mean
+[ok] EEG: T3 is T2 at alpha 0 and T1 at alpha 1
+[ok] EEG: the pool is centered within image and rescaled by sqrt(nU/(nU-1))
+[ok] EEG: a mean of 8 drawn residuals has the pool's variance over 8  (ratio 1.001)
+[ok] EEG: the relative gap is computed as in explore_*_snr.py  (gaps at alpha 0, 0.5, 1: [0.3   0.298 0.297])
+[ok] EEG: mechanism D correlates trials of a stratum by rho, not across strata  (within 0.296, across 0.010)
+[ok] EEG: zero noise in U and H gives naive labels equal to the truth against every reference  (32 pooled counts)
+[ok] EEG: pooled counts keep t1 = n1*nb - 2*n10 + dis, over 2 splits x 3 seeds  (11 references)
+[ok] EEG: the deepest reference is nearer the exact false comfort than the shallowest  (exact 0.031, R_h=8 0.058, R_h=160 0.037)
+[ok] EEG: the estimates land near the exact false comfort in an easy regime  (sqrt 0.012, inv 0.028, b 0.012, c 0.003; exact 0.031)
+[ok] EEG: Layer A has its fixed maps' exact counts and each regeneration's references
+[ok] EEG: the stress cell's analyst is more often right than the matched cell's  (exact FC 0.003 vs 0.031)
+[ok] EEG: cv-MDS cells run
+[ok] mouse: T1 is block H's mean in split 0
+[ok] mouse: T2 has rank 5 about its mean
+[ok] mouse: T3 is T2 at alpha 0 and T1 at alpha 1
+[ok] mouse: the pool is centered within image and rescaled by sqrt(nU/(nU-1))
+[ok] mouse: a mean of 8 drawn residuals has the pool's variance over 8  (ratio 0.985)
+[ok] mouse: the relative gap is computed as in explore_*_snr.py  (gaps at alpha 0, 0.5, 1: [0.309 0.306 0.302])
+[ok] mouse: mechanism D correlates trials of a stratum by rho, not across strata  (within 0.294, across 0.005)
+[ok] mouse: zero noise in U and H gives naive labels equal to the truth against every reference  (32 pooled counts)
+[ok] mouse: pooled counts keep t1 = n1*nb - 2*n10 + dis, over 2 splits x 3 seeds  (11 references)
+[ok] mouse: the deepest reference is nearer the exact false comfort than the shallowest  (exact 0.038, R_h=8 0.040, R_h=96 0.038)
+[ok] mouse: the estimates land near the exact false comfort in an easy regime  (sqrt 0.023, inv 0.030, b 0.023, c 0.031; exact 0.038)
+[ok] mouse: Layer A has its fixed maps' exact counts and each regeneration's references
+[ok] mouse: the stress cell's analyst is more often right than the matched cell's  (exact FC 0.005 vs 0.038)
+[ok] mouse: cv-MDS cells run
+[ok] development and validation seeds differ
+[ok] cell seeds do not depend on the cells' order
+[ok] a validation run refuses to start before the addendum is committed
+[ok] the halves of an EEG reference sub-block of 8 are balanced over sessions
+[ok] there are 20 cells per dataset
+
+0 failures

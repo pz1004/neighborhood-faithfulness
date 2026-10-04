@@ -86,7 +86,11 @@ reproduction. `reach/predecessor/` is the predecessor's code, copied verbatim; s
 | `results/review_audit/` | the audit's printout and summary |
 | `docs/revision_protocol.md` | the revision: the estimator validated in three layers, observable statuses, reporting rules, descriptive revision analyses (plan Amendment 6) |
 | `tests/test_estimand.py` | the estimator's limiting cases and count identities, checked also on every committed row; touches no data |
-| `results/revision/` | the revision's test log |
+| `reach/sim.py` | the simulation study's mechanisms (truth families, resampled noise, shared offsets, the stress test) and the published procedure re-run on each simulated dataset |
+| `run_validation.py` | its driver: development pilot and validation, Layers A and B, with disjoint seed ranges; a validation run needs the addendum committed |
+| `analyze_validation.py` | its estimators, observable statuses, the development pilot's decisions, and the validation summary |
+| `tests/test_validation.py` | synthetic known-truth checks of the simulation code; touches no data |
+| `results/revision/` | the revision's test logs, and the development and validation runs |
 | `describe_allen_subjects.py` | donor, sex, genotype, age at recording, depth and cell count of the included mice, for the manuscript |
 | `results/checks/` | the comparison's test log, rows, semi-synthetic check and printout |
 | `manuscript/` | the Journal of Neuroscience Methods manuscript: `manuscript.tex`, `supplementary.tex` and `cover_letter.tex`, each one self-contained file, with `refs.bib`, `highlights.txt` and `figures/`; `make_figures.py` draws the figures, and `make_tables.py` writes the tables and every quoted number into the `.tex` files from the committed results (`--check` only verifies them); PDFs are built, not tracked |
@@ -181,6 +185,17 @@ The review audit and the estimator's correctness tests (seconds; no data file is
 
 ```bash
 python3 analyze_review_audit.py && python3 tests/test_estimand.py > results/revision/test_estimand.log
+```
+
+The simulation study of the revision (plan Amendment 6): the development pilot, then, with the
+addendum committed, the validation:
+
+```bash
+python3 tests/test_validation.py > results/revision/test_validation.log && python3 run_validation.py --phase dev --alpha && python3 run_validation.py --phase dev > results/revision/dev/run.log && python3 analyze_validation.py --phase dev > results/revision/dev/analysis.txt
+```
+
+```bash
+python3 run_validation.py --phase validation > results/revision/validation/run.log && python3 analyze_validation.py --phase validation > results/revision/validation/analysis.txt
 ```
 
 The manuscript (needs matplotlib and a LaTeX installation with latexmk):
