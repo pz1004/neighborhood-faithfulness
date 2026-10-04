@@ -1,0 +1,14 @@
+TRIAL MANIFEST AND OVERLAP ACCOUNTING (make_trial_manifest.py)
+EEG: 800 rows (10 subjects x 80 stored repetitions); within-session permutation of the authors' epoching step: [11, 1, 17, 0, 12, 10, 18, 14, 5, 19, 9, 16, 6, 15, 2, 3, 7, 13, 4, 8]
+Mouse V1: 59000 rows (10 experiments x 118 images x 50 presentations)
+Mouse V1, per experiment: frames per window (0.5 s / 0.25 s), median overlap of consecutive windows, consecutive pairs one in U and one in H (mean over the 10 splits), and per image pair
+  subject  1: fps 30.14, step 8 frames, windows 15/8 frames, overlap 7/0; 3 epochs; U-H pairs 1662 of 5849 (0.284), 0.241 per image pair, same image 13.1
+  subject  2: fps 30.15, step 8 frames, windows 15/8 frames, overlap 7/0; 3 epochs; U-H pairs 1644 of 5849 (0.281), 0.238 per image pair, same image 18.4
+  subject  3: fps 30.08, step 8 frames, windows 15/8 frames, overlap 7/0; 3 epochs; U-H pairs 1628 of 5849 (0.278), 0.236 per image pair, same image 12.3
+  subject  4: fps 30.08, step 8 frames, windows 15/8 frames, overlap 7/0; 3 epochs; U-H pairs 1604 of 5851 (0.274), 0.232 per image pair, same image 17.9
+  subject  5: fps 30.14, step 8 frames, windows 15/8 frames, overlap 7/0; 3 epochs; U-H pairs 1660 of 5851 (0.284), 0.240 per image pair, same image 12.9
+  subject  6: fps 30.08, step 8 frames, windows 15/8 frames, overlap 7/0; 3 epochs; U-H pairs 1635 of 5849 (0.280), 0.237 per image pair, same image 16.6
+  subject  7: fps 30.14, step 8 frames, windows 15/8 frames, overlap 7/0; 3 epochs; U-H pairs 1650 of 5849 (0.282), 0.239 per image pair, same image 15.0
+  subject  8: fps 30.15, step 8 frames, windows 15/8 frames, overlap 7/0; 3 epochs; U-H pairs 1648 of 5850 (0.282), 0.239 per image pair, same image 15.4
+  subject  9: fps 30.08, step 8 frames, windows 15/8 frames, overlap 7/0; 3 epochs; U-H pairs 1638 of 5849 (0.280), 0.237 per image pair, same image 19.6
+  subject 10: fps 30.08, step 8 frames, windows 15/8 frames, overlap 7/0; 3 epochs; U-H pairs 1614 of 5850 (0.276), 0.234 per image pair, same image 13.3

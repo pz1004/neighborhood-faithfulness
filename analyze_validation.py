@@ -88,6 +88,11 @@ def record(c, L, exact_key=("exact", 0)):
         rec["cv_inv"] = intercept(RH, cv, "inv")
         rec["obs_cv"] = observables(cv, RH, rec["c"], rec["cv_inv"])
     rec["obs_plug"] = observables(plug, RH, rec["sqrt"], rec["inv"])
+    # the mislabel rate q (claim C3), from the same counts: d_q = dis / (n * nb)
+    dq = [c[("plug", h)][2] / c[("plug", h)][4] for h in RH]
+    rec["q_sqrt"], rec["q_inv"] = intercept(RH, dq, "sqrt"), intercept(RH, dq, "inv")
+    rec["q_smaller"] = min(rec["q_sqrt"], rec["q_inv"])
+    rec["q_exact"] = c[exact_key][2] / c[exact_key][4] if exact_key in c else np.nan
     rec["curve"] = {f"plug|{h}": fc(c, "plug", h) for h in RH + (ex,) if ("plug", h) in c}
     rec["curve"].update({f"deep|{h}": fc(c, "deep", h) for h in L["deep"] if ("deep", h) in c})
     return rec
@@ -114,9 +119,9 @@ def status(recs, th, family="plug"):
     return "estimable"
 
 
-def performance(recs, est, rng=None):
+def performance(recs, est, rng=None, exact="exact"):
     """Section 3.6's point-estimate measures of one method over repetitions, with Monte Carlo errors."""
-    pairs = [(r[est], r["exact"]) for r in recs if est in r and np.isfinite(r[est]) and np.isfinite(r["exact"])]
+    pairs = [(r[est], r[exact]) for r in recs if est in r and np.isfinite(r[est]) and np.isfinite(r[exact])]
     if len(pairs) < 2:
         return dict(n=len(pairs))
     e = np.array([a - b for a, b in pairs])
@@ -177,7 +182,8 @@ def summarize_cells(B, th, est_family):
         rows[f"{cell}|{R}"] = dict(bracket=bracket(recs), diagnostic=any(t in cell for t in DIAGNOSTIC),
             status=status(recs, th, est_family), exact=float(np.nanmedian([r["exact"] for r in recs])),
             obs={k: float(np.nanmedian([r["obs_plug"][k] for r in recs])) for k in ("dmax", "fall", "fd", "div")},
-            perf={e: performance(recs, e) for e in ESTIMATORS})
+            perf={e: performance(recs, e) for e in ESTIMATORS},
+            perf_q={e: performance(recs, f"q_{e}", exact="q_exact") for e in ("sqrt", "inv", "smaller")})
     return rows
 
 
@@ -286,8 +292,11 @@ def main():
                    selection={e: {k: v for k, v in t.items()} for e, t in table.items()}, usable_cells=usable,
                    coverage={ds: dict(bins=out[ds]["coverage"], ok=out[ds]["coverage_ok"]) for ds in out},
                    cells={ds: out[ds]["rows"] for ds in out})
-        json.dump(dec, open(f"{OUT}/dev/decisions.json", "w"), indent=1, default=float)
-        print(f"-> {OUT}/dev/decisions.json")
+        target = f"{OUT}/dev/decisions.json"
+        if os.system(f"git ls-files --error-unmatch {target} > /dev/null 2>&1") == 0:
+            target = f"{OUT}/dev/decisions_rerun.json"          # the committed decisions are never overwritten
+        json.dump(dec, open(target, "w"), indent=1, default=float)
+        print(f"-> {target}")
         return
     dec = json.load(open(f"{OUT}/dev/decisions.json"))
     th, est = dec["thresholds"], dec["estimator"]

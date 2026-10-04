@@ -1,0 +1,17 @@
+[ok] a study unit pools 10 splits x 3 seeds against every published reference size and the truth  (4333 faithful calls pooled)
+[ok] a study unit is deterministic in its seed
+[ok] the plasmode carries the guard's pooled counts over 20 draws
+[ok] an oracle unit counts three maps against the truth  ({'v': 0, 'draw': 0, 'n10': 36, 'n1': 453, 'dis': 55, 'n': 600})
+LAYER C (EEG, truth T1, tsne maps, R = 8): 3 virtual studies of 2 subjects from a population of 3
+  population target Theta = 0.115 (theta_v 0.090-0.147, Monte Carlo error per theta_v up to 0.015)
+  study medians: sqrt 0.068, inv 0.116
+  published        Pr(L > Theta) 0.0000 +- 0.0000  Pr(U < Theta) 0.0000 +- 0.0000  coverage 1.000  width 0.078  declares L > 0.5 in 0.000  Pr(L > sample median) 0.0000
+  order_statistics Pr(L > Theta) 0.0000 +- 0.0000  Pr(U < Theta) 0.6667 +- 0.2722  coverage 0.333  width 0.016  declares L > 0.5 in 0.000  Pr(L > sample median) 0.0000
+  mislabel rate q: Theta 0.117; Pr(L > Theta) 0.0000 +- 0.0000; declares L > 0.10 in 0.000
+  guard (first 2 studies): triggered in 0; median plasmode bias -0.0587
+  criterion (addendum): Pr(L > Theta) <= 0.025 + 2 MCSE = 0.0250 -> met
+[ok] the analysis runs end to end, with the guard computed where the plasmode ran  (Theta 0.115, study medians sqrt 0.068)
+[ok] the estimates land near the truth in this easy regime
+
+0 failures
+exit 0

@@ -1,0 +1,452 @@
+[
+ {
+  "subject": 1,
+  "experiment_id": 500964514,
+  "fps": 30.1386377336634,
+  "n_presentations": 5950,
+  "blanks": 50,
+  "epochs": 3,
+  "median_step_frames": 8.0,
+  "window_frames": {
+   "full": 15,
+   "early": 8
+  },
+  "overlap_frames": {
+   "full": 7.0,
+   "early": 0.0
+  },
+  "consecutive_pairs": 5849,
+  "same_image_pairs": 47,
+  "u_h_pairs": [
+   1678,
+   1574,
+   1539,
+   1383,
+   1775,
+   1790,
+   1723,
+   1659,
+   1679,
+   1821
+  ],
+  "u_h_share": 0.2841682338861344,
+  "u_h_same_image": [
+   12,
+   8,
+   9,
+   9,
+   12,
+   16,
+   17,
+   12,
+   23,
+   13
+  ],
+  "u_h_per_image_pair": 0.24077937128784585
+ },
+ {
+  "subject": 2,
+  "experiment_id": 501886692,
+  "fps": 30.14772384670897,
+  "n_presentations": 5950,
+  "blanks": 50,
+  "epochs": 3,
+  "median_step_frames": 8.0,
+  "window_frames": {
+   "full": 15,
+   "early": 8
+  },
+  "overlap_frames": {
+   "full": 7.0,
+   "early": 0.0
+  },
+  "consecutive_pairs": 5849,
+  "same_image_pairs": 49,
+  "u_h_pairs": [
+   1708,
+   1720,
+   1424,
+   1632,
+   1726,
+   1750,
+   1649,
+   1639,
+   1516,
+   1680
+  ],
+  "u_h_share": 0.28114207556847326,
+  "u_h_same_image": [
+   26,
+   20,
+   16,
+   14,
+   20,
+   15,
+   20,
+   16,
+   22,
+   15
+  ],
+  "u_h_per_image_pair": 0.23821526872374332
+ },
+ {
+  "subject": 3,
+  "experiment_id": 501559087,
+  "fps": 30.07518796996759,
+  "n_presentations": 5950,
+  "blanks": 50,
+  "epochs": 3,
+  "median_step_frames": 8.0,
+  "window_frames": {
+   "full": 15,
+   "early": 8
+  },
+  "overlap_frames": {
+   "full": 7.0,
+   "early": 0.0
+  },
+  "consecutive_pairs": 5849,
+  "same_image_pairs": 44,
+  "u_h_pairs": [
+   1495,
+   1587,
+   1737,
+   1674,
+   1646,
+   1613,
+   1636,
+   1616,
+   1679,
+   1594
+  ],
+  "u_h_share": 0.2782868866472901,
+  "u_h_same_image": [
+   10,
+   10,
+   6,
+   14,
+   12,
+   8,
+   14,
+   13,
+   19,
+   17
+  ],
+  "u_h_per_image_pair": 0.23579603071128497
+ },
+ {
+  "subject": 4,
+  "experiment_id": 501794235,
+  "fps": 30.07518796996759,
+  "n_presentations": 5950,
+  "blanks": 50,
+  "epochs": 3,
+  "median_step_frames": 8.0,
+  "window_frames": {
+   "full": 15,
+   "early": 8
+  },
+  "overlap_frames": {
+   "full": 7.0,
+   "early": 0.0
+  },
+  "consecutive_pairs": 5851,
+  "same_image_pairs": 58,
+  "u_h_pairs": [
+   1664,
+   1644,
+   1325,
+   1592,
+   1587,
+   1639,
+   1537,
+   1749,
+   1752,
+   1550
+  ],
+  "u_h_share": 0.27412408135361477,
+  "u_h_same_image": [
+   21,
+   18,
+   13,
+   16,
+   11,
+   23,
+   22,
+   23,
+   18,
+   14
+  ],
+  "u_h_per_image_pair": 0.2323482543821527
+ },
+ {
+  "subject": 5,
+  "experiment_id": 502368172,
+  "fps": 30.1386377336634,
+  "n_presentations": 5950,
+  "blanks": 50,
+  "epochs": 3,
+  "median_step_frames": 8.0,
+  "window_frames": {
+   "full": 15,
+   "early": 8
+  },
+  "overlap_frames": {
+   "full": 7.0,
+   "early": 0.0
+  },
+  "consecutive_pairs": 5851,
+  "same_image_pairs": 47,
+  "u_h_pairs": [
+   1717,
+   1411,
+   1716,
+   1686,
+   1785,
+   1623,
+   1684,
+   1731,
+   1531,
+   1715
+  ],
+  "u_h_share": 0.28369509485558025,
+  "u_h_same_image": [
+   17,
+   13,
+   15,
+   12,
+   17,
+   8,
+   10,
+   18,
+   9,
+   10
+  ],
+  "u_h_per_image_pair": 0.2404606692742286
+ },
+ {
+  "subject": 6,
+  "experiment_id": 503019786,
+  "fps": 30.075187969916175,
+  "n_presentations": 5950,
+  "blanks": 50,
+  "epochs": 3,
+  "median_step_frames": 8.0,
+  "window_frames": {
+   "full": 15,
+   "early": 8
+  },
+  "overlap_frames": {
+   "full": 7.0,
+   "early": 0.0
+  },
+  "consecutive_pairs": 5849,
+  "same_image_pairs": 53,
+  "u_h_pairs": [
+   1618,
+   1586,
+   1657,
+   1616,
+   1616,
+   1756,
+   1550,
+   1610,
+   1696,
+   1645
+  ],
+  "u_h_share": 0.2795349632415798,
+  "u_h_same_image": [
+   19,
+   16,
+   18,
+   25,
+   10,
+   18,
+   13,
+   15,
+   19,
+   13
+  ],
+  "u_h_per_image_pair": 0.2368535419382877
+ },
+ {
+  "subject": 7,
+  "experiment_id": 510705057,
+  "fps": 30.1386377336634,
+  "n_presentations": 5950,
+  "blanks": 50,
+  "epochs": 3,
+  "median_step_frames": 8.0,
+  "window_frames": {
+   "full": 15,
+   "early": 8
+  },
+  "overlap_frames": {
+   "full": 7.0,
+   "early": 0.0
+  },
+  "consecutive_pairs": 5849,
+  "same_image_pairs": 47,
+  "u_h_pairs": [
+   1571,
+   1629,
+   1686,
+   1778,
+   1628,
+   1699,
+   1606,
+   1678,
+   1642,
+   1583
+  ],
+  "u_h_share": 0.28209950418875024,
+  "u_h_same_image": [
+   9,
+   9,
+   12,
+   20,
+   8,
+   20,
+   14,
+   20,
+   14,
+   24
+  ],
+  "u_h_per_image_pair": 0.2390265102129509
+ },
+ {
+  "subject": 8,
+  "experiment_id": 504808661,
+  "fps": 30.14772384670897,
+  "n_presentations": 5950,
+  "blanks": 50,
+  "epochs": 3,
+  "median_step_frames": 8.0,
+  "window_frames": {
+   "full": 15,
+   "early": 8
+  },
+  "overlap_frames": {
+   "full": 7.0,
+   "early": 0.0
+  },
+  "consecutive_pairs": 5850,
+  "same_image_pairs": 43,
+  "u_h_pairs": [
+   1701,
+   1650,
+   1628,
+   1712,
+   1654,
+   1534,
+   1655,
+   1704,
+   1588,
+   1649
+  ],
+  "u_h_share": 0.2816239316239316,
+  "u_h_same_image": [
+   14,
+   12,
+   15,
+   12,
+   13,
+   15,
+   19,
+   17,
+   18,
+   19
+  ],
+  "u_h_per_image_pair": 0.23866434883384036
+ },
+ {
+  "subject": 9,
+  "experiment_id": 510345479,
+  "fps": 30.07518796996759,
+  "n_presentations": 5950,
+  "blanks": 50,
+  "epochs": 3,
+  "median_step_frames": 8.0,
+  "window_frames": {
+   "full": 15,
+   "early": 8
+  },
+  "overlap_frames": {
+   "full": 7.0,
+   "early": 0.0
+  },
+  "consecutive_pairs": 5849,
+  "same_image_pairs": 59,
+  "u_h_pairs": [
+   1475,
+   1534,
+   1509,
+   1602,
+   1650,
+   1774,
+   1674,
+   1748,
+   1700,
+   1713
+  ],
+  "u_h_share": 0.28003077449136604,
+  "u_h_same_image": [
+   18,
+   8,
+   22,
+   15,
+   19,
+   23,
+   18,
+   25,
+   25,
+   23
+  ],
+  "u_h_per_image_pair": 0.23727364913805593
+ },
+ {
+  "subject": 10,
+  "experiment_id": 524848692,
+  "fps": 30.07518796996759,
+  "n_presentations": 5950,
+  "blanks": 50,
+  "epochs": 3,
+  "median_step_frames": 8.0,
+  "window_frames": {
+   "full": 15,
+   "early": 8
+  },
+  "overlap_frames": {
+   "full": 7.0,
+   "early": 0.0
+  },
+  "consecutive_pairs": 5850,
+  "same_image_pairs": 45,
+  "u_h_pairs": [
+   1578,
+   1650,
+   1585,
+   1595,
+   1593,
+   1692,
+   1570,
+   1610,
+   1651,
+   1613
+  ],
+  "u_h_share": 0.27584615384615385,
+  "u_h_same_image": [
+   11,
+   14,
+   16,
+   11,
+   11,
+   10,
+   12,
+   14,
+   15,
+   19
+  ],
+  "u_h_per_image_pair": 0.23376792698826598
+ }
+]
