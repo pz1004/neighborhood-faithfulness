@@ -356,3 +356,15 @@ Classes under the local reading, after Layer C. Under the strict reading the one
 - the mouse "≈100%" as a finite-reference statement (audit items N2 and N8);
 - the scDEED comparison reported under both nulls (Section 5.3, item 3);
 - the title, chosen at Gate B, using "faithfulness" (audit item R2).
+
+### 7.3 The author's decisions (2026-10-05)
+
+The author chose every recommendation above:
+1. **The local reading.**
+2. **EEG:** a scoped latent claim. C1 is the calibrated result at 8 trials; C1-RSA and C3 are model-dependent estimates; at 16 and 32 trials only the finite-reference disagreement is reported.
+3. **Mouse V1:** in the main text, as a finite-reference result with the simulation's context; C3 as a model-dependent estimate.
+4. **The checks:** descriptive. The benchmark leads, and the inferential classification is dropped.
+
+**The bound** stays the published L, with the 2nd-smallest estimate reported beside it as a sensitivity bound. That was the stated default, and the author did not object.
+
+The rewrite (Stage 3) follows these decisions and ends at Gate B.
