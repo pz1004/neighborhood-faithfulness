@@ -1,0 +1,13 @@
+  [25/300] 500 units, last chunk 55s, elapsed 55s
+  [50/300] 1000 units, last chunk 54s, elapsed 109s
+  [75/300] 1500 units, last chunk 54s, elapsed 158s
+  [100/300] 2000 units, last chunk 55s, elapsed 166s
+  [125/300] 2500 units, last chunk 57s, elapsed 221s
+  [150/300] 3000 units, last chunk 56s, elapsed 272s
+  [175/300] 3500 units, last chunk 59s, elapsed 282s
+  [200/300] 4000 units, last chunk 55s, elapsed 337s
+  [225/300] 4500 units, last chunk 55s, elapsed 383s
+  [250/300] 5000 units, last chunk 54s, elapsed 428s
+  [275/300] 5500 units, last chunk 59s, elapsed 449s
+  [300/300] 6000 units, last chunk 38s, elapsed 481s
+done in 481s -> results/revision/layer_c/oracle_mouse_T3_tsne_R16.jsonl.gz

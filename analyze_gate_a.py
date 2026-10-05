@@ -61,15 +61,20 @@ def pooled_checks(path):
 
 def deepest(subj, L, rng, quantity):
     """Median finite-reference disagreement at the deepest reference, with a 95% subject-bootstrap interval:
-    d_FC = n10 / (n1 nb) for false comfort, d_q = dis / (n nb) for the mislabel rate."""
+    d_FC = n10 / (n1 nb) for false comfort, d_q = dis / (n nb) for the mislabel rate. For false comfort it
+    also counts, pooled over subjects, maps and reference sub-blocks, the faithful calls and those the
+    reference confirmed (added after Layer C, descriptive; no random numbers are drawn for it)."""
     key = ("plug", L["RH"][-1])
     v = np.array([(c[key][2] / c[key][4]) if quantity == "q" else (c[key][1] / c[key][0] if c[key][0] else np.nan)
                   for s, c in sorted(subj.items())], float)
+    pooled = None if quantity == "q" else dict(calls=float(sum(c[key][0] for c in subj.values())),
+                                               confirmed=float(sum(c[key][0] - c[key][1] for c in subj.values())))
     v = v[np.isfinite(v)]
     if len(v) < 2:
-        return dict(median=float(np.nanmedian(v)) if len(v) else np.nan, ci=[np.nan, np.nan], n=len(v))
+        return dict(median=float(np.nanmedian(v)) if len(v) else np.nan, ci=[np.nan, np.nan], n=len(v), pooled=pooled)
     m = np.median(v[rng.integers(0, len(v), size=(B, len(v)))], axis=1)
-    return dict(median=float(np.median(v)), ci=[float(np.percentile(m, 2.5)), float(np.percentile(m, 97.5))], n=len(v))
+    return dict(median=float(np.median(v)), ci=[float(np.percentile(m, 2.5)), float(np.percentile(m, 97.5))], n=len(v),
+                pooled=pooled)
 
 
 def classify(status, matches, quantity):
@@ -138,7 +143,8 @@ def main():
             out(f"  {(claim + ' ' if claim else '') + cell:22s} {R:3d} {qn:>2s}  {lo:10.3f}-{hi:<10.3f}  {obs['dmax']:6.3f}"
                 f" {obs['fall']:6.3f} {obs['fd']:+7.3f} {obs['div']:6.3f}  {st:25s} {len(matches):7d}"
                 f"  {worst[0]:+.3f}/{worst[1]:.3f}    {fin['median']:.3f} [{fin['ci'][0]:.3f}, {fin['ci'][1]:.3f}]"
-                f"  {strict} / {local}")
+                f"  {strict} / {local}"
+                + (f"  [confirmed {fin['pooled']['confirmed']:.0f} of {fin['pooled']['calls']:.0f} calls]" if fin["pooled"] else ""))
     open(f"{OUT}/classification.txt", "w").write("\n".join(lines) + "\n")
     json.dump(out_json, open(f"{OUT}/classification.json", "w"), indent=1, default=float)
 

@@ -44,6 +44,17 @@ Journal of Neuroscience Methods manuscript is in [manuscript/](manuscript/).**
   The claims above stand as recorded. How they may be reported is decided by the validation
   in [docs/revision_protocol.md](docs/revision_protocol.md) (plan Amendment 6). The
   manuscript before the revision is tagged `jnm-baseline`.
+- **Gate A (2026-10-05).** The validation, the study-level calibration and the descriptive
+  analyses are complete ([docs/revision_results.md](docs/revision_results.md)).
+  - EEG false comfort at 8 trials is the one result whose bound is calibrated. It is
+    therefore the only one that can carry a threshold claim, and only under the local reading.
+  - The other latent estimates are model-dependent.
+  - Mouse V1 false comfort is reported as disagreement with a finite reference, since its
+    references are saturated.
+  - In EEG the checks select faithful neighborhoods 2–10 times more often than a random
+    selection. Even their strictest 5% has an estimated false comfort of 0.68–0.73.
+
+  The paper's direction awaits the author's decision at Gate A.
 
 Details: [docs/gate3_pilot_things.md](docs/gate3_pilot_things.md) and
 [docs/reframe_prior_art.md](docs/reframe_prior_art.md). The protocol is
@@ -96,7 +107,14 @@ reproduction. `reach/predecessor/` is the predecessor's code, copied verbatim; s
 | `run_points.py` | per-point rerun of the primary and cv-MDS maps and every check, reproducing every committed count, with the scores and references the benchmark needs |
 | `analyze_benchmark.py` | the checks against a matched random selection, at native and matched acceptance, with yield, overlap and the cv-MDS diagnostics |
 | `tests/test_stage2.py` | synthetic checks of that code; touches no data |
-| `results/revision/` | the revision's test logs, and the development and validation runs |
+| `analyze_gate_a.py` | Gate A: every real result's observable status, its matching validation cells and its reporting class under the strict and local readings, with the disagreement at the deepest reference |
+| `run_study_calibration.py`, `analyze_study_calibration.py` | Layer C: virtual studies of 10 subjects drawn from 30 virtual subjects, the published procedure re-run on each, and the bound's calibration against the oracle truth |
+| `run_layer_c.sh` | the chain of Layer C runs that produced `results/revision/layer_c/` |
+| `analyze_layer_c_rule.py` | why the published bound met or missed its level: the bootstrap rule on the exact truths against the estimates (descriptive, added after Layer C) |
+| `tests/test_layer_c.py` | synthetic checks of the Layer C code; touches no data |
+| `docs/revision_results.md` | the revision's results: the validation, Layer C, the analyses on the real data, every claim's class, and the decisions for the author at Gate A |
+| `results/revision/` | the revision's test logs, the development and validation runs, and Layer C (`layer_c/`) |
+| `results/gate_a/` | Gate A's classification of every real result |
 | `describe_allen_subjects.py` | donor, sex, genotype, age at recording, depth and cell count of the included mice, for the manuscript |
 | `results/checks/` | the comparison's test log, rows, semi-synthetic check and printout |
 | `manuscript/` | the Journal of Neuroscience Methods manuscript: `manuscript.tex`, `supplementary.tex` and `cover_letter.tex`, each one self-contained file, with `refs.bib`, `highlights.txt` and `figures/`; `make_figures.py` draws the figures, and `make_tables.py` writes the tables and every quoted number into the `.tex` files from the committed results (`--check` only verifies them); PDFs are built, not tracked |
@@ -208,6 +226,12 @@ The revision's descriptive analyses on the real data (about 1.5 hours, most of i
 
 ```bash
 python3 tests/test_stage2.py > results/revision/test_stage2.log && python3 make_trial_manifest.py && python3 run_session_disjoint.py > results/session_disjoint/run.log && python3 analyze_session_disjoint.py && python3 run_points.py --dataset things > results/points/things.log && python3 run_points.py --dataset allen > results/points/allen.log && python3 analyze_benchmark.py
+```
+
+Gate A's classification, then the study-level calibration, Layer C (about 19 hours on 36 cores):
+
+```bash
+python3 analyze_gate_a.py && python3 tests/test_layer_c.py > results/revision/test_layer_c.log && bash run_layer_c.sh && python3 analyze_layer_c_rule.py
 ```
 
 The manuscript (needs matplotlib and a LaTeX installation with latexmk):

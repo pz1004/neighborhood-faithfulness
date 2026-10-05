@@ -1,0 +1,8 @@
+LAYER C (EEG, truth T1, tsne maps, R = 8): 1000 virtual studies of 10 subjects from a population of 30
+  population target Theta = 0.821 (theta_v 0.550-0.988, Monte Carlo error per theta_v up to 0.006)
+  study medians: sqrt 0.811, inv 0.867
+  published        Pr(L > Theta) 0.0200 +- 0.0044  Pr(U < Theta) 0.0040 +- 0.0020  coverage 0.976  width 0.274  declares L > 0.5 in 0.976  Pr(L > sample median) 0.0010
+  order_statistics Pr(L > Theta) 0.0110 +- 0.0033  Pr(U < Theta) 0.0000 +- 0.0000  coverage 0.989  width 0.341  declares L > 0.5 in 0.848  Pr(L > sample median) 0.0000
+  mislabel rate q: Theta 0.153; Pr(L > Theta) 0.0170 +- 0.0041; declares L > 0.10 in 0.962
+  guard (first 200 studies): triggered in 0; median plasmode bias -0.0078
+  criterion (addendum): Pr(L > Theta) <= 0.025 + 2 MCSE = 0.0339 -> met

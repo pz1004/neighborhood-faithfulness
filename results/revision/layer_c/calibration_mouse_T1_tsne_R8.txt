@@ -1,0 +1,8 @@
+LAYER C (mouse, truth T1, tsne maps, R = 8): 1000 virtual studies of 10 subjects from a population of 30
+  population target Theta = 0.974 (theta_v 0.854-0.997, Monte Carlo error per theta_v up to 0.006)
+  study medians: sqrt 0.980, inv 0.986
+  published        Pr(L > Theta) 0.0490 +- 0.0068  Pr(U < Theta) 0.0010 +- 0.0010  coverage 0.950  width 0.059  declares L > 0.5 in 1.000  Pr(L > sample median) 0.0160
+  order_statistics Pr(L > Theta) 0.0230 +- 0.0047  Pr(U < Theta) 0.0000 +- 0.0000  coverage 0.977  width 0.080  declares L > 0.5 in 1.000  Pr(L > sample median) 0.0060
+  mislabel rate q: Theta 0.138; Pr(L > Theta) 0.0400 +- 0.0062; declares L > 0.10 in 1.000
+  guard (first 0 studies): triggered in 0; median plasmode bias None
+  criterion (addendum): Pr(L > Theta) <= 0.025 + 2 MCSE = 0.0387 -> NOT met

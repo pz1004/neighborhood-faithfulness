@@ -1,0 +1,29 @@
+LAYER C, the published bound's rule against the estimator (analyze_layer_c_rule.py; descriptive)
+Pr(bound > target) for the published L on the estimates and on the exact theta_v, and for x(3);
+with exact values, x(3) of 10 errs with probability 0.0547 for a population median
+
+the rule on known populations, Pr(L > median): normal 0.0299 +- 0.0012, uniform 0.0305 +- 0.0012, exponential 0.0338 +- 0.0013
+
+EEG_T1_tsne_R8
+  FC target 0.821: L on estimates 0.0200 +- 0.0044, on exact values 0.0290 +- 0.0053; x(3) 0.0520 +- 0.0070, exact 0.0590 +- 0.0075; L = x(3) in 0.484, L < x(3) in 0.516; median bias of the smaller estimate -0.0064
+  q  target 0.153: L on estimates 0.0170 +- 0.0041, on exact values 0.0280 +- 0.0052; x(3) 0.0380 +- 0.0060, exact 0.0560 +- 0.0073; L = x(3) in 0.465, L < x(3) in 0.507; median bias of the smaller estimate -0.0032
+
+EEG_T3_tsne_R8
+  FC target 0.794: L on estimates 0.0160 +- 0.0040, on exact values 0.0210 +- 0.0045; x(3) 0.0330 +- 0.0056, exact 0.0530 +- 0.0071; L = x(3) in 0.457, L < x(3) in 0.543; median bias of the smaller estimate -0.0135
+  q  target 0.203: L on estimates 0.0100 +- 0.0031, on exact values 0.0360 +- 0.0059; x(3) 0.0310 +- 0.0055, exact 0.0640 +- 0.0077; L = x(3) in 0.463, L < x(3) in 0.524; median bias of the smaller estimate -0.0083
+
+mouse_T1_tsne_R16
+  FC target 0.906: L on estimates 0.1270 +- 0.0105, on exact values 0.0240 +- 0.0048; x(3) 0.2230 +- 0.0132, exact 0.0620 +- 0.0076; L = x(3) in 0.435, L < x(3) in 0.566; median bias of the smaller estimate +0.0255
+  q  target 0.139: L on estimates 0.0660 +- 0.0079, on exact values 0.0300 +- 0.0054; x(3) 0.1020 +- 0.0096, exact 0.0580 +- 0.0074; L = x(3) in 0.420, L < x(3) in 0.492; median bias of the smaller estimate +0.0022
+
+mouse_T1_tsne_R8
+  FC target 0.974: L on estimates 0.0490 +- 0.0068, on exact values 0.0250 +- 0.0049; x(3) 0.1070 +- 0.0098, exact 0.0620 +- 0.0076; L = x(3) in 0.428, L < x(3) in 0.572; median bias of the smaller estimate +0.0038
+  q  target 0.138: L on estimates 0.0400 +- 0.0062, on exact values 0.0220 +- 0.0046; x(3) 0.0760 +- 0.0084, exact 0.0510 +- 0.0070; L = x(3) in 0.445, L < x(3) in 0.483; median bias of the smaller estimate -0.0002
+
+mouse_T3_tsne_R16
+  FC target 0.889: L on estimates 0.2130 +- 0.0129, on exact values 0.0270 +- 0.0051; x(3) 0.2950 +- 0.0144, exact 0.0510 +- 0.0070; L = x(3) in 0.463, L < x(3) in 0.537; median bias of the smaller estimate +0.0363
+  q  target 0.210: L on estimates 0.0130 +- 0.0036, on exact values 0.0390 +- 0.0061; x(3) 0.0270 +- 0.0051, exact 0.0570 +- 0.0073; L = x(3) in 0.518, L < x(3) in 0.465; median bias of the smaller estimate -0.0055
+
+mouse_T3_tsne_R8
+  FC target 0.978: L on estimates 0.0590 +- 0.0075, on exact values 0.0210 +- 0.0045; x(3) 0.1130 +- 0.0100, exact 0.0510 +- 0.0070; L = x(3) in 0.412, L < x(3) in 0.589; median bias of the smaller estimate +0.0038
+  q  target 0.165: L on estimates 0.0240 +- 0.0048, on exact values 0.0430 +- 0.0064; x(3) 0.0370 +- 0.0060, exact 0.0570 +- 0.0073; L = x(3) in 0.526, L < x(3) in 0.459; median bias of the smaller estimate -0.0034
