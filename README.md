@@ -51,10 +51,15 @@ Journal of Neuroscience Methods manuscript is in [manuscript/](manuscript/).**
   - The other latent estimates are model-dependent.
   - Mouse V1 false comfort is reported as disagreement with a finite reference, since its
     references are saturated.
-  - In EEG the checks select faithful neighborhoods 2–10 times more often than a random
-    selection. Even their strictest 5% has an estimated false comfort of 0.68–0.73.
+  - In EEG, the four checks whose false comfort is estimable select faithful neighborhoods
+    2.0–4.2 times more often than a random selection. Even the best-scoring 5% has an
+    estimated false comfort of 0.68–0.73.
 
-  The paper's direction awaits the author's decision at Gate A.
+  At Gate A the author chose the local reading: EEG as a scoped latent claim, mouse V1 as a
+  finite-reference result in the main text, and the checks as a descriptive benchmark
+  ([docs/revision_results.md](docs/revision_results.md), Section 7.3). The manuscript is
+  rewritten to those choices and awaits review at Gate B
+  ([docs/claims_audit.md](docs/claims_audit.md)).
 
 Details: [docs/gate3_pilot_things.md](docs/gate3_pilot_things.md) and
 [docs/reframe_prior_art.md](docs/reframe_prior_art.md). The protocol is
@@ -113,6 +118,7 @@ reproduction. `reach/predecessor/` is the predecessor's code, copied verbatim; s
 | `analyze_layer_c_rule.py` | why the published bound met or missed its level: the bootstrap rule on the exact truths against the estimates (descriptive, added after Layer C) |
 | `tests/test_layer_c.py` | synthetic checks of the Layer C code; touches no data |
 | `docs/revision_results.md` | the revision's results: the validation, Layer C, the analyses on the real data, every claim's class, and the decisions for the author at Gate A |
+| `docs/claims_audit.md` | Gate B: every sentence of the abstract, highlights and conclusions mapped to its result, status and class, and the audit's required fixes |
 | `results/revision/` | the revision's test logs, the development and validation runs, and Layer C (`layer_c/`) |
 | `results/gate_a/` | Gate A's classification of every real result |
 | `describe_allen_subjects.py` | donor, sex, genotype, age at recording, depth and cell count of the included mice, for the manuscript |

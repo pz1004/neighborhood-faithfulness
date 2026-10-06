@@ -1,22 +1,25 @@
 #!/usr/bin/env python3
-"""Figures for manuscript/manuscript.tex, drawn only from committed results. Nothing is re-measured.
+"""Figures for manuscript/manuscript.tex and supplementary.tex, drawn only from committed results.
+Nothing is re-measured.
 
-  Figure 1  the estimator: design, the reach label, and the extrapolation in both datasets
-  Figure 2  called faithful vs truly faithful at 8 trials, and false comfort vs trials
-  Figure 3  false comfort at 8 trials in the 12 pre-specified variations
-  Figure 4  common checks against the truth at 8 trials
+  Figure 1   the estimator: design, the reach label, and the disagreement curves in both datasets
+  Figure 2   where the estimator can be trusted, in simulation (Layers A, B and C)
+  Figure 3   the real data: disagreement with references of increasing depth, by budget
+  Figure 4   common checks at 8 trials: false comfort against the share of points passed
+  Figure S1  the 12 pre-specified variations at 8 trials
 
 Sources:
 - results/things_confirmatory/{rows.jsonl, confirmatory_summary.json};
 - results/allen_confirmatory/{rows.jsonl, allen_summary.json};
-- results/checks/checks_summary.json.
+- results/revision/validation/summary.json; results/revision/layer_c/calibration_*.json;
+- results/gate_a/classification.json; results/benchmark/summary.json.
 
-**Estimates shown.** Each estimate is the midpoint of the two extrapolants' medians. Bars run
-from the conservative bound L to the upper end of the wider 95% interval, or to U for the
-checks.
+**What is drawn as an estimate.** A latent estimate (an extrapolated false comfort) is drawn only
+where the result's status is estimable; everything else is drawn as the disagreement with the
+deepest reference, which is reportable whatever the status (manuscript, Section 2.3.4).
 
 **Palette.** Blue #2a78d6 for EEG, orange #eb6834 for mouse V1. Marker shape and line style
-carry the map type or the check family, so identity never rests on hue alone. The PDFs carry
+carry the status, the budget or the check, so identity never rests on hue alone. The PDFs carry
 no creation date, so unchanged results rebuild the same files.
 """
 import json, sys
@@ -26,6 +29,7 @@ import numpy as np
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
 from matplotlib.patches import FancyBboxPatch, FancyArrowPatch
 from matplotlib.ticker import FuncFormatter
 
@@ -37,12 +41,16 @@ import analyze_allen_confirmatory as AA       # noqa: E402
 OUT = Path(__file__).resolve().parent / "figures"
 TH = json.load(open(ROOT / "results/things_confirmatory/confirmatory_summary.json"))["summary"]
 AL = json.load(open(ROOT / "results/allen_confirmatory/allen_summary.json"))["summary"]
-CHECKS = ROOT / "results/checks/checks_summary.json"
+VAL = json.load(open(ROOT / "results/revision/validation/summary.json"))
+GA = json.load(open(ROOT / "results/gate_a/classification.json"))
+BM = json.load(open(ROOT / "results/benchmark/summary.json"))
+LCDIR = ROOT / "results/revision/layer_c"
 
 BLUE, ORANGE = "#2a78d6", "#eb6834"
 INK, INK2, MUTED = "#0b0b0b", "#52514e", "#898781"
 GRID, AXIS, SURFACE, REF = "#e1e0d9", "#c3c2b7", "#ffffff", "#a8a69e"
 FILL = "#f3f2ee"
+COLOR = {"EEG": BLUE, "mouse": ORANGE}
 plt.rcParams.update({
     "font.family": "DejaVu Sans", "font.size": 8.5,
     "axes.edgecolor": AXIS, "axes.linewidth": 0.8, "axes.labelcolor": INK2,
@@ -56,12 +64,18 @@ plt.rcParams.update({
 pct = FuncFormatter(lambda v, _: f"{v:.0%}")
 NO_DATE = {"CreationDate": None}
 MARK = dict(markersize=6, markeredgecolor=SURFACE, markeredgewidth=1.0)
+STATUS_MARK = {"estimable": ("o", True), "extrapolation unresolved": ("^", False),
+               "reference saturated": ("s", True), "insufficient acceptance": ("x", False)}
+STATUS_LABEL = {"estimable": "estimable", "extrapolation unresolved": "unresolved",
+                "reference saturated": "saturated", "insufficient acceptance": "too few passes"}
 
 
-def est(S, cell, R, q):
-    v = S[f"{cell}|{R}|{q}"]
-    lo, hi = sorted((v["med_sqrt"], v["med_inv"]))
-    return (lo + hi) / 2, v["L"], max(v["ci_sqrt"][1], v["ci_inv"][1]), lo, hi
+def rh_axis(ax, sizes, xmax=None):
+    """An axis linear in R_h^(-1/2), with the reference sizes as ticks and infinity at 0."""
+    x = [h ** -0.5 for h in sizes]
+    ax.set_xticks([0] + x, ["∞"] + [str(h) for h in sizes])
+    ax.set_xlim(-0.015, (xmax or max(x)) * 1.06)
+    ax.set_xlabel("reference trials $R_h$")
 
 
 # ------------------------------------------------------------------------------------------
@@ -87,9 +101,9 @@ def _design(ax):
          "block $F$ fits the representation used by both lanes: PCA, whitening, PCA to 20 dimensions",
          fc=SURFACE, size=7.0)
     w, h, xs = 0.17, 0.22, (0.0, 0.205, 0.41, 0.615)
-    lane = [(0.52, ["block $U$: the\nanalyst's $R$ trials", "averages $c_i$", "t-SNE map;\ndisplayed\nneighbors $E_i$",
+    lane = [(0.55, ["block $U$: the\nanalyst's $R$ trials", "averages $c_i$", "t-SNE map;\ndisplayed\nneighbors $E_i$",
                     "naive label $N_i$:\nis $E_i$ faithful\nin the averages?"]),
-            (0.10, ["block $H$: disjoint\nsub-blocks of\n$R_h$ trials", "sub-block\nmeans", "the same $E_i$",
+            (0.17, ["block $H$: disjoint\nsub-blocks of\n$R_h$ trials", "sub-block\nmeans", "the same $E_i$",
                     "reference label\n$T_i(R_h)$: is $E_i$\nfaithful there?"])]
     for y, texts in lane:
         for j, (x, t) in enumerate(zip(xs, texts)):
@@ -97,12 +111,14 @@ def _design(ax):
                  fc=SURFACE if (y < 0.3 and j == 2) else FILL)
             if j:
                 _arrow(ax, (xs[j - 1] + w, y + h / 2), (x, y + h / 2))
-    _arrow(ax, (0.41 + w / 2, 0.52), (0.41 + w / 2, 0.10 + h), color=MUTED, ls="--")
-    _box(ax, 0.83, 0.10, 0.17, 0.64,
+    _arrow(ax, (0.41 + w / 2, 0.55), (0.41 + w / 2, 0.17 + h), color=MUTED, ls="--")
+    _box(ax, 0.83, 0.17, 0.17, 0.60,
          "disagreement\n$d_{FC}(R_h)$: share of\n$N_i = 1$ with\n$T_i(R_h) = 0$\n\nextrapolated to\n"
-         "$R_h \\to \\infty$ gives\nthe false comfort\n(panels c, d)", fc=SURFACE, ec=INK2, size=7.0)
-    _arrow(ax, (0.615 + w, 0.52 + h / 2), (0.83, 0.52 + h / 2))
-    _arrow(ax, (0.615 + w, 0.10 + h / 2), (0.83, 0.10 + h / 2))
+         "$R_h \\to \\infty$ where\nestimable (panel c)", fc=SURFACE, ec=INK2, size=7.0)
+    _arrow(ax, (0.615 + w, 0.55 + h / 2), (0.83, 0.55 + h / 2))
+    _arrow(ax, (0.615 + w, 0.17 + h / 2), (0.83, 0.17 + h / 2))
+    ax.text(0.0, 0.03, "repetitions per image:  $F + R + H$ = 8 + $R$ + 40 of 80 (EEG);  10 + $R$ + 24 of 50 (mouse V1)",
+            fontsize=7.0, color=INK2, transform=ax.transAxes, ha="left", va="center")
 
 
 def _reach(ax):
@@ -131,7 +147,7 @@ def _reach(ax):
     ax.spines["left"].set_visible(False)
 
 
-def _curves(ax, rows_path, mod, RH, color, title):
+def _curves(ax, rows_path, mod, RH, color, title, extrapolate):
     rows = [json.loads(l) for l in open(rows_path)]
     rows = [r for r in rows if r["cell"] == "primary" and r["R"] == 8]
     dis = mod.disagreement(rows) if mod is AT else mod.disagreement(rows, RH)
@@ -140,96 +156,246 @@ def _curves(ax, rows_path, mod, RH, color, title):
     e1s, e2s = [], []
     for key in sorted(dis):
         y = np.array([dis[key][h][1] for h in RH])
-        b1, a1 = np.polyfit(x, y, 1)
-        b2, a2 = np.polyfit(x ** 2, y, 1)
-        e1s.append(a1)
-        e2s.append(a2)
         ax.plot(x, y, color=color, lw=0.8, alpha=0.6, marker="o", markersize=2.6, markeredgewidth=0)
-        ax.plot(xf, a1 + b1 * xf, color=color, lw=0.6, alpha=0.35, ls="--")
-        ax.plot(xf, a2 + b2 * xf ** 2, color=color, lw=0.6, alpha=0.35, ls=":")
-    m1, m2 = np.median(e1s), np.median(e2s)
-    ax.plot([0], [m1], marker="o", color=INK, markersize=5.5, markeredgecolor=SURFACE, zorder=5, clip_on=False)
-    ax.plot([0], [m2], marker="^", color=INK, markersize=5.5, markeredgecolor=SURFACE, zorder=5, clip_on=False)
-    ax.set_xticks([0] + list(x), ["∞"] + [str(h) for h in RH])
-    ax.set_xlim(-0.015, x.max() * 1.06)
-    ax.set_xlabel("reference trials $R_h$")
+        if extrapolate:
+            b1, a1 = np.polyfit(x, y, 1)
+            b2, a2 = np.polyfit(x ** 2, y, 1)
+            e1s.append(a1)
+            e2s.append(a2)
+            ax.plot(xf, a1 + b1 * xf, color=color, lw=0.6, alpha=0.35, ls="--")
+            ax.plot(xf, a2 + b2 * xf ** 2, color=color, lw=0.6, alpha=0.35, ls=":")
+    rh_axis(ax, RH)
     ax.yaxis.set_major_formatter(pct)
     ax.set_ylim(0.6, 1.02)
     ax.set_title(title)
+    if not extrapolate:
+        ax.text(0.04, 0.63, "saturated: not extrapolated", fontsize=7, color=MUTED, transform=ax.transData)
+        return None
+    m1, m2 = np.median(e1s), np.median(e2s)
+    ax.plot([0], [m1], marker="o", color=INK, markersize=5.5, markeredgecolor=SURFACE, zorder=5, clip_on=False)
+    ax.plot([0], [m2], marker="^", color=INK, markersize=5.5, markeredgecolor=SURFACE, zorder=5, clip_on=False)
     return m1, m2
 
 
 def fig_method():
-    fig = plt.figure(figsize=(7.2, 5.5))
-    gs = fig.add_gridspec(2, 3, height_ratios=[1.0, 1.0], width_ratios=[1.1, 1, 1], hspace=0.38, wspace=0.42,
+    fig = plt.figure(figsize=(7.2, 5.6))
+    gs = fig.add_gridspec(2, 3, height_ratios=[1.05, 1.0], width_ratios=[1.1, 1, 1], hspace=0.38, wspace=0.42,
                           left=0.03, right=0.99)
     _design(fig.add_subplot(gs[0, :]))
     _reach(fig.add_subplot(gs[1, 0]))
     c = fig.add_subplot(gs[1, 1])
-    m1, m2 = _curves(c, ROOT / "results/things_confirmatory/rows.jsonl", AT, AT.RH, BLUE, "c   EEG, 8 trials")
+    m1, m2 = _curves(c, ROOT / "results/things_confirmatory/rows.jsonl", AT, AT.RH, BLUE, "c   EEG, 8 trials", True)
     c.set_ylabel("disagreement $d_{FC}(R_h)$")
     c.annotate(f"{m1:.2f}", (0, m1), xytext=(6, -3), textcoords="offset points", fontsize=7, color=INK, va="top")
     c.annotate(f"{m2:.2f}", (0, m2), xytext=(6, 3), textcoords="offset points", fontsize=7, color=INK, va="bottom")
     d = fig.add_subplot(gs[1, 2])
-    _curves(d, ROOT / "results/allen_confirmatory/rows.jsonl", AA, AA.RH, ORANGE, "d   Mouse V1, 8 trials")
-    from matplotlib.lines import Line2D
+    _curves(d, ROOT / "results/allen_confirmatory/rows.jsonl", AA, AA.RH, ORANGE, "d   Mouse V1, 8 trials", False)
     d.legend(handles=[Line2D([], [], color=INK2, lw=0.8, marker="o", markersize=2.6, label="one subject"),
                       Line2D([], [], color=INK2, lw=0.8, ls="--", label="fit linear in $R_h^{-1/2}$"),
                       Line2D([], [], color=INK2, lw=0.8, ls=":", label="fit linear in $1/R_h$"),
                       Line2D([], [], color=INK, lw=0, marker="o", markersize=5, label="median, $R_h^{-1/2}$"),
                       Line2D([], [], color=INK, lw=0, marker="^", markersize=5, label="median, $1/R_h$")],
-             loc="lower right", fontsize=6.5, handlelength=2.2)
+             loc="center left", bbox_to_anchor=(0.02, 0.55), fontsize=6.3, handlelength=2.2)
     fig.savefig(OUT / "fig1_method.pdf", metadata=NO_DATE, bbox_inches="tight")
     plt.close(fig)
 
 
 # ------------------------------------------------------------------------------------------
-# Figures 2 and 3: as in the note
+# Figure 2: the estimator in simulation
 # ------------------------------------------------------------------------------------------
 
-def fig_false_comfort():
-    fig, (a, b) = plt.subplots(1, 2, figsize=(7.2, 3.15), gridspec_kw=dict(width_ratios=[1.05, 1]))
-    groups = [("EEG\nt-SNE", TH, "primary", BLUE), ("EEG\ncv-MDS", TH, "rsa_cv_mds", BLUE),
-              ("mouse\nt-SNE", AL, "primary", ORANGE), ("mouse\ncv-MDS", AL, "rsa_cv_mds", ORANGE)]
-    x = np.arange(len(groups))
-    for j, (lab, S, cell, col) in enumerate(groups):
-        nf = S[f"{cell}|8|NF"]
-        tf, _, _, tlo, thi = est(S, cell, 8, "TF")
-        a.bar(j - 0.19, nf, 0.36, color=col, alpha=0.9, label="called faithful" if j == 0 else None)
-        a.bar(j + 0.19, tf, 0.36, color=SURFACE, edgecolor=col, linewidth=1.2,
-              label="truly faithful" if j == 0 else None)
-        a.plot([j + 0.19] * 2, [max(tlo, 0), thi], color=INK2, linewidth=1.0)
-    a.set_xticks(x, [g[0] for g in groups])
-    a.yaxis.set_major_formatter(pct)
-    a.set_ylim(0, 0.22)
-    a.set_title("a   Share of points, 8 trials")
-    a.legend(loc="upper right")
-    a.grid(axis="x", visible=False)
-    series = [("EEG, t-SNE", TH, "primary", (8, 16, 32), BLUE, "o", "-"),
-              ("EEG, cv-MDS", TH, "rsa_cv_mds", (8, 16, 32), BLUE, "s", "--"),
-              ("mouse V1, t-SNE", AL, "primary", (8, 16), ORANGE, "o", "-"),
-              ("mouse V1, cv-MDS", AL, "rsa_cv_mds", (8, 16), ORANGE, "s", "--")]
-    for k, (lab, S, cell, Rs, col, mk, ls) in enumerate(series):
-        off = (k - 1.5) * 0.9
-        xs = np.array(Rs, float) * (1 + off / 40)
-        pts = [est(S, cell, R, "FC") for R in Rs]
-        mid = [p[0] for p in pts]
-        b.errorbar(xs, mid, yerr=[[m - p[1] for m, p in zip(mid, pts)], [p[2] - m for m, p in zip(mid, pts)]],
-                   color=col, marker=mk, linestyle=ls, linewidth=1.3, elinewidth=0.9, capsize=0,
-                   label=lab, **MARK)
-    b.axhline(0.5, color=REF, linewidth=0.9, linestyle=":")
-    b.set_xscale("log", base=2)
-    b.set_xticks([8, 16, 32], ["8", "16", "32"])
-    b.set_xlim(6.5, 40)
-    b.set_ylim(0, 1.04)
+def fig_validation():
+    fig, (a, b, c) = plt.subplots(1, 3, figsize=(7.2, 2.9), gridspec_kw=dict(width_ratios=[1.25, 1.0, 1.0], wspace=0.5))
+    # (a) Layer B
+    clip = 0.26
+    off_scale = []
+    a.axhspan(-0.03, 0.03, color=FILL, zorder=0)
+    a.axhline(0, color=REF, lw=0.7)
+    for ds in ("EEG", "mouse"):
+        for key, cell in VAL[ds]["cells"].items():
+            bias = cell["perf"]["smaller"]["median_bias"]
+            if not np.isfinite(bias):
+                continue
+            y = float(np.clip(bias, -clip, clip))
+            if cell["diagnostic"]:
+                mk = "x" if "_S|" in key else "D"
+                a.plot([cell["exact"]], [y], marker=mk, color=MUTED, linestyle="none", markersize=4.5,
+                       markeredgewidth=1.0, fillstyle="none" if mk == "D" else "full")
+                if abs(bias) > clip:
+                    off_scale.append(bias)
+                continue
+            mk, filled = STATUS_MARK[cell["status"]]
+            a.plot([cell["exact"]], [y], marker=mk, color=COLOR[ds], linestyle="none",
+                   markersize=4.8, fillstyle="full" if filled else "none", markeredgewidth=1.0,
+                   markeredgecolor=COLOR[ds] if not filled else SURFACE)
+    a.set_xlim(-0.03, 1.03)
+    a.set_ylim(-clip - 0.02, clip + 0.02)
+    a.text(0.2, clip - 0.005, "off scale: " + ", ".join(f"{b:+.2f}" for b in sorted(off_scale)), fontsize=6.2,
+           color=MUTED, va="top")
+    a.xaxis.set_major_formatter(pct)
+    a.set_xlabel("exact false comfort")
+    a.set_ylabel("median bias, smaller extrapolant")
+    a.set_title("a   Layer B: 100 datasets per cell")
+    handles = [Line2D([], [], color=BLUE, marker="o", lw=0, markersize=4.8, markeredgecolor=SURFACE, label="EEG"),
+               Line2D([], [], color=ORANGE, marker="o", lw=0, markersize=4.8, markeredgecolor=SURFACE, label="mouse V1"),
+               Line2D([], [], color=INK2, marker="o", lw=0, markersize=4.8, markeredgecolor=SURFACE, label="estimable"),
+               Line2D([], [], color=INK2, marker="^", lw=0, markersize=4.8, fillstyle="none", label="unresolved"),
+               Line2D([], [], color=INK2, marker="s", lw=0, markersize=4.8, markeredgecolor=SURFACE, label="saturated"),
+               Line2D([], [], color=MUTED, marker="x", lw=0, markersize=4.5, label="stress test"),
+               Line2D([], [], color=MUTED, marker="D", lw=0, markersize=4.0, fillstyle="none", label="shared noise")]
+    a.legend(handles=handles, loc="lower left", fontsize=6.0, ncol=2, handletextpad=0.3, columnspacing=0.8)
+    # (b) Layer A
+    series = [("EEG", "T1_l1", (8, 20, 40, 80, 160), "-", "EEG, data's noise"),
+              ("EEG", "T1_S", (8, 20, 40, 80, 160), "--", "EEG, stress test"),
+              ("mouse", "T1_S", (8, 12, 24, 48, 96), "--", "mouse, stress T1"),
+              ("mouse", "T2_S", (8, 12, 24, 48, 96), ":", "mouse, stress T2")]
+    for ds, key, grid, ls, lab in series:
+        la = VAL[ds]["layer_a"][key]
+        x = [h ** -0.5 for h in grid]
+        y = [la["curve"][str(h)] for h in grid]
+        b.plot(x, y, color=COLOR[ds], ls=ls, lw=1.2, marker="o", markersize=3, markeredgewidth=0, label=lab)
+        b.plot([0], [la["exact"]], marker="*", color=COLOR[ds], markersize=7, clip_on=False, markeredgecolor=SURFACE)
+    b.axvspan(40 ** -0.5 * 0.999, 8 ** -0.5 * 1.06, color=FILL, zorder=0)
+    rh_axis(b, (8, 20, 40, 160))
+    b.tick_params(axis="x", labelsize=7)
+    b.set_ylim(0, 1.02)
     b.yaxis.set_major_formatter(pct)
-    b.set_xlabel("trials averaged")
-    b.set_title("b   False comfort")
-    b.legend(loc="upper center", bbox_to_anchor=(0.45, -0.2), ncol=2, fontsize=7, columnspacing=1.2, handlelength=3.2)
-    fig.tight_layout(w_pad=2.0)
-    fig.savefig(OUT / "fig2_false_comfort.pdf", metadata=NO_DATE)
+    b.set_ylabel("disagreement $d_{FC}(R_h)$")
+    b.set_title("b   Layer A: deeper references")
+    b.text(0.255, 0.03, "real sizes", fontsize=6.3, color=MUTED, ha="center")
+    b.legend(loc="lower left", bbox_to_anchor=(0.0, 0.08), fontsize=6.0, handlelength=2.4)
+    # (c) Layer C
+    runs = [("EEG_T1_tsne_R8", "FC", "EEG, T1"), ("EEG_T3_tsne_R8", "FC", "EEG, T3"),
+            ("mouse_T1_tsne_R8", "q", "mouse 8, T1"), ("mouse_T3_tsne_R8", "q", "mouse 8, T3"),
+            ("mouse_T1_tsne_R16", "q", "mouse 16, T1"), ("mouse_T3_tsne_R16", "q", "mouse 16, T3")]
+    y = np.arange(len(runs))[::-1]
+    for yi, (tag, q, lab) in zip(y, runs):
+        o = json.load(open(LCDIR / f"calibration_{tag}.json"))
+        r = o["published"]["L_above"] if q == "FC" else o["mislabel"]["L_above"]
+        col = COLOR[tag.split("_")[0]]
+        allowed = 0.025 + 2 * r["mcse"]
+        c.plot([r["p"] - 2 * r["mcse"], r["p"] + 2 * r["mcse"]], [yi, yi], color=col, lw=1.2)
+        c.plot([r["p"]], [yi], marker="o" if r["p"] <= allowed else "X", color=col, linestyle="none", **MARK)
+        c.plot([allowed], [yi], marker="|", color=INK2, markersize=9, markeredgewidth=1.4)
+    c.axvline(0.025, color=REF, lw=0.9, ls=":")
+    c.set_yticks(y, [r[2] for r in runs], fontsize=7)
+    c.set_xlim(0, 0.09)
+    c.set_xticks([0, 0.025, 0.05, 0.075], ["0", "0.025", "0.05", "0.075"])
+    c.set_xlabel("$\\Pr(L > \\Theta)$ over 1,000 studies")
+    c.set_title("c   Layer C")
+    c.grid(axis="y", visible=False)
+    c.legend(handles=[Line2D([], [], color=INK2, marker="o", lw=0, markersize=5, markeredgecolor=SURFACE, label="met"),
+                      Line2D([], [], color=INK2, marker="X", lw=0, markersize=5, markeredgecolor=SURFACE, label="missed"),
+                      Line2D([], [], color=INK2, marker="|", lw=0, markersize=8, markeredgewidth=1.4, label="allowed")],
+             loc="lower right", fontsize=6.3, handletextpad=0.3)
+    fig.subplots_adjust(left=0.07, right=0.99, bottom=0.17, top=0.9)
+    fig.savefig(OUT / "fig2_validation.pdf", metadata=NO_DATE)
     plt.close(fig)
 
+
+# ------------------------------------------------------------------------------------------
+# Figure 3: the real data, by budget
+# ------------------------------------------------------------------------------------------
+
+def fig_depth():
+    fig, axes = plt.subplots(1, 2, figsize=(7.2, 3.0), gridspec_kw=dict(wspace=0.3))
+    style = {8: ("o", "-"), 16: ("s", "--"), 32: ("^", ":")}
+    for ax, ds, RH, Rs, title in ((axes[0], "EEG", (8, 20, 40), (8, 16, 32), "a   Human EEG"),
+                                  (axes[1], "mouse", (8, 12, 24), (8, 16), "b   Mouse V1")):
+        col = COLOR[ds]
+        x = np.array([h ** -0.5 for h in RH])
+        for R in Rs:
+            mk, ls = style[R]
+            e = BM[ds][f"N|{R}"]
+            g = GA[ds][f"primary|{R}|FC"]
+            fr = g["finite_reference"]
+            st = STATUS_LABEL[g["status"]]
+            ax.plot(x, e["d"], color=col, marker=mk, ls=ls, lw=1.2, label=f"{R} trials ({st})", **MARK)
+            dx = {8: 0.007, 16: 0.0, 32: -0.007}[R]
+            ax.plot([x[-1] + dx] * 2, fr["ci"], color=col, lw=1.0, alpha=0.7)
+            ax.plot([x[-1] - 0.02], [e["rand_deep"]], marker=mk, color=col, fillstyle="none", linestyle="none",
+                    markersize=5, markeredgewidth=1.0)
+            if ds == "EEG" and R == 8:
+                S = TH["primary|8|FC"]
+                lo, hi = sorted((S["med_sqrt"], S["med_inv"]))
+                ax.plot([0, x[-1]], [lo, e["d"][-1]], color=col, ls="--", lw=0.9, alpha=0.8)
+                ax.plot([0, 0], [S["L"], hi], color=INK, lw=1.4, clip_on=False)
+                ax.plot([0], [lo], marker="o", color=INK, markersize=5.5, markeredgecolor=SURFACE, zorder=5, clip_on=False)
+                ax.annotate(f"estimate {lo:.2f}\nbound $L$ {S['L']:.2f}", (0, S["L"]), xytext=(7, -2),
+                            textcoords="offset points", fontsize=6.6, color=INK, va="top")
+        rh_axis(ax, RH)
+        ax.set_ylim(0.45 if ds == "EEG" else 0.9, 1.01)
+        ax.yaxis.set_major_formatter(pct)
+        ax.set_title(title)
+        ax.legend(loc="lower right", fontsize=6.6)
+    axes[0].set_ylabel("disagreement of the passing\nneighborhoods with the reference")
+    axes[1].text(0.03, 0.955, "open markers: random selection,\nat the deepest reference", fontsize=6.6, color=MUTED)
+    fig.subplots_adjust(left=0.1, right=0.99, bottom=0.16, top=0.9)
+    fig.savefig(OUT / "fig3_depth.pdf", metadata=NO_DATE)
+    plt.close(fig)
+
+
+# ------------------------------------------------------------------------------------------
+# Figure 4: common checks at 8 trials
+# ------------------------------------------------------------------------------------------
+
+NATIVE = [("N", "N", "o"), ("TW", "TW", "o"), ("SCD", "SCD", "o"), ("SCD_alt", "SCD alt", "o"), ("CV", "CV", "s"),
+          ("SEED", "SEED", "^"), ("SH", "SH", "^"), ("BOOT", "BOOT", "^"), ("cv-MDS N", "cv-MDS", "s")]
+LABEL_AT = {"N": (-9, 4), "TW": (4, -7), "SCD": (-20, 2), "SCD_alt": (4, -6), "CV": (-12, 4), "SEED": (2, 4),
+            "SH": (4, 2), "BOOT": (4, 2), "cv-MDS N": (4, 2)}
+CURVES = [("N", "-"), ("TW", "--"), ("SCD", "-."), ("CV", ":"), ("BOOT", (0, (1, 2))), ("cv-MDS N", (0, (5, 2)))]
+LEVELS = (5, 10, 20, 30, 50)
+
+
+def fig_checks():
+    fig, axes = plt.subplots(1, 3, figsize=(7.2, 2.9), gridspec_kw=dict(wspace=0.36))
+    panels = ((axes[0], "EEG", "chosen", "a   EEG: estimate", "random"),
+              (axes[1], "EEG", "d_deep", "b   EEG: 40-trial reference", "rand_deep"),
+              (axes[2], "mouse", "d_deep", "c   Mouse V1: 24-trial reference", "rand_deep"))
+    for ax, ds, key, title, rkey in panels:
+        col = COLOR[ds]
+        latent = key == "chosen"
+        for X, ls in CURVES:
+            pts = [BM[ds][f"{X} @{lv}%|8"] for lv in LEVELS]
+            ok = [p for p in pts if (p["status"] == "estimable" or not latent) and np.isfinite(p[key])]
+            if ok:
+                ax.plot([p["accept"] for p in ok], [p[key] for p in ok], color=col, ls=ls, lw=0.9, alpha=0.75)
+        for X, lab, mk in NATIVE:
+            e = BM[ds][f"{X}|8"]
+            if e["accept"] <= 0 or not np.isfinite(e[key]):
+                continue
+            estimable = e["status"] == "estimable"
+            if latent and not estimable:
+                continue
+            ax.plot([e["accept"]], [e[key]], marker=mk, color=col, linestyle="none",
+                    fillstyle="full" if estimable else "none", markersize=5.5,
+                    markeredgecolor=SURFACE if estimable else col, markeredgewidth=1.0)
+            if ds == "EEG":
+                ax.annotate(lab, (e["accept"], e[key]), xytext=LABEL_AT[X], textcoords="offset points", fontsize=6.0,
+                            color=INK2)
+        rand = np.nanmedian([BM[ds][f"{X}|8"][rkey] for X, _, _ in NATIVE if np.isfinite(BM[ds][f"{X}|8"][rkey])])
+        ax.axhline(rand, color=MUTED, lw=1.0)
+        ax.text(0.0055, rand + 0.006, "random selection", fontsize=6.2, color=MUTED, va="bottom")
+        ax.set_xscale("log")
+        ax.set_xlim(0.005, 0.7)
+        ax.set_xticks([0.01, 0.05, 0.2, 0.5], ["1%", "5%", "20%", "50%"])
+        ax.set_ylim((0.4, 1.0) if ds == "EEG" else (0.98, 1.001))
+        ax.yaxis.set_major_formatter(pct if ds == "EEG" else FuncFormatter(lambda v, _: f"{v:.1%}"))
+        ax.set_xlabel("share of points passed")
+        ax.set_title(title, fontsize=8.3)
+    axes[2].text(0.006, 0.9845, "every check is saturated\nat the 24-trial reference", fontsize=6.4, color=MUTED)
+    axes[0].legend(handles=[Line2D([], [], color=INK2, lw=0.9, ls=ls, label=lab) for (X, ls), lab in
+                            zip(CURVES, ("N", "TW", "SCD", "CV", "BOOT", "cv-MDS"))],
+                   title="matched acceptance", title_fontsize=6.2, loc="lower right", fontsize=6.0, ncol=2,
+                   handlelength=2.2, columnspacing=0.8)
+    fig.subplots_adjust(left=0.06, right=0.99, bottom=0.17, top=0.9)
+    fig.savefig(OUT / "fig4_checks.pdf", metadata=NO_DATE)
+    plt.close(fig)
+
+
+# ------------------------------------------------------------------------------------------
+# Figure S1: the pre-specified variations
+# ------------------------------------------------------------------------------------------
 
 CELLS = [("primary", "primary (t-SNE, perplexity 30)"), ("rsa_cv_mds", "cv-MDS (MDS of cross-validated distances)"),
          ("k5", "k = 5"), ("k20", "k = 20"), ("eps0.1", "ε = 0.1"), ("eps0.3", "ε = 0.3"),
@@ -238,72 +404,42 @@ CELLS = [("primary", "primary (t-SNE, perplexity 30)"), ("rsa_cv_mds", "cv-MDS (
          ("early_window", "alternative response window"), ("unwhitened", "unwhitened representation")]
 
 
-def fig_robustness():
-    fig, ax = plt.subplots(figsize=(5.6, 3.3))
+def fig_variations():
+    fig, ax = plt.subplots(figsize=(5.8, 3.6))
     y = np.arange(len(CELLS))[::-1]
-    for S, col, mk, dy, lab in ((TH, BLUE, "o", 0.16, "human EEG"), (AL, ORANGE, "s", -0.16, "mouse V1")):
+    for ds, S, mk, dy in (("EEG", TH, "o", 0.16), ("mouse", AL, "s", -0.16)):
+        col = COLOR[ds]
         for yi, (cell, _) in zip(y, CELLS):
-            m, Lb, up, _, _ = est(S, cell, 8, "FC")
-            ax.plot([Lb, up], [yi + dy] * 2, color=col, linewidth=1.1, alpha=0.8)
-            ax.plot([m], [yi + dy], marker=mk, color=col, linestyle="none", **MARK,
-                    label=lab if cell == "primary" else None)
-            ax.plot([Lb], [yi + dy], marker="|", color=col, markersize=7)
-    ax.axvline(0.5, color=REF, linewidth=0.9, linestyle=":")
-    ax.set_yticks(y, [c[1] for c in CELLS])
-    ax.set_xlim(0, 1.03)
-    ax.xaxis.set_major_formatter(pct)
-    ax.set_xlabel("false comfort at 8 trials (tick: conservative bound L)")
-    ax.grid(axis="y", visible=False)
-    ax.legend(loc="lower left", bbox_to_anchor=(0.0, 1.0), ncol=2)
-    fig.tight_layout()
-    fig.savefig(OUT / "fig3_robustness.pdf", metadata=NO_DATE)
-    plt.close(fig)
-
-
-# ------------------------------------------------------------------------------------------
-# Figure 4: common checks against the truth
-# ------------------------------------------------------------------------------------------
-
-CHECK_ROWS = [("N", "plug-in (N)", "o"), ("TW", "trustworthiness", "o"), ("SCD", "scDEED", "o"),
-              ("CV", "cross-validated", "s"), ("SEED", "seed recurrence", "^"),
-              ("BOOT", "bootstrap recurrence", "^"), ("SH", "split-half recurrence", "^")]
-
-
-def fig_checks():
-    CK = json.load(open(CHECKS))["datasets"]
-    fig, axes = plt.subplots(1, 2, figsize=(7.2, 3.2), sharey=True, gridspec_kw=dict(wspace=0.32))
-    y = np.arange(len(CHECK_ROWS))[::-1]
-    for ax, ds, col, title in ((axes[0], "things", BLUE, "a   Human EEG, 8 trials"),
-                               (axes[1], "allen", ORANGE, "b   Mouse V1, 8 trials")):
-        S = CK[ds]["summary"]
-        for yi, (X, lab, mk) in zip(y, CHECK_ROWS):
-            f, p = S[f"{X}|8|FC"], S[f"{X}|8|PASS"]
-            if f["n_defined"] < 5:
-                ax.text(0.02, yi, "not evaluable", va="center", fontsize=7, color=MUTED)
+            g = GA[ds][f"{cell}|8|FC"]
+            if g["status"] == "estimable":
+                v = S[f"{cell}|8|FC"]
+                lo, hi = sorted((v["med_sqrt"], v["med_inv"]))
+                ax.plot([lo, hi], [yi + dy] * 2, color=col, lw=1.1, alpha=0.85)
+                ax.plot([lo], [yi + dy], marker=mk, color=col, linestyle="none", **MARK)
             else:
-                mid = (f["med_sqrt"] + f["med_inv"]) / 2
-                ax.plot([f["L"], f["U"]], [yi, yi], color=col, lw=1.2, alpha=0.85)
-                ax.plot([mid], [yi], marker=mk, color=col, linestyle="none", **MARK)
-            ax.text(1.05, yi, f"{100 * p['med']:.1f}%", va="center", ha="left", fontsize=7, color=INK2,
-                    transform=ax.get_yaxis_transform(), clip_on=False)
-        ax.axvline(0.5, color=REF, lw=0.9, ls=":")
-        ax.set_xlim(0, 1.02)
-        ax.xaxis.set_major_formatter(pct)
-        ax.set_xlabel("false comfort of the check (bar: $L$ to $U$)")
-        ax.set_title(title)
-        ax.grid(axis="y", visible=False)
-        ax.text(1.05, len(CHECK_ROWS) - 0.35, "passes", ha="left", fontsize=7, color=MUTED,
-                transform=ax.get_yaxis_transform(), clip_on=False)
-    axes[0].set_yticks(y, [r[1] for r in CHECK_ROWS])
-    fig.subplots_adjust(left=0.2, right=0.93, bottom=0.16, top=0.9)
-    fig.savefig(OUT / "fig4_checks.pdf", metadata=NO_DATE, bbox_inches="tight")
+                fr = g["finite_reference"]
+                ax.plot(fr["ci"], [yi + dy] * 2, color=col, lw=1.0, alpha=0.6)
+                ax.plot([fr["median"]], [yi + dy], marker=mk, color=col, linestyle="none", fillstyle="none",
+                        markersize=5.5, markeredgewidth=1.0)
+    ax.axvline(0.5, color=REF, lw=0.9, ls=":")
+    ax.set_yticks(y, [c[1] for c in CELLS])
+    ax.set_xlim(0.3, 1.03)
+    ax.xaxis.set_major_formatter(pct)
+    ax.set_xlabel("false comfort at 8 trials: estimate (filled)\nor disagreement with the deepest reference (open)")
+    ax.grid(axis="y", visible=False)
+    ax.legend(handles=[Line2D([], [], color=BLUE, marker="o", lw=0, markersize=5, markeredgecolor=SURFACE, label="human EEG"),
+                       Line2D([], [], color=ORANGE, marker="s", lw=0, markersize=5, markeredgecolor=SURFACE, label="mouse V1")],
+              loc="lower left", bbox_to_anchor=(0.0, 1.0), ncol=2)
+    fig.tight_layout()
+    fig.savefig(OUT / "figS1_variations.pdf", metadata=NO_DATE)
     plt.close(fig)
 
 
 if __name__ == "__main__":
     OUT.mkdir(exist_ok=True)
     fig_method()
-    fig_false_comfort()
-    fig_robustness()
+    fig_validation()
+    fig_depth()
     fig_checks()
+    fig_variations()
     print("figures written to", OUT)

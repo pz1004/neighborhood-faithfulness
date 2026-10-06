@@ -8,7 +8,9 @@
 \usepackage[margin=1in]{geometry}
 \usepackage{amsmath,amssymb}
 \usepackage{booktabs}
+\usepackage{array}
 \usepackage{longtable}
+\usepackage{graphicx}
 \usepackage{enumitem}
 \usepackage{microtype}
 \usepackage{xcolor}
@@ -19,15 +21,38 @@
 \captionsetup{font=small,labelfont=bf,labelsep=period,skip=6pt}
 % Tables: the caption (title) above the table, notes below the table body.
 \captionsetup[table]{position=top}
-\newcommand{\tablenote}[1]{\par\smallskip
+\newcommand{\tablenote}[1]{\par\smallskip\noindent
   \begin{minipage}{\linewidth}\footnotesize\setlength{\parindent}{0pt}#1\end{minipage}}
 \setlist{itemsep=2pt,topsep=4pt}
 \renewcommand{\thetable}{S\arabic{table}}
+\renewcommand{\thefigure}{S\arabic{figure}}
 \renewcommand{\thesection}{S\arabic{section}}
 \newcommand{\todo}[1]{\textcolor{red!70!black}{[TODO: #1]}}
-\newcommand{\MsTitle}{Most faithful-looking neighborhoods in two-dimensional maps of trial-averaged neural responses are spurious: estimates from held-out repetitions}
-% The body of every table except Table S2 is written by make_tables.py from the committed results, between its BEGIN and END lines.
+\newcommand{\FC}{\mathrm{FC}}
+\graphicspath{{figures/}}
+\newcommand{\MsTitle}{Neighborhood faithfulness in maps of trial-averaged neural responses, estimated from held-out repetitions}
+% The body of every table except Table S2, and every number the text quotes, is written by make_tables.py from the committed results, between its BEGIN and END lines.
 % Edit the script, not these blocks; python3 make_tables.py --check verifies them.
+% BEGIN make_tables.py numbers
+\newcommand{\BmSCDPass}{32.5}
+\newcommand{\BmSCDAltPass}{8.2}
+\newcommand{\CertDraws}{900}
+\newcommand{\OvPerPair}{0.24}
+\newcommand{\LcRuleLo}{3.0}
+\newcommand{\LcRuleHi}{3.4}
+\newcommand{\PilotSpread}{1.63}
+\newcommand{\PilotSpreadLo}{1.21}
+\newcommand{\PilotSpreadHi}{3.45}
+\newcommand{\AlphaEeg}{0.45}
+\newcommand{\AlphaMouse}{0}
+\newcommand{\GapEeg}{0.159}
+\newcommand{\GapMouse}{0.298}
+\newcommand{\LcThetaSeMax}{0.008}
+\newcommand{\LcIsXthreeLo}{41}
+\newcommand{\LcIsXthreeHi}{53}
+\newcommand{\OvShare}{28}
+\newcommand{\CertValidityDraws}{3{,}000}
+% END make_tables.py numbers
 
 \title{Supplementary material for\\ ``\MsTitle''}
 \author{Sooyoung Jang}
@@ -38,21 +63,23 @@
 
 \section{Supplementary methods}
 
-\subsection{Recovering the session of each EEG repetition}
+\subsection{Recovering the session and order of each EEG repetition}
 The THINGS-EEG2 preprocessed test files store the 80 repetitions of each image in one array.
 The authors' preprocessing code concatenates the four sessions along the repetition axis (session 1 first) and then reorders the repetitions with \texttt{sklearn.utils.shuffle} applied to $0,\dots,79$ with the random state 20200220.
 Replaying that permutation gives the session of every stored repetition, 20 per session.
-Blocks were then drawn within session, so that every block and every prefix of the analyst's block is balanced over sessions.
-Only the session labels were reconstructed; no data value was changed.
+The same code selects each image's 20 presentations within a session with a shuffle of the same random state; because every image has exactly 20 presentations per session, that permutation is the same for every image, and replaying it gives each stored repetition its chronological rank within its session.
+Onset times are not recoverable from the preprocessed files.
+Blocks were drawn within session, so that every block and every prefix of the analyst's block is balanced over sessions.
+Only these labels were reconstructed; no data value was changed.
 
-\subsection{Why the extrapolation removes the reference's bias as well as its noise}
+\subsection{The extrapolation's target}
 Reference labels use plug-in distances between sub-block means.
-For two images the squared plug-in distance has expectation $\|\mu_i-\mu_j\|^2+\operatorname{tr}(\Sigma_i+\Sigma_j)/R_h$, where $\Sigma_i$ is the trial covariance of image $i$.
-In the whitened representation the trace terms are nearly equal across images, so they barely change the ranks, and whatever effect they have vanishes as $R_h\to\infty$, together with the reference's noise.
-The extrapolation targets exactly that limit.
+As $R_h\to\infty$, every sub-block mean converges to $\mu_i$, so the reference's ranks converge to the true ranks wherever the true distances are not tied, and the reference label converges to the truth label.
+At finite $R_h$ the reference is both noisy and biased: for two images the squared plug-in distance has expectation $\|\mu_i-\mu_j\|^2+\operatorname{tr}(\Sigma_i+\Sigma_j)/R_h$, where $\Sigma_i$ is the trial covariance of image $i$, and the trace terms differ between images (in the pilot their spread was \PilotSpread{} times what equal covariances would give, \PilotSpreadLo--\PilotSpreadHi{} across subjects).
+Both the noise and this bias vanish in the limit that the extrapolation targets.
+Whether a straight line in $R_h^{-1/2}$ or $1/R_h$ reaches that limit from the available sizes is an assumption, not a consequence; the simulation study tested it (main text, Section~3.1), and the statuses flag the cells where it failed.
 
-\subsection{Why checks computed from the analyst's own trials cannot see the error}
-This argument was written into the protocol of the comparison before it was run.
+\subsection{What checks computed from the analyst's own trials can and cannot see}
 Let the analyst's trials of image $i$ be $x_{it}=\mu_i+e_{it}$, $t=1,\dots,R$, with independent Gaussian noise of a common covariance.
 Split the trials into two halves $A$ and $B$ of equal size, and write the averages $c_i=(c^A_i+c^B_i)/2$ and the half-difference $\delta_i=(c^A_i-c^B_i)/2$.
 Then
@@ -63,54 +90,122 @@ Then
 \end{itemize}
 The averages carry all the information the trials hold about the $\mu_i$; the residuals add only information about the size of the noise.
 Every check of the comparison is therefore a function of the averages, the noise level and randomization.
-It can be stricter than the plug-in check, but it cannot tell where the averages themselves are wrong.
-The certificates of our earlier pilot, which used the averages and the noise level with family-wise error control, resolved no neighborhood of THINGS-EEG2 even at 72 trials.
+This does not make such a check uninformative.
+It can favor neighborhoods whose margins are large relative to the noise, and those are more often faithful, which is why the checks beat a random selection (main text, Section~3.7).
+What it cannot do is measure its own false comfort, because the residuals carry no information about where the averages themselves are wrong.
+The comparison's protocol stated a stronger form of this argument, that the checks cannot reveal where the averages are wrong, and predicted from it that all six checks would leave most false comfort; the enrichment over a random selection contradicts that form.
 
 \subsection{The scDEED null}
 scDEED \citep{xia2024} permutes every gene independently across cells and then applies the pipeline's PCA step to the permuted data.
 Our pipeline's dimension-reduction step is the fixed representation fitted on block $F$.
-We therefore permuted every measured feature of the analyst's averages (EEG channel-time samples; mouse cells) independently across images and passed the permuted averages through the same representation.
-Permuting the 20 coordinates of the representation instead would keep the signal's unequal spread across coordinates.
-In the synthetic tests of the code, that null resembled structured data so closely that scDEED called 11\% of points trustworthy, against 74\% with the measured-feature null.
-The protocol registers the measured-feature null.
+We therefore permuted every measured feature of the analyst's averages (EEG channel-time samples; mouse cells) independently across images, passed the permuted averages through the same representation, and mapped them with the same t-SNE settings and seed.
+One permutation is drawn per map, and the null distribution is that map's $n$ permuted scores.
+The protocol first permuted the 20 coordinates of the representation instead.
+That null keeps the signal's unequal spread across coordinates, and in the synthetic tests of the code it resembled strongly structured data so closely that scDEED called 11\% of points trustworthy, against 74\% with the measured-feature null.
+The protocol was changed to the measured-feature null, which is scDEED's own procedure, before the comparison was run.
+The coordinate null was later run as a sensitivity analysis (Section~S1.9); it passed \BmSCDAltPass\% of the EEG points at 8 trials instead of \BmSCDPass\%.
 
 \subsection{The pilot's certificates}
 Before the analyses reported here, an exploratory pilot on THINGS-EEG2 (protocol committed at \texttt{5024fe6}) tested per-point certificates.
 For each displayed neighborhood, it bounded the reach simultaneously, from studentized bounds on all pairwise distances with family-wise error control.
-In semi-synthetic draws with resampled real noise, the certificates made no false statement in 3000 draws.
-On the real data they resolved no neighborhood as faithful or distorted at $k'=20$, at 8, 16, 32 or 72 repetitions per image, while the plug-in check called 17.5\% (8 repetitions) to 38.1\% (72) of the points faithful.
-The obstacle was the signal-to-noise ratio, not the multiplicity correction (main text, Table~4).
+On the real data the certificates resolved no neighborhood as faithful or distorted at $k'=20$, at 8, 16, 32 or 72 repetitions per image, while the plug-in check called 17.5\% (8 repetitions) to 38.1\% (72) of the points faithful.
+In \CertDraws{} semi-synthetic draws with resampled real noise that recorded issuance, they resolved no neighborhood at $k'=10$, 20 or 40 either.
+Another \CertValidityDraws{} draws recorded only whether a pairwise interval or a reach bound was violated, and none was; the coverage of the intervals is therefore the only validity result.
+Because no certificate was issued, these draws cannot show that a certificate would be correct, and we did not test how much the multiplicity correction contributed.
 
-\section{Supplementary tables}
+\subsection{The simulation study}
+The study follows the ADEMP structure \citep{morris2019}: aims, data-generating mechanisms, estimands, methods and performance measures.
+Its protocol and code were committed before the development pilot, the pilot's decisions before any validation seed, and the code for the classes and the study-level calibration before they were used (Table~S2).
 
-Tables S1--S8 are numbered in the order in which the main text cites them.
+\textbf{Aims.} To measure the bias, RMSE and range coverage of both extrapolants across regimes; to define observable statuses that separate the regimes; and to test whether the bound $L$ is calibrated for a population median.
+
+\textbf{Data-generating mechanisms.} Each mechanism starts from one real subject's first split, in the measured features, so that every simulated dataset refits the representation on its own block $F$.
+\begin{itemize}[leftmargin=*]
+  \item \textbf{Truths.} T1, the plasmode truth: the means of block $H$.
+  T2, a low-rank truth: the mean over images plus the projection of the image means onto their first five principal components.
+  T3, $\mu_{T2}+\alpha(\mu_{T1}-\mu_{T2})$, with $\alpha$ chosen by the development pilot so that the median relative gap between each image's 8th and 20th nearest true distance matches the cross-validated estimate from the real data (\GapEeg{} in EEG, \GapMouse{} in mouse V1): $\alpha=\AlphaEeg$ in EEG, and in mouse V1 the nearest match was $\alpha=\AlphaMouse$, so T3 is T2.
+  \item \textbf{Noise.} A trial is the truth plus $\lambda$ times a residual drawn with replacement from block $U$'s within-image residuals, rescaled by $\sqrt{n_U/(n_U-1)}$.
+  The screening levels were $\lambda\in\{0.1,0.5,1,2\}$; the development pilot added 0.25 and 0.35, where false comfort is moderate.
+  In the noise-free control, blocks $U$ and $H$ have no noise and block $F$ keeps $\lambda=1$ so that the whitening can be fitted.
+  \item \textbf{Shared noise.} For every image and session (EEG) or stratum (mouse V1), an offset $\sqrt{\rho}\,\lambda\,\tilde e$, with $\tilde e$ one residual of that image, is added to every trial, and the trial noise is scaled by $\sqrt{1-\rho}$, so the total noise per trial is unchanged; $\rho\in\{0.1,0.3\}$, at T1 and $\lambda=1$.
+  The truth excludes the offsets, and because blocks are balanced over sessions or strata, blocks $U$ and $H$ share their mean.
+  \item \textbf{Stress test.} Block $U$ is drawn at $\lambda=0.1$ and blocks $F$ and $H$ at $\lambda=1$, at T1 and T2: most displayed neighborhoods are truly faithful, and the reference is noisy.
+\end{itemize}
+Every mechanism keeps the real design: 80 trials per image in 4 sessions (EEG) or 50 in two strata (mouse V1), and the published splitter, halves, budgets and reference sizes.
+
+\textbf{Estimands.} The exact false comfort and mislabel rate of each simulated dataset, pooled over its splits and seeds as in the real analysis, with labels against the simulated truth in the representation fitted to that dataset's block $F$; in Layer C, the population median $\Theta$ of the virtual subjects' values, and each study's own sample median.
+
+\textbf{Methods.} The published estimator: both extrapolants, their medians over subjects, the bound $L$ and the guard. The development pilot also compared candidate revisions (the $R_h^{-1/2}$ extrapolant alone, extra reference sizes, cross-validated reference distances); none met its rule, so the published estimator was kept.
+
+\textbf{Layers and sizes.}
+Layer A regenerated the references of one split's fixed maps 20 times, at the real reference sizes and at 2 and 4 times the largest (80 and 160 trials in EEG, 48 and 96 in mouse V1).
+Layer B used 100 repetitions per cell; each repetition drew new blocks $F$, $U$ and $H$, refitted the representation and the maps, and computed exact labels in that representation.
+The development pilot used 20 repetitions per cell and seeds of its own (6{,}000{,}000), disjoint from those of the validation (6{,}500{,}000), of Layer C (7{,}000{,}000 and 7{,}500{,}000) and of every earlier analysis.
+
+\textbf{Performance measures.} For each cell: the median and mean bias, MAE, RMSE and 90th percentile of the absolute error, each with its Monte Carlo error; the share of repetitions whose exact value lay between the two extrapolants; and, in Layer C, $\Pr(L>\Theta)$, $\Pr(U<\Theta)$, the coverage and width of $[L,U]$, and the rate of declaring $L>0.5$, each with its Monte Carlo error.
+
+\subsection{Statuses and reporting classes}
+Per subject and cell, the observable quantities are the pooled number of passing neighborhoods; the disagreement with the deepest reference, $d(R_{h,\max})$; its fall, $d(R_{h,\min})-d(R_{h,\max})$; the finite-depth error, the prediction of the deepest size from the line through the two shallower ones minus the observed value; and the divergence between the two extrapolants.
+A cell has too few passes if fewer than 5 subjects have at least 20 pooled passing neighborhoods; it is saturated if, over subjects, the median $d(R_{h,\max})$ is at least 0.95 and the median fall at most 0.02; it is unresolved if the median absolute finite-depth error exceeds 0.03 or the median divergence exceeds 0.10; and it is estimable otherwise.
+These are the protocol's default thresholds.
+The development pilot was to replace them by the most permissive values for which the estimable development cells met $|$median bias$|\le0.03$ and RMSE $\le0.08$; no set met that rule.
+The classes and the matching rule are given in the main text (Section~2.3.4).
+They were fixed before the validation was run, and two readings were reported to the author: the cell-by-cell reading used in the paper, and a strict one under which no result carries a threshold claim.
+
+\subsection{The study-level calibration}
+The population had 30 virtual subjects: the 10 real subjects, each at $\lambda\in\{0.8,1,1.25\}$.
+Each virtual subject's true false comfort and mislabel rate were pooled over 200 oracle datasets, three maps each; the largest Monte Carlo error of a single subject's value was \LcThetaSeMax.
+Each of 1{,}000 virtual studies drew 10 virtual subjects with replacement, simulated a new dataset for each, and reproduced the published procedure exactly: 10 splits $\times$ 3 seeds, references at the real sizes, both extrapolants, the medians over subjects, 10{,}000 bootstrap resamples, the rule for subjects without passes, and the guard from a 20-draw plasmode per subject.
+To keep the run within the protocol's time limit, the guard was computed in the first 200 studies only; it can only lower $L$, so leaving it out elsewhere makes the criterion harder to meet.
+It never triggered.
+For the mislabel rate, which the published guard does not cover, the runs had no plasmode.
+The criterion is $\Pr(L>\Theta)\le0.025$ plus two Monte Carlo errors; rules fixed and committed before any output was read required it to hold under both truths, and, for C3, at both of its budgets.
+The order-statistic bound $x_{(2)}$ was evaluated beside $L$.
+After the runs, a descriptive analysis applied the same bootstrap rule, with the same resamples, to each study's exact subject values, and to 20{,}000 studies of 10 draws from normal, uniform and exponential populations of known median (seeds 9{,}200{,}000).
+On those populations it erred in \LcRuleLo--\LcRuleHi\% of studies.
+It equalled the third-smallest subject estimate in only \LcIsXthreeLo--\LcIsXthreeHi\% of the virtual studies and was lower otherwise (Table~S6).
+
+\subsection{Sensitivity analyses}
+\textbf{EEG blocks from separate sessions.} For each subject and each of the 12 ordered pairs of sessions $(a,b)$, block $F$ held 8 random repetitions of session $a$, block $U$ held 16 of session $b$ in random order, of which the analyst used the first $R\in\{8,16\}$, and block $H$ held the 40 repetitions of the other two sessions, alternating between them so that every reference sub-block was balanced over both.
+The control was 12 random splits with the same block sizes, balanced over all four sessions.
+Everything else was the primary analysis.
+
+\textbf{Per-point rerun.} The primary and cv-MDS maps and every check were re-created with the committed splits, seeds and code, and every count was compared with the committed rows; none differed.
+The rerun kept each point's naive reach, check scores and reference reach, from which the matched-acceptance comparison, the random comparator matched per map, and the continuous overlap were computed.
+
+\textbf{Mouse window overlap.} From the stimulus timestamps of each experiment, consecutive presentations start every 8 frames at about 30\,Hz, so consecutive 0.5\,s windows (15 frames) overlap by 7 frames and 0.25\,s windows do not overlap.
+About \OvShare\% of consecutive presentation pairs fall one in block $U$ and one in block $H$, which is \OvPerPair{} per image pair against $16\times24=384$ pairs of $U$ and $H$ trials.
+
+\section{Supplementary tables and figure}
+
+Tables S1--S16 are numbered in the order in which the main text cites them.
 
 \begin{table}[!htb]
 \centering\small
-\caption{Per-subject estimates in the primary analysis at 8 trials, in percent.}
+\caption{Per-subject values in the primary analysis at 8 trials, in percent.}
 % BEGIN make_tables.py tab_supp_subjects
 \begin{tabular}{rrrrrrrrrr}
 \toprule
- & \multicolumn{3}{c}{Human EEG} & \multicolumn{6}{c}{Mouse V1} \\
-\cmidrule(lr){2-4}\cmidrule(lr){5-10}
-Subject & NF & FC, $R_h^{-1/2}$ & FC, $1/R_h$ & NF & FC, $R_h^{-1/2}$ & FC, $1/R_h$ & Sex & Age (days) & Cells \\
+ & \multicolumn{4}{c}{Human EEG} & \multicolumn{5}{c}{Mouse V1} \\
+\cmidrule(lr){2-5}\cmidrule(lr){6-10}
+Subject & NF & FC, $R_h^{-1/2}$ & FC, $1/R_h$ & $d_{40}$ & NF & $d_{24}$ & Sex & Age (days) & Cells \\
 \midrule
-1 & 17.9 & 84.3 & 89.5 & 17.1 & 100.3 & 100.1 & F & 97 & 214 \\
-2 & 15.7 & 88.0 & 91.5 & 19.4 & 99.4 & 99.6 & M & 109 & 163 \\
-3 & 17.3 & 79.0 & 85.3 & 15.4 & 99.7 & 99.8 & M & 103 & 174 \\
-4 & 16.5 & 89.0 & 92.3 & 18.1 & 99.7 & 99.8 & M & 107 & 152 \\
-5 & 22.0 & 79.6 & 85.3 & 15.9 & 100.0 & 100.0 & M & 95 & 295 \\
-6 & 19.9 & 82.6 & 87.6 & 16.2 & 100.0 & 100.0 & M & 101 & 359 \\
-7 & 25.3 & 60.5 & 70.2 & 15.3 & 100.0 & 100.0 & M & 105 & 242 \\
-8 & 19.6 & 64.2 & 74.1 & 15.7 & 100.0 & 100.0 & F & 84 & 145 \\
-9 & 10.4 & 98.1 & 98.8 & 20.1 & 99.7 & 99.8 & M & 87 & 331 \\
-10 & 23.9 & 54.9 & 66.6 & 13.8 & 100.0 & 100.0 & F & 103 & 249 \\
+1 & 17.9 & 84.3 & 89.5 & 89.7 & 17.1 & 100.0 & F & 97 & 214 \\
+2 & 15.7 & 88.0 & 91.5 & 92.8 & 19.4 & 99.7 & M & 109 & 163 \\
+3 & 17.3 & 79.0 & 85.3 & 86.7 & 15.4 & 99.8 & M & 103 & 174 \\
+4 & 16.5 & 89.0 & 92.3 & 93.0 & 18.1 & 99.8 & M & 107 & 152 \\
+5 & 22.0 & 79.6 & 85.3 & 86.8 & 15.9 & 100.0 & M & 95 & 295 \\
+6 & 19.9 & 82.6 & 87.6 & 88.7 & 16.2 & 100.0 & M & 101 & 359 \\
+7 & 25.3 & 60.5 & 70.2 & 73.9 & 15.3 & 100.0 & M & 105 & 242 \\
+8 & 19.6 & 64.2 & 74.1 & 76.8 & 15.7 & 100.0 & F & 84 & 145 \\
+9 & 10.4 & 98.1 & 98.8 & 98.7 & 20.1 & 99.9 & M & 87 & 331 \\
+10 & 23.9 & 54.9 & 66.6 & 70.6 & 13.8 & 100.0 & F & 103 & 249 \\
 \bottomrule
 \end{tabular}
 % END make_tables.py tab_supp_subjects
 \tablenote{NF: the share called faithful.
-FC: the false comfort under each extrapolant.
-Estimates are extrapolations and are not clipped, so they can slightly exceed 100\% where the reference disagreement is already near 100\%.
+FC: the false comfort under each extrapolant (EEG, where the status is estimable).
+$d_{40}$, $d_{24}$: the disagreement with the deepest reference; in mouse V1 the reference is saturated and only this value is reported.
 Mouse sex is the sex recorded in the Allen Institute's donor metadata (F, female; M, male), and age is the time from the recorded date of birth to the recording session.
 The EEG participant and the mouse in the same row are unrelated.}
 \end{table}
@@ -133,6 +228,16 @@ Commit & Date & What it fixed or recorded \\
 \texttt{a2f39ca} & 2026-09-29 & Mouse V1 results \\
 \texttt{766e4b7} & 2026-10-01 & Amendment 5: the comparison of common checks, its code and synthetic tests \\
 \texttt{3e3204e} & 2026-10-01 & Results of the comparison \\
+\texttt{c5df05b} & 2026-10-04 & Amendment 6, written after the first results and an internal review: the simulation study, statuses, reporting classes and sensitivity analyses \\
+\texttt{817f138} & 2026-10-04 & Simulation code and synthetic tests, before the development pilot \\
+\texttt{cfa8ba2} & 2026-10-04 & The development pilot's decisions, before any validation seed \\
+\texttt{200cf63} & 2026-10-04 & Code for the classes and the study-level calibration, and the trial manifest, before they were used \\
+\texttt{5e16193} & 2026-10-04 & The mislabel rate's status from its own curve, before the validation was analyzed \\
+\texttt{a3c282d} & 2026-10-04 & Validation results and the class of every real result \\
+\texttt{a1047b0} & 2026-10-04 & Results of the sensitivity analyses and the benchmark \\
+\texttt{1587f15} & 2026-10-04 & How the study-level calibration is judged, before its output was read \\
+\texttt{62df069} & 2026-10-05 & Study-level calibration results \\
+\texttt{262d8c3} & 2026-10-05 & The author's choice of how the results are reported \\
 \bottomrule
 \end{tabular}
 \tablenote{Commits of the version-controlled repository (\todo{repository URL}).
@@ -169,6 +274,515 @@ The pre-specified guard would have applied above $+0.05$.}
 \end{table}
 
 \begin{table}[!htb]
+\centering\scriptsize
+\caption{The estimator in simulation (Layer B): every cell, 100 repetitions each.}
+% BEGIN make_tables.py tab_supp_validation
+\setlength{\tabcolsep}{2.5pt}\renewcommand{\arraystretch}{0.94}
+\begin{tabular}{lrrlllrlr}
+\toprule
+ & & Exact false & & \multicolumn{2}{c}{Bias (RMSE)} & Range & \multicolumn{2}{c}{Mislabel rate} \\
+\cmidrule(lr){5-6}\cmidrule(lr){8-9}
+Simulated cell & Trials & comfort & Status & smaller & $1/R_h$ & covers (\%) & status & bias \\
+\midrule
+\multicolumn{9}{l}{\textit{Human EEG}} \\
+\quad shared noise $\rho=0.1$, T1 & 8 & 0.836 & estimable & $-$0.023 (0.043) & +0.025 (0.035) & 76 & estimable & $-$0.0055 \\
+\quad shared noise $\rho=0.3$, T1 & 8 & 0.873 & estimable & $-$0.123 (0.132) & $-$0.059 (0.065) & 0 & estimable & $-$0.0133 \\
+\quad stress, T1 & 8 & 0.107 & unresolved & +0.162 (0.210) & +0.389 (0.394) & 17 & estimable & +0.0682 \\
+\quad T1, cv-MDS & 8 & 0.829 & estimable & $-$0.020 (0.053) & +0.028 (0.043) & 39 & estimable & $-$0.0030 \\
+\quad T1, $\lambda=0.1$ & 8 & 0.099 & estimable & $-$0.016 (0.021) & +0.002 (0.008) & 59 & estimable & $-$0.0051 \\
+\quad T1, $\lambda=0.25$ & 8 & 0.228 & estimable & $-$0.043 (0.049) & +0.004 (0.012) & 63 & estimable & $-$0.0094 \\
+\quad T1, $\lambda=0.35$ & 8 & 0.315 & estimable & $-$0.067 (0.070) & +0.009 (0.016) & 67 & estimable & $-$0.0105 \\
+\quad T1, $\lambda=0.5$ & 8 & 0.445 & estimable & $-$0.081 (0.084) & +0.018 (0.027) & 86 & estimable & $-$0.0106 \\
+\quad T1, $\lambda=1$ & 8 & 0.826 & estimable & $-$0.006 (0.033) & +0.046 (0.049) & 58 & estimable & $-$0.0017 \\
+\quad T1, $\lambda=1$ & 16 & 0.646 & unresolved & +0.003 (0.048) & +0.108 (0.109) & 49 & estimable & $-$0.0033 \\
+\quad T1, $\lambda=1$ & 32 & 0.470 & unresolved & +0.039 (0.075) & +0.182 (0.178) & 38 & estimable & $-$0.0003 \\
+\quad T1, $\lambda=2$ & 8 & 0.997 & saturated & 0.000 (0.006) & +0.002 (0.007) & 8 & estimable & $-$0.0003 \\
+\quad T1, no noise & 8 & 0.000 & estimable & 0.000 (0.000) & 0.000 (0.000) & 100 & estimable & 0.0000 \\
+\quad stress, T2 & 8 & 0.040 & unresolved & +0.183 (0.362) & +0.441 (0.501) & 31 & unresolved & +0.1499 \\
+\quad T2, cv-MDS & 8 & 0.597 & unresolved & $-$0.106 (0.141) & +0.012 (0.066) & 41 & estimable & $-$0.0115 \\
+\quad T2, $\lambda=0.1$ & 8 & 0.045 & estimable & $-$0.010 (0.013) & +0.001 (0.005) & 47 & estimable & $-$0.0091 \\
+\quad T2, $\lambda=0.25$ & 8 & 0.132 & estimable & $-$0.057 (0.064) & $-$0.002 (0.008) & 41 & estimable & $-$0.0351 \\
+\quad T2, $\lambda=0.35$ & 8 & 0.218 & unresolved & $-$0.105 (0.111) & $-$0.003 (0.010) & 34 & estimable & $-$0.0586 \\
+\quad T2, $\lambda=0.5$ & 8 & 0.363 & unresolved & $-$0.123 (0.126) & +0.012 (0.024) & 71 & estimable & $-$0.0561 \\
+\quad T2, $\lambda=1$ & 8 & 0.783 & estimable & $-$0.026 (0.049) & +0.044 (0.047) & 70 & estimable & $-$0.0078 \\
+\quad T2, $\lambda=2$ & 8 & 0.998 & saturated & +0.001 (0.007) & +0.002 (0.008) & 6 & estimable & $-$0.0006 \\
+\quad T3, cv-MDS & 8 & 0.609 & unresolved & $-$0.078 (0.120) & +0.040 (0.074) & 45 & estimable & $-$0.0111 \\
+\quad T3, $\lambda=0.1$ & 8 & 0.078 & estimable & $-$0.017 (0.019) & +0.001 (0.005) & 62 & estimable & $-$0.0098 \\
+\quad T3, $\lambda=0.25$ & 8 & 0.180 & estimable & $-$0.061 (0.064) & +0.003 (0.009) & 68 & estimable & $-$0.0242 \\
+\quad T3, $\lambda=0.35$ & 8 & 0.251 & unresolved & $-$0.092 (0.095) & +0.008 (0.016) & 74 & estimable & $-$0.0337 \\
+\quad T3, $\lambda=0.5$ & 8 & 0.383 & unresolved & $-$0.105 (0.105) & +0.026 (0.035) & 94 & estimable & $-$0.0380 \\
+\quad T3, $\lambda=1$ & 8 & 0.784 & estimable & $-$0.012 (0.045) & +0.051 (0.053) & 58 & estimable & $-$0.0049 \\
+\quad T3, $\lambda=1$ & 16 & 0.597 & unresolved & +0.023 (0.067) & +0.135 (0.132) & 35 & estimable & $-$0.0121 \\
+\quad T3, $\lambda=1$ & 32 & 0.404 & unresolved & +0.082 (0.120) & +0.240 (0.233) & 30 & estimable & +0.0002 \\
+\quad T3, $\lambda=2$ & 8 & 0.998 & saturated & +0.001 (0.007) & +0.002 (0.008) & 4 & estimable & $-$0.0007 \\
+\addlinespace
+\multicolumn{9}{l}{\textit{Mouse V1}} \\
+\quad shared noise $\rho=0.1$, T1 & 8 & 0.986 & estimable & $-$0.042 (0.058) & $-$0.027 (0.035) & 1 & estimable & $-$0.0025 \\
+\quad shared noise $\rho=0.3$, T1 & 8 & 0.994 & estimable & $-$0.231 (0.254) & $-$0.170 (0.184) & 0 & estimable & $-$0.0191 \\
+\quad stress, T1 & 8 & 0.170 & unresolved & +0.536 (0.536) & +0.646 (0.641) & 0 & estimable & +0.0895 \\
+\quad T1, cv-MDS & 8 & 1.000 & saturated & 0.000 (0.007) & 0.000 (0.007) & 41 & estimable & $-$0.0004 \\
+\quad T1, $\lambda=0.1$ & 8 & 0.129 & estimable & $-$0.025 (0.035) & +0.002 (0.016) & 44 & estimable & $-$0.0060 \\
+\quad T1, $\lambda=0.25$ & 8 & 0.333 & estimable & $-$0.073 (0.085) & +0.012 (0.027) & 65 & estimable & $-$0.0102 \\
+\quad T1, $\lambda=0.35$ & 8 & 0.492 & unresolved & $-$0.089 (0.101) & +0.015 (0.032) & 68 & estimable & $-$0.0120 \\
+\quad T1, $\lambda=0.5$ & 8 & 0.680 & estimable & $-$0.047 (0.068) & +0.041 (0.051) & 78 & estimable & $-$0.0054 \\
+\quad T1, $\lambda=1$ & 8 & 0.974 & saturated & +0.008 (0.016) & +0.014 (0.020) & 13 & estimable & +0.0001 \\
+\quad T1, $\lambda=1$ & 16 & 0.905 & estimable & +0.041 (0.046) & +0.055 (0.066) & 7 & estimable & +0.0028 \\
+\quad T1, $\lambda=2$ & 8 & 1.000 & saturated & 0.000 (0.003) & 0.000 (0.002) & 57 & estimable & 0.0000 \\
+\quad T1, no noise & 8 & 0.000 & estimable & 0.000 (0.000) & 0.000 (0.000) & 100 & estimable & 0.0000 \\
+\quad stress, T2 & 8 & 0.105 & unresolved & +0.752 (0.743) & +0.803 (0.798) & 0 & estimable & +0.4607 \\
+\quad T2, cv-MDS & 8 & 1.000 & saturated & 0.000 (0.008) & 0.000 (0.005) & 87 & estimable & $-$0.0016 \\
+\quad T2, $\lambda=0.1$ & 8 & 0.090 & estimable & $-$0.037 (0.041) & $-$0.003 (0.012) & 38 & estimable & $-$0.0238 \\
+\quad T2, $\lambda=0.25$ & 8 & 0.280 & unresolved & $-$0.136 (0.141) & 0.000 (0.023) & 50 & estimable & $-$0.0645 \\
+\quad T2, $\lambda=0.35$ & 8 & 0.445 & unresolved & $-$0.132 (0.133) & +0.030 (0.044) & 80 & estimable & $-$0.0464 \\
+\quad T2, $\lambda=0.5$ & 8 & 0.677 & unresolved & $-$0.042 (0.070) & +0.060 (0.062) & 86 & estimable & $-$0.0133 \\
+\quad T2, $\lambda=1$ & 8 & 0.978 & saturated & +0.004 (0.018) & +0.010 (0.021) & 25 & estimable & $-$0.0021 \\
+\quad T2, $\lambda=2$ & 8 & 1.000 & saturated & 0.000 (0.002) & 0.000 (0.001) & 67 & estimable & 0.0000 \\
+\quad T3, cv-MDS & 8 & 1.000 & saturated & 0.000 (0.013) & 0.000 (0.011) & 77 & estimable & $-$0.0016 \\
+\quad T3, $\lambda=0.1$ & 8 & 0.089 & estimable & $-$0.033 (0.041) & $-$0.002 (0.012) & 41 & estimable & $-$0.0243 \\
+\quad T3, $\lambda=0.25$ & 8 & 0.284 & unresolved & $-$0.140 (0.143) & 0.000 (0.019) & 47 & estimable & $-$0.0669 \\
+\quad T3, $\lambda=0.35$ & 8 & 0.461 & unresolved & $-$0.121 (0.130) & +0.027 (0.044) & 82 & estimable & $-$0.0463 \\
+\quad T3, $\lambda=0.5$ & 8 & 0.674 & unresolved & $-$0.048 (0.069) & +0.059 (0.064) & 82 & estimable & $-$0.0139 \\
+\quad T3, $\lambda=1$ & 8 & 0.979 & saturated & +0.006 (0.014) & +0.012 (0.020) & 23 & estimable & $-$0.0021 \\
+\quad T3, $\lambda=1$ & 16 & 0.887 & estimable & +0.041 (0.054) & +0.068 (0.081) & 3 & estimable & $-$0.0050 \\
+\quad T3, $\lambda=2$ & 8 & 1.000 & saturated & 0.000 (0.002) & 0.000 (0.002) & 64 & estimable & 0.0000 \\
+\bottomrule
+\end{tabular}
+% END make_tables.py tab_supp_validation
+\tablenote{As in main-text Table~2; the last two columns give the mislabel rate's status, from its own curve, and the median bias of its smaller estimate.
+$\rho$: the share of the noise variance shared within a session or stratum.}
+\end{table}
+
+\begin{table}[!htb]
+\centering\scriptsize
+\caption{Deeper references (Layer A).}
+% BEGIN make_tables.py tab_supp_layer_a
+\begin{tabular}{lrrrrrrrr}
+\toprule
+ & Exact false & \multicolumn{5}{c}{Disagreement $d_{\FC}(R_h)$} & \multicolumn{2}{c}{Error of the $R_h^{-1/2}$ fit} \\
+\cmidrule(lr){3-7}\cmidrule(lr){8-9}
+Simulated cell & comfort & \multicolumn{5}{c}{by reference size, as listed} & real sizes & all sizes \\
+\midrule
+\multicolumn{9}{l}{\textit{Human EEG}: $R_h$ = 8, 20, 40, 80, 160} \\
+\quad shared noise $\rho=0.1$, T1 & 0.818 & 0.967 & 0.919 & 0.881 & 0.857 & 0.843 & $-$0.028 & $-$0.038 \\
+\quad shared noise $\rho=0.3$, T1 & 0.866 & 0.935 & 0.875 & 0.830 & 0.800 & 0.794 & $-$0.127 & $-$0.124 \\
+\quad stress, T1 & 0.105 & 0.925 & 0.734 & 0.543 & 0.387 & 0.272 & +0.149 & +0.017 \\
+\quad T1, cv-MDS & 0.875 & 0.980 & 0.950 & 0.925 & 0.913 & 0.886 & $-$0.004 & $-$0.009 \\
+\quad T1, $\lambda=0.1$ & 0.098 & 0.138 & 0.114 & 0.106 & 0.104 & 0.101 & $-$0.018 & $-$0.011 \\
+\quad T1, $\lambda=0.25$ & 0.216 & 0.329 & 0.261 & 0.239 & 0.225 & 0.223 & $-$0.046 & $-$0.031 \\
+\quad T1, $\lambda=0.35$ & 0.307 & 0.476 & 0.380 & 0.342 & 0.324 & 0.318 & $-$0.063 & $-$0.041 \\
+\quad T1, $\lambda=0.5$ & 0.453 & 0.679 & 0.551 & 0.506 & 0.473 & 0.464 & $-$0.082 & $-$0.056 \\
+\quad T1, $\lambda=1$ & 0.801 & 0.968 & 0.922 & 0.883 & 0.849 & 0.832 & $-$0.004 & $-$0.020 \\
+\quad T1, $\lambda=2$ & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 & 0.000 & 0.000 \\
+\quad T1, no noise & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 \\
+\quad stress, T2 & 0.039 & 0.957 & 0.773 & 0.508 & 0.280 & 0.153 & +0.196 & $-$0.055 \\
+\quad T2, cv-MDS & 0.733 & 0.937 & 0.822 & 0.740 & 0.717 & 0.720 & $-$0.089 & $-$0.051 \\
+\quad T2, $\lambda=0.1$ & 0.051 & 0.068 & 0.057 & 0.053 & 0.053 & 0.051 & $-$0.012 & $-$0.008 \\
+\quad T2, $\lambda=0.25$ & 0.131 & 0.246 & 0.173 & 0.149 & 0.139 & 0.134 & $-$0.056 & $-$0.035 \\
+\quad T2, $\lambda=0.35$ & 0.213 & 0.415 & 0.295 & 0.249 & 0.233 & 0.223 & $-$0.106 & $-$0.066 \\
+\quad T2, $\lambda=0.5$ & 0.360 & 0.664 & 0.492 & 0.424 & 0.390 & 0.374 & $-$0.125 & $-$0.080 \\
+\quad T2, $\lambda=1$ & 0.767 & 0.968 & 0.894 & 0.839 & 0.808 & 0.788 & $-$0.026 & $-$0.032 \\
+\quad T2, $\lambda=2$ & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 & 0.000 & 0.000 \\
+\quad T3, cv-MDS & 0.680 & 0.956 & 0.853 & 0.751 & 0.750 & 0.750 & $-$0.052 & $-$0.050 \\
+\quad T3, $\lambda=0.1$ & 0.075 & 0.117 & 0.095 & 0.087 & 0.084 & 0.079 & $-$0.017 & $-$0.011 \\
+\quad T3, $\lambda=0.25$ & 0.174 & 0.316 & 0.234 & 0.204 & 0.186 & 0.178 & $-$0.058 & $-$0.038 \\
+\quad T3, $\lambda=0.35$ & 0.238 & 0.471 & 0.347 & 0.297 & 0.270 & 0.254 & $-$0.092 & $-$0.060 \\
+\quad T3, $\lambda=0.5$ & 0.377 & 0.687 & 0.530 & 0.459 & 0.420 & 0.398 & $-$0.103 & $-$0.073 \\
+\quad T3, $\lambda=1$ & 0.765 & 0.970 & 0.911 & 0.866 & 0.815 & 0.800 & $-$0.017 & $-$0.028 \\
+\quad T3, $\lambda=2$ & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 & 0.000 & 0.000 \\
+\addlinespace
+\multicolumn{9}{l}{\textit{Mouse V1}: $R_h$ = 8, 12, 24, 48, 96} \\
+\quad shared noise $\rho=0.1$, T1 & 1.000 & 0.990 & 0.985 & 0.974 & 0.964 & 0.952 & $-$0.039 & $-$0.051 \\
+\quad shared noise $\rho=0.3$, T1 & 1.000 & 0.930 & 0.900 & 0.850 & 0.816 & 0.794 & $-$0.250 & $-$0.246 \\
+\quad stress, T1 & 0.153 & 0.984 & 0.961 & 0.863 & 0.714 & 0.535 & +0.553 & +0.276 \\
+\quad T1, cv-MDS & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 & 0.000 & 0.000 \\
+\quad T1, $\lambda=0.1$ & 0.117 & 0.176 & 0.161 & 0.146 & 0.134 & 0.132 & $-$0.019 & $-$0.012 \\
+\quad T1, $\lambda=0.25$ & 0.311 & 0.461 & 0.422 & 0.372 & 0.348 & 0.332 & $-$0.079 & $-$0.046 \\
+\quad T1, $\lambda=0.35$ & 0.466 & 0.686 & 0.633 & 0.571 & 0.513 & 0.495 & $-$0.081 & $-$0.056 \\
+\quad T1, $\lambda=0.5$ & 0.677 & 0.877 & 0.832 & 0.777 & 0.729 & 0.714 & $-$0.051 & $-$0.038 \\
+\quad T1, $\lambda=1$ & 0.980 & 0.997 & 0.995 & 0.991 & 0.989 & 0.983 & $-$0.002 & $-$0.003 \\
+\quad T1, $\lambda=2$ & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 & 0.000 & 0.000 \\
+\quad T1, no noise & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 \\
+\quad stress, T2 & 0.103 & 0.992 & 0.984 & 0.941 & 0.832 & 0.661 & +0.757 & +0.495 \\
+\quad T2, cv-MDS & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 & 0.000 & 0.000 \\
+\quad T2, $\lambda=0.1$ & 0.085 & 0.142 & 0.123 & 0.104 & 0.092 & 0.088 & $-$0.033 & $-$0.020 \\
+\quad T2, $\lambda=0.25$ & 0.295 & 0.548 & 0.472 & 0.384 & 0.336 & 0.313 & $-$0.136 & $-$0.080 \\
+\quad T2, $\lambda=0.35$ & 0.448 & 0.740 & 0.672 & 0.568 & 0.501 & 0.472 & $-$0.118 & $-$0.097 \\
+\quad T2, $\lambda=0.5$ & 0.677 & 0.905 & 0.863 & 0.790 & 0.740 & 0.714 & $-$0.060 & $-$0.062 \\
+\quad T2, $\lambda=1$ & 0.984 & 0.999 & 0.998 & 0.993 & 0.988 & 0.985 & 0.000 & $-$0.002 \\
+\quad T2, $\lambda=2$ & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 & 0.000 & 0.000 \\
+\quad T3, cv-MDS & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 & 0.000 & 0.000 \\
+\quad T3, $\lambda=0.1$ & 0.081 & 0.145 & 0.121 & 0.103 & 0.092 & 0.087 & $-$0.035 & $-$0.018 \\
+\quad T3, $\lambda=0.25$ & 0.289 & 0.534 & 0.459 & 0.375 & 0.332 & 0.310 & $-$0.143 & $-$0.086 \\
+\quad T3, $\lambda=0.35$ & 0.443 & 0.747 & 0.679 & 0.571 & 0.511 & 0.475 & $-$0.109 & $-$0.091 \\
+\quad T3, $\lambda=0.5$ & 0.660 & 0.899 & 0.854 & 0.774 & 0.710 & 0.683 & $-$0.058 & $-$0.064 \\
+\quad T3, $\lambda=1$ & 0.984 & 0.999 & 0.998 & 0.995 & 0.992 & 0.989 & 0.000 & $-$0.003 \\
+\quad T3, $\lambda=2$ & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 & 0.000 & 0.000 \\
+\bottomrule
+\end{tabular}
+% END make_tables.py tab_supp_layer_a
+\tablenote{The first split's maps and labels are fixed and only the references are regenerated, 20 times.
+The disagreement is given at the real reference sizes and at 2 and 4 times the largest.
+The last two columns are the error of the $R_h^{-1/2}$ extrapolant fitted to the real sizes and to all five.}
+\end{table}
+
+\begin{table}[!htb]
+\centering\scriptsize
+\caption{The study-level calibration (Layer C): 1{,}000 virtual studies of 10 subjects per run.}
+% BEGIN make_tables.py tab_supp_layer_c
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{llrrlllrrrrr}
+\toprule
+ & & & Target & & & & & Declares & & Rule, exact & Median \\
+Claim & Truth & Trials & $\Theta$ & Range & $\Pr(L>\Theta)$ & Allowed & Criterion & (\%) & $x_{(2)}$ & values & bias \\
+\midrule
+EEG C1 & T1 & 8 & 0.821 & 0.55--0.99 & 0.020 $\pm$ 0.004 & 0.034 & met & 97.6 & 0.011 & 0.029 & $-$0.006 \\
+ & T3 & 8 & 0.794 & 0.45--0.99 & 0.016 $\pm$ 0.004 & 0.033 & met & 84.9 & 0.006 & 0.021 & $-$0.013 \\
+\addlinespace
+mouse C3 & T1 & 8 & 0.138 & 0.13--0.16 & 0.040 $\pm$ 0.006 & 0.037 & missed & 100.0 & -- & 0.022 & 0.000 \\
+ & T3 & 8 & 0.165 & 0.13--0.27 & 0.024 $\pm$ 0.005 & 0.035 & met & 100.0 & -- & 0.043 & $-$0.003 \\
+ & T1 & 16 & 0.139 & 0.12--0.15 & 0.066 $\pm$ 0.008 & 0.041 & missed & 100.0 & -- & 0.030 & +0.002 \\
+ & T3 & 16 & 0.210 & 0.14--0.31 & 0.013 $\pm$ 0.004 & 0.032 & met & 100.0 & -- & 0.039 & $-$0.005 \\
+\bottomrule
+\end{tabular}
+% END make_tables.py tab_supp_layer_c
+\tablenote{EEG C1: false comfort at 8 trials, with the guard; mouse V1 C3: the mislabel rate, without a guard, as published.
+\emph{Target}: the median over the 30 virtual subjects, with their range.
+\emph{Allowed}: 0.025 plus two Monte Carlo errors.
+\emph{Declares}: the share of studies with $L>0.5$ (false comfort) or $L>0.10$ (mislabel rate).
+\emph{Rule on exact values}: the error rate of the same bootstrap rule applied to the subjects' exact values (descriptive, added after the runs).
+\emph{Median bias}: of the smaller estimate, within studies.}
+\end{table}
+
+{\scriptsize\setlength{\tabcolsep}{4pt}
+\begin{longtable}{>{\raggedright\arraybackslash}p{3.0cm}rl>{\raggedright\arraybackslash}p{2.3cm}>{\raggedright\arraybackslash}p{2.1cm}ll}
+\caption{Human EEG: the status and class of every result.}\\
+\toprule
+ & & & Matching cells & & Disagreement with & Pre-specified \\
+Result & Trials & Status & (worst bias / RMSE) & Class & deepest reference & classification \\
+\midrule
+\endfirsthead
+\multicolumn{7}{l}{\textit{Table~\thetable, continued}} \\
+\toprule
+Result & Trials & Status & Matching cells & Class & Disagreement & Pre-specified \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+% BEGIN make_tables.py tab_supp_status_eeg
+primary (t-SNE, perplexity 30) & 8 & estimable & 3 ($-$0.026 / 0.049) & calibrated & 87.7 (76.8--92.8) & -- \\
+\quad mislabel rate & 8 & estimable & 8 ($-$0.035 / 0.039) & model-dependent & 17.4 (16.1--20.6) & -- \\
+ & 16 & unresolved & -- & finite-reference & 77.9 (65.6--82.7) & -- \\
+\quad mislabel rate & 16 & estimable & 6 ($-$0.038 / 0.038) & model-dependent & 22.4 (21.6--23.3) & -- \\
+ & 32 & unresolved & -- & finite-reference & 67.3 (50.0--73.9) & -- \\
+\quad mislabel rate & 32 & estimable & 6 ($-$0.059 / 0.060) & finite-reference & 25.0 (23.9--27.0) & -- \\
+\addlinespace
+cv-MDS & 8 & estimable & none & model-dependent, unvalidated & 75.4 (70.8--89.4) & -- \\
+ & 16 & unresolved & -- & finite-reference & 73.7 (64.5--82.5) & -- \\
+ & 32 & unresolved & -- & finite-reference & 64.6 (60.2--77.5) & -- \\
+\addlinespace
+$k=5$ & 8 & estimable & 1 ($-$0.006 / 0.033) & model-dependent & 92.5 (83.6--94.9) & -- \\
+ & 16 & estimable & 2 ($-$0.026 / 0.049) & model-dependent & 82.6 (71.0--88.5) & -- \\
+ & 32 & unresolved & -- & finite-reference & 72.8 (57.0--81.0) & -- \\
+\addlinespace
+$k=20$ & 8 & unresolved & -- & finite-reference & 67.5 (52.0--80.6) & -- \\
+ & 16 & unresolved & -- & finite-reference & 56.4 (41.9--63.8) & -- \\
+ & 32 & unresolved & -- & finite-reference & 45.9 (33.1--57.1) & -- \\
+\addlinespace
+$\varepsilon=0.1$ & 8 & estimable & none & model-dependent, unvalidated & 94.8 (87.4--96.6) & -- \\
+ & 16 & unresolved & -- & finite-reference & 86.1 (77.6--90.8) & -- \\
+ & 32 & unresolved & -- & finite-reference & 77.0 (67.4--83.5) & -- \\
+\addlinespace
+$\varepsilon=0.3$ & 8 & estimable & none & model-dependent, unvalidated & 79.5 (67.8--85.3) & -- \\
+ & 16 & unresolved & -- & finite-reference & 66.9 (51.8--73.9) & -- \\
+ & 32 & unresolved & -- & finite-reference & 54.0 (37.0--62.1) & -- \\
+\addlinespace
+t-SNE perplexity 15 & 8 & estimable & 3 ($-$0.026 / 0.049) & model-dependent & 88.6 (78.2--92.7) & -- \\
+ & 16 & unresolved & -- & finite-reference & 78.7 (65.7--81.0) & -- \\
+ & 32 & unresolved & -- & finite-reference & 67.9 (51.9--73.5) & -- \\
+\addlinespace
+t-SNE perplexity 50 & 8 & estimable & 3 ($-$0.026 / 0.049) & model-dependent & 85.5 (75.7--90.2) & -- \\
+ & 16 & unresolved & -- & finite-reference & 76.1 (64.2--80.6) & -- \\
+ & 32 & unresolved & -- & finite-reference & 66.2 (51.8--73.2) & -- \\
+\addlinespace
+PCA-2 & 8 & unresolved & -- & finite-reference & 67.7 (61.5--77.9) & -- \\
+ & 16 & unresolved & -- & finite-reference & 61.8 (54.7--70.7) & -- \\
+ & 32 & unresolved & -- & finite-reference & 53.5 (49.7--65.8) & -- \\
+\addlinespace
+MDS, Euclidean & 8 & estimable & none & model-dependent, unvalidated & 82.7 (73.1--94.1) & -- \\
+ & 16 & unresolved & -- & finite-reference & 73.7 (68.0--83.7) & -- \\
+ & 32 & unresolved & -- & finite-reference & 65.8 (62.2--75.4) & -- \\
+\addlinespace
+alternative window & 8 & estimable & 3 ($-$0.026 / 0.049) & model-dependent & 86.2 (74.2--89.6) & -- \\
+ & 16 & unresolved & -- & finite-reference & 73.7 (59.5--77.8) & -- \\
+ & 32 & unresolved & -- & finite-reference & 63.4 (47.6--68.0) & -- \\
+\addlinespace
+unwhitened & 8 & saturated & -- & finite-reference & 100.0 (99.8--100.0) & -- \\
+ & 16 & saturated & -- & finite-reference & 99.9 (97.9--100.0) & -- \\
+ & 32 & saturated & -- & finite-reference & 99.4 (94.2--99.9) & -- \\
+\addlinespace
+Trustworthiness & 8 & estimable & 3 ($-$0.026 / 0.049) & model-dependent & 86.5 (76.9--91.5) & leaves most \\
+ & 16 & unresolved & -- & finite-reference & 77.1 (64.4--81.7) & -- \\
+ & 32 & unresolved & -- & finite-reference & 66.6 (49.5--73.0) & -- \\
+\addlinespace
+scDEED & 8 & estimable & 1 ($-$0.006 / 0.033) & model-dependent & 91.2 (84.2--94.6) & leaves most \\
+ & 16 & estimable & 3 ($-$0.026 / 0.049) & model-dependent & 85.2 (75.4--88.2) & -- \\
+ & 32 & unresolved & -- & finite-reference & 76.4 (64.8--81.6) & -- \\
+\addlinespace
+Cross-validated & 8 & estimable & 2 ($-$0.026 / 0.049) & model-dependent & 82.4 (73.2--87.6) & leaves most \\
+ & 16 & unresolved & -- & finite-reference & 73.6 (62.3--78.9) & -- \\
+ & 32 & unresolved & -- & finite-reference & 66.0 (50.3--72.0) & -- \\
+\addlinespace
+Seed recurrence & 8 & estimable & 1 ($-$0.006 / 0.033) & model-dependent & 91.6 (85.1--95.1) & leaves most \\
+ & 16 & estimable & 3 ($-$0.026 / 0.049) & model-dependent & 85.3 (74.9--87.4) & -- \\
+ & 32 & unresolved & -- & finite-reference & 76.8 (63.5--81.3) & -- \\
+\addlinespace
+Bootstrap recurrence & 8 & too few passes & -- & finite-reference & 0.0 (0.0--33.3) & not evaluable \\
+ & 16 & too few passes & -- & finite-reference & 28.6 (8.3--45.5) & -- \\
+ & 32 & unresolved & -- & finite-reference & 23.7 (16.6--43.4) & -- \\
+\addlinespace
+Split-half recurrence & 8 & unresolved & -- & finite-reference & 65.4 (59.0--77.8) & undetermined \\
+ & 16 & unresolved & -- & finite-reference & 60.8 (50.5--70.3) & -- \\
+ & 32 & unresolved & -- & finite-reference & 57.7 (48.8--65.7) & -- \\
+% END make_tables.py tab_supp_status_eeg
+\end{longtable}}
+\tablenote{False comfort unless marked; the disagreement with the 40-trial reference is in percent, with its 95\% subject-bootstrap interval.
+\emph{Class}: the class reported in the paper (main text, Section~2.3.4); no check and no variation was calibrated at the study level.
+\emph{Pre-specified classification}: the comparison's rule for each check at 8 trials, which the paper does not use for inference.}
+
+{\scriptsize\setlength{\tabcolsep}{4pt}
+\begin{longtable}{>{\raggedright\arraybackslash}p{3.0cm}rl>{\raggedright\arraybackslash}p{2.3cm}>{\raggedright\arraybackslash}p{2.1cm}ll}
+\caption{Mouse V1: the status and class of every result.}\\
+\toprule
+ & & & Matching cells & & Disagreement with & Pre-specified \\
+Result & Trials & Status & (worst bias / RMSE) & Class & deepest reference & classification \\
+\midrule
+\endfirsthead
+\multicolumn{7}{l}{\textit{Table~\thetable, continued}} \\
+\toprule
+Result & Trials & Status & Matching cells & Class & Disagreement & Pre-specified \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+% BEGIN make_tables.py tab_supp_status_mouse
+primary (t-SNE, perplexity 30) & 8 & saturated & -- & finite-reference & 100.0 (99.8--100.0) & -- \\
+\quad mislabel rate & 8 & estimable & 10 ($-$0.012 / 0.014) & model-dependent & 16.1 (15.4--18.3) & -- \\
+ & 16 & saturated & -- & finite-reference & 99.7 (98.9--100.0) & -- \\
+\quad mislabel rate & 16 & estimable & 9 ($-$0.005 / 0.010) & model-dependent & 17.2 (15.8--18.8) & -- \\
+\addlinespace
+cv-MDS & 8 & saturated & -- & finite-reference & 100.0 (100.0--100.0) & -- \\
+ & 16 & saturated & -- & finite-reference & 100.0 (99.4--100.0) & -- \\
+\addlinespace
+$k=5$ & 8 & saturated & -- & finite-reference & 99.5 (98.6--99.9) & -- \\
+ & 16 & saturated & -- & finite-reference & 99.0 (96.8--100.0) & -- \\
+\addlinespace
+$k=20$ & 8 & saturated & -- & finite-reference & 99.8 (99.7--100.0) & -- \\
+ & 16 & saturated & -- & finite-reference & 99.7 (98.6--99.8) & -- \\
+\addlinespace
+$\varepsilon=0.1$ & 8 & saturated & -- & finite-reference & 100.0 (100.0--100.0) & -- \\
+ & 16 & saturated & -- & finite-reference & 100.0 (99.8--100.0) & -- \\
+\addlinespace
+$\varepsilon=0.3$ & 8 & saturated & -- & finite-reference & 99.5 (98.8--99.9) & -- \\
+ & 16 & saturated & -- & finite-reference & 99.1 (96.7--99.7) & -- \\
+\addlinespace
+t-SNE perplexity 15 & 8 & saturated & -- & finite-reference & 100.0 (99.4--100.0) & -- \\
+ & 16 & saturated & -- & finite-reference & 100.0 (99.0--100.0) & -- \\
+\addlinespace
+t-SNE perplexity 50 & 8 & saturated & -- & finite-reference & 99.9 (99.6--100.0) & -- \\
+ & 16 & saturated & -- & finite-reference & 99.8 (99.4--100.0) & -- \\
+\addlinespace
+PCA-2 & 8 & saturated & -- & finite-reference & 100.0 (100.0--100.0) & -- \\
+ & 16 & saturated & -- & finite-reference & 100.0 (100.0--100.0) & -- \\
+\addlinespace
+MDS, Euclidean & 8 & saturated & -- & finite-reference & 100.0 (100.0--100.0) & -- \\
+ & 16 & saturated & -- & finite-reference & 100.0 (99.5--100.0) & -- \\
+\addlinespace
+alternative window & 8 & saturated & -- & finite-reference & 100.0 (99.9--100.0) & -- \\
+ & 16 & saturated & -- & finite-reference & 100.0 (99.9--100.0) & -- \\
+\addlinespace
+unwhitened & 8 & saturated & -- & finite-reference & 100.0 (100.0--100.0) & -- \\
+ & 16 & saturated & -- & finite-reference & 100.0 (99.9--100.0) & -- \\
+\addlinespace
+Trustworthiness & 8 & saturated & -- & finite-reference & 100.0 (99.9--100.0) & leaves most \\
+ & 16 & saturated & -- & finite-reference & 99.9 (98.9--100.0) & -- \\
+\addlinespace
+scDEED & 8 & saturated & -- & finite-reference & 100.0 (99.8--100.0) & leaves most \\
+ & 16 & saturated & -- & finite-reference & 99.5 (98.6--100.0) & -- \\
+\addlinespace
+Cross-validated & 8 & saturated & -- & finite-reference & 100.0 (99.1--100.0) & leaves most \\
+ & 16 & saturated & -- & finite-reference & 98.7 (97.4--100.0) & -- \\
+\addlinespace
+Seed recurrence & 8 & saturated & -- & finite-reference & 100.0 (99.9--100.0) & leaves most \\
+ & 16 & saturated & -- & finite-reference & 99.8 (99.3--100.0) & -- \\
+\addlinespace
+Bootstrap recurrence & 8 & too few passes & -- & finite-reference & -- & not evaluable \\
+ & 16 & too few passes & -- & finite-reference & -- & -- \\
+\addlinespace
+Split-half recurrence & 8 & too few passes & -- & finite-reference & 100.0 (100.0--100.0) & not evaluable \\
+ & 16 & too few passes & -- & finite-reference & 100.0 (93.8--100.0) & -- \\
+% END make_tables.py tab_supp_status_mouse
+\end{longtable}}
+\tablenote{As in Table~S7, with the 24-trial reference.}
+
+\begin{table}[!htb]
+\centering\small
+\caption{EEG blocks drawn from separate sessions (medians over 10 subjects).}
+% BEGIN make_tables.py tab_supp_session
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{rllrrl}
+\toprule
+ & & Disagreement at & Smaller & Random & \\
+Trials & Blocks & $R_h$ = 8, 20, 40 & extrapolant & selection & Status \\
+\midrule
+8 & balanced (control) & 0.970, 0.913, 0.881 & 0.810 & 0.937 & estimable \\
+ & separate sessions & 0.972, 0.930, 0.900 & 0.848 & 0.945 & estimable \\
+ & difference per subject & & +0.052 ($-$0.019 to +0.103) & & \\
+\addlinespace
+16 & balanced (control) & 0.954, 0.857, 0.767 & 0.632 & 0.851 & unresolved \\
+ & separate sessions & 0.957, 0.878, 0.810 & 0.696 & 0.888 & estimable \\
+ & difference per subject & & +0.076 ($-$0.001 to +0.149) & & \\
+\bottomrule
+\end{tabular}
+% END make_tables.py tab_supp_session
+\tablenote{Separate sessions: $F$ and $U$ from one session each, $H$ the other two (Section~S1.9).
+Control: balanced random splits of the same block sizes.
+The difference is the paired difference per subject, separate sessions minus control, with its range.}
+\end{table}
+
+\begin{table}[!htb]
+\centering\small
+\caption{cv-MDS diagnostics.}
+% BEGIN make_tables.py tab_supp_cvmds
+\begin{tabular}{lrrrrr}
+\toprule
+ & \multicolumn{3}{c}{Human EEG} & \multicolumn{2}{c}{Mouse V1} \\
+\cmidrule(lr){2-4}\cmidrule(lr){5-6}
+ & 8 trials & 16 & 32 & 8 trials & 16 \\
+\midrule
+Negative cross-validated squared distances (\%) & 4.9 & 1.1 & 0.1 & 25.1 & 16.7 \\
+Kruskal stress-1 of the MDS fit & 0.30 & 0.27 & 0.26 & 0.37 & 0.31 \\
+\bottomrule
+\end{tabular}
+% END make_tables.py tab_supp_cvmds
+\tablenote{Negative cross-validated squared distances become zeros in the MDS input; the naive labels rank the signed values.
+Medians over subjects and maps.}
+\end{table}
+
+\begin{table}[!htb]
+\centering\scriptsize
+\caption{Human EEG: every pre-specified variation and budget, in percent.}
+% BEGIN make_tables.py tab_supp_cells_eeg
+\begin{tabular}{lrrrrrrl}
+\toprule
+ & & Called & Truly & Mislabel & False & Bound & \\
+Variation & Trials & faithful & faithful & rate & comfort & $L$ & Status \\
+\midrule
+primary (t-SNE, perplexity 30) & 8 & 18.8 & 4.6--6.6 & 16.9--17.2 & 81.1--86.5 & 64.2 & estimable \\
+ & 16 & 26.1 & 9.7--13.8 & 20.8--21.9 & 64.6--75.1 & 46.1 & unresolved \\
+ & 32 & 32.5 & 16.3--23.3 & 21.0--24.3 & 47.6--63.5 & 23.1 & unresolved \\
+\addlinespace
+cv-MDS & 8 & 2.0 & 2.5--3.5 & 3.3--3.9 & 62.3--72.0 & 55.0 & estimable \\
+ & 16 & 5.8 & 4.8--6.6 & 6.4--6.7 & 60.0--70.6 & 45.2 & unresolved \\
+ & 32 & 9.5 & 6.3--8.7 & 7.6--8.1 & 44.5--59.8 & 37.8 & unresolved \\
+\addlinespace
+$k=5$ & 8 & 31.3 & 4.4--6.2 & 29.7--30.1 & 88.4--91.7 & 75.3 & estimable \\
+ & 16 & 35.8 & 10.4--14.9 & 30.2--32.0 & 72.7--81.0 & 55.9 & estimable \\
+ & 32 & 41.3 & 16.5--23.8 & 29.7--33.2 & 57.0--70.3 & 33.2 & unresolved \\
+\addlinespace
+$k=20$ & 8 & 21.0 & 11.7--16.1 & 15.4--16.4 & 49.3--63.3 & 31.2 & unresolved \\
+ & 16 & 32.6 & 20.1--28.1 & 15.9--19.8 & 32.0--50.8 & 15.6 & unresolved \\
+ & 32 & 40.1 & 28.1--39.1 & 12.7--20.3 & 16.4--39.3 & 2.1 & unresolved \\
+\addlinespace
+$\varepsilon=0.1$ & 8 & 6.7 & 1.2--1.8 & 7.0--7.1 & 91.8--94.3 & 79.8 & estimable \\
+ & 16 & 11.1 & 3.0--4.4 & 11.0--11.1 & 77.4--84.7 & 62.5 & unresolved \\
+ & 32 & 15.7 & 6.3--9.3 & 12.9--14.1 & 63.1--75.1 & 47.2 & unresolved \\
+\addlinespace
+$\varepsilon=0.3$ & 8 & 36.3 & 12.1--16.6 & 27.9--30.1 & 68.7--77.0 & 52.6 & estimable \\
+ & 16 & 45.0 & 21.3--29.4 & 28.2--33.0 & 48.4--62.7 & 28.3 & unresolved \\
+ & 32 & 51.6 & 31.3--43.6 & 22.6--31.3 & 28.4--48.7 & 6.3 & unresolved \\
+\addlinespace
+t-SNE perplexity 15 & 8 & 15.0 & 3.5--4.9 & 14.5--14.6 & 82.5--87.4 & 66.5 & estimable \\
+ & 16 & 21.9 & 8.5--12.2 & 17.3--18.7 & 65.8--76.1 & 47.3 & unresolved \\
+ & 32 & 29.3 & 14.4--20.6 & 18.8--21.4 & 48.8--64.2 & 24.9 & unresolved \\
+\addlinespace
+t-SNE perplexity 50 & 8 & 16.9 & 5.5--7.8 & 16.1--16.4 & 77.4--83.7 & 62.4 & estimable \\
+ & 16 & 24.1 & 9.9--14.0 & 19.1--20.3 & 62.4--73.6 & 44.0 & unresolved \\
+ & 32 & 31.8 & 15.5--22.1 & 19.7--22.7 & 46.2--62.4 & 24.9 & unresolved \\
+\addlinespace
+PCA-2 & 8 & 4.0 & 4.2--5.9 & 5.1--5.5 & 51.2--63.7 & 43.7 & unresolved \\
+ & 16 & 6.5 & 5.4--7.7 & 6.2--6.3 & 41.6--56.6 & 29.2 & unresolved \\
+ & 32 & 9.7 & 7.2--10.5 & 7.2--7.7 & 27.9--47.9 & 22.6 & unresolved \\
+\addlinespace
+MDS, Euclidean & 8 & 3.5 & 2.3--3.2 & 4.2--4.5 & 73.0--80.4 & 58.2 & estimable \\
+ & 16 & 6.8 & 4.1--5.9 & 6.8--6.9 & 59.2--70.3 & 50.6 & unresolved \\
+ & 32 & 9.9 & 5.9--8.4 & 7.6--8.1 & 46.8--61.9 & 43.0 & unresolved \\
+\addlinespace
+alternative window & 8 & 19.2 & 5.0--6.9 & 17.4--17.8 & 78.5--84.5 & 61.1 & estimable \\
+ & 16 & 25.5 & 11.0--15.4 & 18.4--19.7 & 59.1--71.0 & 37.8 & unresolved \\
+ & 32 & 29.9 & 16.0--22.7 & 18.0--21.0 & 41.7--59.1 & 20.3 & unresolved \\
+\addlinespace
+unwhitened & 8 & 16.0 & 0.0 & 16.0 & 100.0 & 99.6 & saturated \\
+ & 16 & 17.8 & 0.0--0.1 & 17.7 & 99.9 & 96.6 & saturated \\
+ & 32 & 19.1 & 0.2--0.3 & 19.0--19.1 & 99.1--99.4 & 90.9 & saturated \\
+\bottomrule
+\end{tabular}
+% END make_tables.py tab_supp_cells_eeg
+\tablenote{The pre-specified outputs, kept for the record: ranges span the two extrapolants' medians over 10 subjects, and $L$ is the pre-specified lower bound.
+They are estimates only where the status is estimable, and model-dependent even there except in the primary cell at 8 trials (Tables~S7 and~S8).}
+\end{table}
+
+\begin{table}[!htb]
+\centering\scriptsize
+\caption{Mouse V1: every pre-specified variation and budget, in percent.}
+% BEGIN make_tables.py tab_supp_cells_mouse
+\begin{tabular}{lrrrrrrl}
+\toprule
+ & & Called & Truly & Mislabel & False & Bound & \\
+Variation & Trials & faithful & faithful & rate & comfort & $L$ & Status \\
+\midrule
+primary (t-SNE, perplexity 30) & 8 & 16.1 & 0.0 & 16.1 & 100.0 & 99.7 & saturated \\
+ & 16 & 17.2 & 0.2 & 17.2 & 99.4--99.6 & 97.7 & saturated \\
+\addlinespace
+cv-MDS & 8 & 0.9 & 0.0 & 1.0 & 100.0 & 100.0 & saturated \\
+ & 16 & 2.2 & 0.1 & 2.3--2.4 & 100.0 & 98.8 & saturated \\
+\addlinespace
+$k=5$ & 8 & 19.9 & 0.2--0.3 & 19.6--19.8 & 99.0--99.4 & 96.9 & saturated \\
+ & 16 & 21.7 & 0.7--1.0 & 21.7 & 97.7--98.6 & 93.9 & saturated \\
+\addlinespace
+$k=20$ & 8 & 27.8 & 0.1 & 27.8 & 99.7--99.8 & 99.3 & saturated \\
+ & 16 & 28.3 & 0.2--0.3 & 27.8--28.0 & 99.3--99.6 & 96.9 & saturated \\
+\addlinespace
+$\varepsilon=0.1$ & 8 & 6.3 & 0.0 & 6.3 & 100.0 & 100.0 & saturated \\
+ & 16 & 6.5 & 0.0 & 6.5 & 100.0 & 99.7 & saturated \\
+\addlinespace
+$\varepsilon=0.3$ & 8 & 31.0 & 0.3--0.4 & 30.9 & 99.1--99.4 & 97.8 & saturated \\
+ & 16 & 31.8 & 0.9--1.4 & 31.6--31.7 & 98.2--98.8 & 93.0 & saturated \\
+\addlinespace
+t-SNE perplexity 15 & 8 & 11.7 & 0.0 & 11.6--11.7 & 100.0 & 98.8 & saturated \\
+ & 16 & 11.4 & 0.1 & 11.5--11.6 & 100.0 & 97.8 & saturated \\
+\addlinespace
+t-SNE perplexity 50 & 8 & 12.7 & 0.0 & 12.7 & 99.7--99.8 & 99.3 & saturated \\
+ & 16 & 12.6 & 0.1 & 12.5--12.6 & 99.7--99.8 & 98.5 & saturated \\
+\addlinespace
+PCA-2 & 8 & 1.7 & 0.0 & 1.7 & 100.0 & 100.0 & saturated \\
+ & 16 & 1.7 & 0.0 & 1.6 & 100.0 & 100.0 & saturated \\
+\addlinespace
+MDS, Euclidean & 8 & 8.9 & 0.0 & 8.9 & 100.0 & 100.0 & saturated \\
+ & 16 & 7.9 & 0.0--0.1 & 7.9 & 100.0 & 98.8 & saturated \\
+\addlinespace
+alternative window & 8 & 15.6 & 0.0 & 15.6 & 100.0 & 99.8 & saturated \\
+ & 16 & 15.8 & 0.0 & 15.8 & 100.0 & 99.8 & saturated \\
+\addlinespace
+unwhitened & 8 & 46.0 & 0.0 & 46.0 & 100.0 & 99.9 & saturated \\
+ & 16 & 45.2 & 0.0 & 45.2 & 100.0 & 99.8 & saturated \\
+\bottomrule
+\end{tabular}
+% END make_tables.py tab_supp_cells_mouse
+\tablenote{As in Table~S11.
+Every cell is saturated, so none of these values is an estimate of false comfort.}
+\end{table}
+
+\begin{table}[!htb]
 \centering\small
 \caption{Plasmode check of the estimator for the common checks at 8 trials.}
 % BEGIN make_tables.py tab_supp_checks_plasmode
@@ -195,114 +809,35 @@ The pre-specified guard would have applied if the smaller estimate's bias exceed
 
 \begin{table}[!htb]
 \centering\small
-\caption{Human EEG: every pre-specified variation and budget, in percent.}
-% BEGIN make_tables.py tab_supp_cells_eeg
-\begin{tabular}{lrrrrrr}
+\caption{Checks with a continuous score at matched acceptance, 8 trials, in percent.}
+% BEGIN make_tables.py tab_supp_matched
+\begin{tabular}{lrrrrr}
 \toprule
- & & Called & Truly & Mislabel & False & Bound \\
-Variation & Trials & faithful & faithful & rate & comfort & $L$ \\
+ & \multicolumn{5}{c}{Share of points accepted per map} \\
+\cmidrule(lr){2-6}
+Score & 5\% & 10\% & 20\% & 30\% & 50\% \\
 \midrule
-primary (t-SNE, perplexity 30) & 8 & 18.8 & 4.6--6.6 & 16.9--17.2 & 81.1--86.5 & 64.2 \\
- & 16 & 26.1 & 9.7--13.8 & 20.8--21.9 & 64.6--75.1 & 46.1 \\
- & 32 & 32.5 & 16.3--23.3 & 21.0--24.3 & 47.6--63.5 & 23.1 \\
+\multicolumn{6}{l}{\textit{Human EEG: estimated false comfort}} \\
+\quad Plug-in & 72 & 78 & 82 & 84 & 88 \\
+\quad Trustworthiness & 68 & 74 & 79 & 83 & 88 \\
+\quad scDEED & (76) & 70 & 79 & 84 & 89 \\
+\quad Cross-validated & 68 & 75 & 80 & 84 & 88 \\
+\quad Bootstrap recurrence & (71) & (78) & 77 & 83 & 90 \\
+\quad cv-MDS label & 73 & 81 & 87 & 90 & 93 \\
 \addlinespace
-cv-MDS & 8 & 2.0 & 2.5--3.5 & 3.3--3.9 & 62.3--72.0 & 55.0 \\
- & 16 & 5.8 & 4.8--6.6 & 6.4--6.7 & 60.0--70.6 & 45.2 \\
- & 32 & 9.5 & 6.3--8.7 & 7.6--8.1 & 44.5--59.8 & 37.8 \\
-\addlinespace
-$k=5$ & 8 & 31.3 & 4.4--6.2 & 29.7--30.1 & 88.4--91.7 & 75.3 \\
- & 16 & 35.8 & 10.4--14.9 & 30.2--32.0 & 72.7--81.0 & 55.9 \\
- & 32 & 41.3 & 16.5--23.8 & 29.7--33.2 & 57.0--70.3 & 33.2 \\
-\addlinespace
-$k=20$ & 8 & 21.0 & 11.7--16.1 & 15.4--16.4 & 49.3--63.3 & 31.2 \\
- & 16 & 32.6 & 20.1--28.1 & 15.9--19.8 & 32.0--50.8 & 15.6 \\
- & 32 & 40.1 & 28.1--39.1 & 12.7--20.3 & 16.4--39.3 & 2.1 \\
-\addlinespace
-$\varepsilon=0.1$ & 8 & 6.7 & 1.2--1.8 & 7.0--7.1 & 91.8--94.3 & 79.8 \\
- & 16 & 11.1 & 3.0--4.4 & 11.0--11.1 & 77.4--84.7 & 62.5 \\
- & 32 & 15.7 & 6.3--9.3 & 12.9--14.1 & 63.1--75.1 & 47.2 \\
-\addlinespace
-$\varepsilon=0.3$ & 8 & 36.3 & 12.1--16.6 & 27.9--30.1 & 68.7--77.0 & 52.6 \\
- & 16 & 45.0 & 21.3--29.4 & 28.2--33.0 & 48.4--62.7 & 28.3 \\
- & 32 & 51.6 & 31.3--43.6 & 22.6--31.3 & 28.4--48.7 & 6.3 \\
-\addlinespace
-t-SNE perplexity 15 & 8 & 15.0 & 3.5--4.9 & 14.5--14.6 & 82.5--87.4 & 66.5 \\
- & 16 & 21.9 & 8.5--12.2 & 17.3--18.7 & 65.8--76.1 & 47.3 \\
- & 32 & 29.3 & 14.4--20.6 & 18.8--21.4 & 48.8--64.2 & 24.9 \\
-\addlinespace
-t-SNE perplexity 50 & 8 & 16.9 & 5.5--7.8 & 16.1--16.4 & 77.4--83.7 & 62.4 \\
- & 16 & 24.1 & 9.9--14.0 & 19.1--20.3 & 62.4--73.6 & 44.0 \\
- & 32 & 31.8 & 15.5--22.1 & 19.7--22.7 & 46.2--62.4 & 24.9 \\
-\addlinespace
-PCA-2 & 8 & 4.0 & 4.2--5.9 & 5.1--5.5 & 51.2--63.7 & 43.7 \\
- & 16 & 6.5 & 5.4--7.7 & 6.2--6.3 & 41.6--56.6 & 29.2 \\
- & 32 & 9.7 & 7.2--10.5 & 7.2--7.7 & 27.9--47.9 & 22.6 \\
-\addlinespace
-MDS, Euclidean & 8 & 3.5 & 2.3--3.2 & 4.2--4.5 & 73.0--80.4 & 58.2 \\
- & 16 & 6.8 & 4.1--5.9 & 6.8--6.9 & 59.2--70.3 & 50.6 \\
- & 32 & 9.9 & 5.9--8.4 & 7.6--8.1 & 46.8--61.9 & 43.0 \\
-\addlinespace
-alternative window & 8 & 19.2 & 5.0--6.9 & 17.4--17.8 & 78.5--84.5 & 61.1 \\
- & 16 & 25.5 & 11.0--15.4 & 18.4--19.7 & 59.1--71.0 & 37.8 \\
- & 32 & 29.9 & 16.0--22.7 & 18.0--21.0 & 41.7--59.1 & 20.3 \\
-\addlinespace
-unwhitened & 8 & 16.0 & 0.0 & 16.0 & 100.0 & 99.6 \\
- & 16 & 17.8 & 0.0--0.1 & 17.7 & 99.9 & 96.6 \\
- & 32 & 19.1 & 0.2--0.3 & 19.0--19.1 & 99.1--99.4 & 90.9 \\
+\multicolumn{6}{l}{\textit{Mouse V1: disagreement with the 24-trial reference}} \\
+\quad Plug-in & 100.0 & 100.0 & 100.0 & 100.0 & 100.0 \\
+\quad Trustworthiness & 100.0 & 100.0 & 100.0 & 100.0 & 100.0 \\
+\quad scDEED & 100.0 & 100.0 & 100.0 & 100.0 & 99.9 \\
+\quad Cross-validated & 100.0 & 99.9 & 99.9 & 100.0 & 100.0 \\
+\quad Bootstrap recurrence & 100.0 & 99.9 & 100.0 & 100.0 & 100.0 \\
+\quad cv-MDS label & 100.0 & 100.0 & 100.0 & 100.0 & 100.0 \\
 \bottomrule
 \end{tabular}
-% END make_tables.py tab_supp_cells_eeg
-\tablenote{Ranges span the two extrapolants' medians over 10 subjects; $L$ is the conservative lower bound of false comfort.}
-\end{table}
-
-\begin{table}[!htb]
-\centering\small
-\caption{Mouse V1: every pre-specified variation and budget, in percent.}
-% BEGIN make_tables.py tab_supp_cells_mouse
-\begin{tabular}{lrrrrrr}
-\toprule
- & & Called & Truly & Mislabel & False & Bound \\
-Variation & Trials & faithful & faithful & rate & comfort & $L$ \\
-\midrule
-primary (t-SNE, perplexity 30) & 8 & 16.1 & 0.0 & 16.1 & 100.0 & 99.7 \\
- & 16 & 17.2 & 0.2 & 17.2 & 99.4--99.6 & 97.7 \\
-\addlinespace
-cv-MDS & 8 & 0.9 & 0.0 & 1.0 & 100.0 & 100.0 \\
- & 16 & 2.2 & 0.1 & 2.3--2.4 & 100.0 & 98.8 \\
-\addlinespace
-$k=5$ & 8 & 19.9 & 0.2--0.3 & 19.6--19.8 & 99.0--99.4 & 96.9 \\
- & 16 & 21.7 & 0.7--1.0 & 21.7 & 97.7--98.6 & 93.9 \\
-\addlinespace
-$k=20$ & 8 & 27.8 & 0.1 & 27.8 & 99.7--99.8 & 99.3 \\
- & 16 & 28.3 & 0.2--0.3 & 27.8--28.0 & 99.3--99.6 & 96.9 \\
-\addlinespace
-$\varepsilon=0.1$ & 8 & 6.3 & 0.0 & 6.3 & 100.0 & 100.0 \\
- & 16 & 6.5 & 0.0 & 6.5 & 100.0 & 99.7 \\
-\addlinespace
-$\varepsilon=0.3$ & 8 & 31.0 & 0.3--0.4 & 30.9 & 99.1--99.4 & 97.8 \\
- & 16 & 31.8 & 0.9--1.4 & 31.6--31.7 & 98.2--98.8 & 93.0 \\
-\addlinespace
-t-SNE perplexity 15 & 8 & 11.7 & 0.0 & 11.6--11.7 & 100.0 & 98.8 \\
- & 16 & 11.4 & 0.1 & 11.5--11.6 & 100.0 & 97.8 \\
-\addlinespace
-t-SNE perplexity 50 & 8 & 12.7 & 0.0 & 12.7 & 99.7--99.8 & 99.3 \\
- & 16 & 12.6 & 0.1 & 12.5--12.6 & 99.7--99.8 & 98.5 \\
-\addlinespace
-PCA-2 & 8 & 1.7 & 0.0 & 1.7 & 100.0 & 100.0 \\
- & 16 & 1.7 & 0.0 & 1.6 & 100.0 & 100.0 \\
-\addlinespace
-MDS, Euclidean & 8 & 8.9 & 0.0 & 8.9 & 100.0 & 100.0 \\
- & 16 & 7.9 & 0.0--0.1 & 7.9 & 100.0 & 98.8 \\
-\addlinespace
-alternative window & 8 & 15.6 & 0.0 & 15.6 & 100.0 & 99.8 \\
- & 16 & 15.8 & 0.0 & 15.8 & 100.0 & 99.8 \\
-\addlinespace
-unwhitened & 8 & 46.0 & 0.0 & 46.0 & 100.0 & 99.9 \\
- & 16 & 45.2 & 0.0 & 45.2 & 100.0 & 99.8 \\
-\bottomrule
-\end{tabular}
-% END make_tables.py tab_supp_cells_mouse
-\tablenote{As in Table~S5.}
+% END make_tables.py tab_supp_matched
+\tablenote{Each map accepts the given share of points with the best score, ties at the cut-off included.
+EEG: the estimated false comfort (smaller extrapolant) where the status is estimable; in brackets, the disagreement with the 40-trial reference where it is not.
+Mouse V1: the disagreement with the 24-trial reference, saturated throughout.}
 \end{table}
 
 \begin{table}[!htb]
@@ -345,15 +880,16 @@ SH & 8 & 1.2 & 46.7--62.1 & 38.3 & 72.2 & 97.4--98.4 & 0.4--0.6 & 0.8 & 35.7--56
 \bottomrule
 \end{tabular}
 % END make_tables.py tab_supp_checks_eeg
-\tablenote{N, plug-in; TW, trustworthiness; SCD, scDEED; CV, cross-validated distances; SEED, BOOT and SH, recurrence across seeds, bootstrap resamples and split halves.
+\tablenote{The comparison's pre-specified outputs, kept for the record.
+N, plug-in; TW, trustworthiness; SCD, scDEED; CV, cross-validated distances; SEED, BOOT and SH, recurrence across seeds, bootstrap resamples and split halves.
 \emph{Passes}: share of all points passed.
-\emph{False comfort}: range of the two extrapolants' medians; $L$ and $U$: conservative bounds.
+\emph{False comfort}: range of the two extrapolants' medians; $L$ and $U$: the pre-specified bounds.
 \emph{Plug-in false comfort flagged}: share of the plug-in check's false-comfort neighborhoods that the check fails.
 \emph{Yield}: share of all points passed and faithful.
 \emph{With plug-in}: the check applied on top of the plug-in check.
 n.e.: not evaluable (fewer than 5 subjects with a passing neighborhood).
-Extrapolated estimates are not clipped and can fall below 0 or above 100\% where few neighborhoods pass.
-Only the 8-trial classification was pre-specified.}
+Extrapolated values are not clipped and can fall below 0 or above 100\% where few neighborhoods pass.
+At 16 and 32 trials most statuses are unresolved (Table~S7), so these values are not estimates there.}
 \end{table}
 
 \begin{table}[!htb]
@@ -389,8 +925,19 @@ SH & 8 & 0.0 & n.e. & n.e. & n.e. & 100.0 & 0.0 & 0.0 & n.e. \\
 \bottomrule
 \end{tabular}
 % END make_tables.py tab_supp_checks_mouse
-\tablenote{As in Table~S7.}
+\tablenote{As in Table~S15.
+Every status is saturated or has too few passes (Table~S8).}
 \end{table}
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=0.85\linewidth]{figS1_variations.pdf}
+\caption{The 12 pre-specified variations at 8 trials.
+Filled markers are estimable results, at the smaller extrapolant's estimate, with a bar to the $1/R_h$ estimate; open markers are results that are not estimable, at their disagreement with the deepest reference, with its 95\% subject-bootstrap interval.
+Only the primary EEG result is calibrated; the other estimates are model-dependent (Tables~S7 and~S8).
+The figure was generated with Matplotlib, directly from the committed results, by code written with an AI tool (Claude, Anthropic).}
+\label{fig:s1}
+\end{figure}
 
 \clearpage
 \bibliographystyle{plainnat}

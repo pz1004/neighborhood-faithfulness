@@ -138,7 +138,7 @@ Each run has 1,000 virtual studies of 10 subjects, drawn from 30 virtual subject
 - **The bootstrap rule itself is slightly liberal.** Its nominal error rate is 2.5%.
   - On continuous populations of known median, it errs in 3.0–3.4% of studies (normal, uniform and exponential; 20,000 studies each).
   - On the exact values of the virtual populations, which are discrete, it errs in 2.1–4.3%.
-- **In EEG the estimator's slight downward bias compensates.** Its median within-study bias is −0.006 under T1 and −0.014 under T3, which brings the error rate to 2.0% and 1.6%.
+- **In EEG the estimator's slight downward bias compensates.** Its median within-study bias is −0.006 under T1 and −0.013 under T3, which brings the error rate to 2.0% and 1.6%.
 - **What this settles.**
   - Audit item N3 said "conservative" presumed a coverage never shown. For EEG C1 the coverage has now been shown.
   - The margin, however, rests on the estimator erring slightly low in this regime, as it does in the matching cells (Section 2).

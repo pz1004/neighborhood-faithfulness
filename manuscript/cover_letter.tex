@@ -7,11 +7,16 @@
 \usepackage{enumitem}
 \setlist{itemsep=2pt,topsep=4pt}
 \newcommand{\todo}[1]{\textcolor{red!70!black}{[TODO: #1]}}
-\newcommand{\MsTitle}{Most faithful-looking neighborhoods in two-dimensional maps of trial-averaged neural responses are spurious: estimates from held-out repetitions}
-% The number the letter quotes is written by make_tables.py from the committed results,
-% between its BEGIN and END lines; python3 make_tables.py --check verifies it.
+\newcommand{\MsTitle}{Neighborhood faithfulness in maps of trial-averaged neural responses, estimated from held-out repetitions}
+% The numbers the letter quotes are written by make_tables.py from the committed results,
+% between its BEGIN and END lines; python3 make_tables.py --check verifies them.
 % BEGIN make_tables.py numbers
-\newcommand{\EegFCeight}{81--86}
+\newcommand{\EegLeight}{64}
+\newcommand{\EegFCeightSmaller}{81}
+\newcommand{\BmEnrichLo}{2.0}
+\newcommand{\BmEnrichHi}{4.2}
+\newcommand{\BmFiveLo}{68}
+\newcommand{\BmFiveHi}{73}
 % END make_tables.py numbers
 \signature{Sooyoung Jang\\ Hanbat National University\\ \texttt{syjang@hanbat.ac.kr}}
 \address{Sooyoung Jang\\ \todo{department}\\ Hanbat National University\\ 125 Dongseo-daero, Yuseong-gu\\ Daejeon 34158, Republic of Korea}
@@ -27,31 +32,40 @@ Two-dimensional maps of trial-averaged responses, made with t-SNE or multidimens
 read neighbor by neighbor throughout systems neuroscience, and analysts check them against the
 averaged data or for stability across runs, resamples and halves of the trials. The manuscript
 asks how often a neighborhood that passes such a check is faithful to the noise-free responses,
-and answers with a method that estimates this from held-out repetitions.
+and answers with a method that estimates this from held-out repetitions and says when its estimate
+can be trusted.
 
 The study reanalyzes two public datasets, THINGS-EEG2 and the Allen Brain Observatory two-photon
 survey, and I am aware of the journal's policy for such work. I believe it meets that policy on
 all three of its grounds:
 \begin{itemize}[leftmargin=*]
   \item \textbf{Methodological innovation.} An estimator of the ``false comfort'' of any
-  neighborhood check: held-out reference blocks, a simulation--extrapolation correction for the
-  reference's own noise, subject-level bootstrap bounds, and validation in plasmode simulations.
-  \item \textbf{Rigorous benchmarking.} A pre-specified comparison of six existing checks against the
-  truth: per-point trustworthiness, scDEED, cross-validated distances, and recurrence across t-SNE
-  seeds, bootstrap resamples and split halves. Four of the six left most false comfort in both
-  datasets, the two strict resampling checks passed almost no neighborhoods, and none removed most
-  false comfort.
-  \item \textbf{Insight for experimental methodology.} At 8 trials, \EegFCeight\% of the
-  neighborhoods that pass the usual check are not faithful in human EEG, and essentially all in
-  mouse V1. An exploratory analysis relates the difference to the ratio of neighbor distance to
-  trial noise, which bears directly on how many trials a study needs before its maps can be read
-  locally.
+  neighborhood check, from held-out reference blocks, with an extrapolation for the reference's
+  own noise and subject-level bootstrap bounds; and a simulation study built on the real data that
+  defines observable statuses, saying when the estimate can be trusted, and tests whether its
+  bound is calibrated across simulated studies.
+  \item \textbf{Rigorous benchmarking.} A comparison of six existing checks against the truth and
+  against a random selection of as many neighborhoods: per-point trustworthiness, scDEED,
+  cross-validated distances, and recurrence across t-SNE seeds, bootstrap resamples and split
+  halves. In EEG the checks selected faithful neighborhoods \BmEnrichLo--\BmEnrichHi{} times more
+  often than chance, yet even their best-scoring 5\% had an estimated false comfort of
+  \BmFiveLo--\BmFiveHi\%.
+  \item \textbf{Insight for experimental methodology.} At 8 trials, an estimated
+  \EegFCeightSmaller\% of the neighborhoods that pass the usual check are not faithful in human
+  EEG, with a lower bound of \EegLeight\% that is calibrated in simulated studies. In mouse V1, a
+  held-out reference of 24 trials confirmed fewer than 0.1\% of them. The statuses also show that
+  at 16 or 32 trials in EEG, and in mouse V1, held-out references of the depth these designs allow
+  cannot resolve false comfort, which bears directly on how many repetitions a study needs before
+  its maps can be read locally.
 \end{itemize}
 Every claim, threshold and robustness variation was fixed in a protocol committed before the
 analysis it governs was run, and the mouse data were selected by rule and analyzed only after
-their protocol was fixed. In line with the journal's research data policy, the code, protocols and
-derived results are deposited at \todo{repository and DOI} and cited in the article; the raw data
-remain openly available from their providers.
+their protocol was fixed. The simulation study and the rules for reporting each result were
+specified after the first results, in a further protocol committed before they were run; the
+manuscript reports each result according to the status those rules give it. In line with the
+journal's research data policy, the code, protocols and derived results are deposited at
+\todo{repository and DOI} and cited in the article; the raw data remain openly available from
+their providers.
 
 The manuscript has not been published and is not under consideration elsewhere. The author
 declares no competing interests. \todo{confirm} As described in the manuscript's Methods and its
