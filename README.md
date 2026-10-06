@@ -57,8 +57,8 @@ Journal of Neuroscience Methods manuscript is in [manuscript/](manuscript/).**
 
   At Gate A the author chose the local reading: EEG as a scoped latent claim, mouse V1 as a
   finite-reference result in the main text, and the checks as a descriptive benchmark
-  ([docs/revision_results.md](docs/revision_results.md), Section 7.3). The manuscript is
-  rewritten to those choices and awaits review at Gate B
+  ([docs/revision_results.md](docs/revision_results.md), Section 7.3). The manuscript was
+  rewritten to those choices and approved at Gate B on 2026-10-06, with the working title
   ([docs/claims_audit.md](docs/claims_audit.md)).
 
 Details: [docs/gate3_pilot_things.md](docs/gate3_pilot_things.md) and
