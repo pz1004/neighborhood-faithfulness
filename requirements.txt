@@ -1,0 +1,8 @@
+# The versions behind every committed result; each run's manifest.json records
+# python (3.13.5), numpy, scipy and sklearn. The t-SNE maps depend on the
+# scikit-learn version.
+numpy==2.1.3
+scipy==1.15.3
+scikit-learn==1.6.1
+h5py==3.12.1
+mpmath==1.3.0

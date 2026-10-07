@@ -1,7 +1,0 @@
-Highlights
-
-- Checks of 2-D maps share the averages' noise; held-out repetitions do not
-- A simulation study flags where false comfort can be estimated, and where not
-- EEG, 8 trials: an estimated 81% of passing neighborhoods were not faithful
-- Mouse V1: a 24-trial reference confirmed under 0.1% of passing neighborhoods
-- Common checks beat chance 2-4 fold, yet their best 5% had 68-73% false comfort

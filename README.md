@@ -1,259 +1,278 @@
-# Certified neighborhood reach
+# Neighborhood Faithfulness in Maps of Trial-Averaged Neural Responses
 
-Simultaneous, finite-sample confidence intervals on how far each displayed neighborhood of a
-2-D display (t-SNE, UMAP, PCA) reaches into the true neighbor ranking, for data measured
-with replicates. From the intervals comes a faithful / distorted / unresolved map that is
-valid at every tolerance.
+### Estimated from Held-Out Repetitions
 
-**Status (2026-10-01): Gates 1 and 2 passed. The Gate 3 need pilot on THINGS-EEG2 ended
-in the protocol's "reframe" branch, and the reframe's prior-art check ended in its
-"short empirical note" branch. The note's pre-registered headline held on THINGS-EEG2
-and on an independent second dataset, and a pre-registered comparison found that none of
-six common checks removed the false comfort. The note is in [note/](note/), and the
-Journal of Neuroscience Methods manuscript is in [manuscript/](manuscript/).**
-- Real EEG replicates showed strong need. Naive neighborhood maps mislabel about 20% of
-  points, and most of their "faithful" calls are wrong.
-- They also showed no use. The certificate resolves no point even at 72 repetitions,
-  because of signal-to-noise rather than the error control.
-- The reframed "neighborhood noise ceiling" is routine as a method. Only the empirical
-  finding is new, and [docs/note_protocol.md](docs/note_protocol.md) tests it with fixed
-  claims and thresholds.
-- The finding held ([docs/note_confirmatory_results.md](docs/note_confirmatory_results.md)).
-  At 8 trials, 81–86% of the faithful calls of t-SNE maps are wrong (conservative bound
-  64%). For MDS maps of cross-validated distances it is 62–72% (bound 55%). The headline
-  holds in 10 of 12 pre-specified variations. The claim at 32 trials fell just short.
-- It was then confirmed independently on a second species and modality
-  ([docs/note_allen_results.md](docs/note_allen_results.md)): Allen two-photon, mouse V1,
-  10 mice. Essentially every faithful call is wrong at 8 and 16 trials (bound 0.997), in all
-  12 variations, and for RSA-style maps too.
-- Common checks against the truth ([docs/checks_results.md](docs/checks_results.md)):
-  - Four of six checks left most false comfort in both datasets: per-point
-    trustworthiness, scDEED, cross-validated distances and seed recurrence.
-  - The two strict ones, bootstrap and split-half recurrence, passed almost nothing at
-    8 trials.
-  - None removed most false comfort.
-- **Under revision (2026-10-04).** A colleague's review
-  ([docs/review_comments.md](docs/review_comments.md)) asked that the estimator be validated
-  end to end before the paper decides what to claim. The audit
-  ([docs/review_audit.md](docs/review_audit.md)) confirmed the concern from the committed
-  rows:
-  - the estimator had been checked only at 8 trials and for the t-SNE map;
-  - its larger extrapolant overstates at 16 and 32 trials;
-  - the mouse references are saturated, so the mouse estimate is not resolved.
+**Sooyoung Jang**\
+Department of Computer Engineering, Hanbat National University, Daejeon 34158, Republic of Korea\
+Correspondence: `syjang@hanbat.ac.kr`
 
-  The claims above stand as recorded. How they may be reported is decided by the validation
-  in [docs/revision_protocol.md](docs/revision_protocol.md) (plan Amendment 6). The
-  manuscript before the revision is tagged `jnm-baseline`.
-- **Gate A (2026-10-05).** The validation, the study-level calibration and the descriptive
-  analyses are complete ([docs/revision_results.md](docs/revision_results.md)).
-  - EEG false comfort at 8 trials is the one result whose bound is calibrated. It is
-    therefore the only one that can carry a threshold claim, and only under the local reading.
-  - The other latent estimates are model-dependent.
-  - Mouse V1 false comfort is reported as disagreement with a finite reference, since its
-    references are saturated.
-  - In EEG, the four checks whose false comfort is estimable select faithful neighborhoods
-    2.0–4.2 times more often than a random selection. Even the best-scoring 5% has an
-    estimated false comfort of 0.68–0.73.
+> **Status:** manuscript submitted for publication, not yet peer reviewed. This work was
+> supported by the National Research Foundation of Korea (NRF) grant funded by the Korea
+> government (MSIT) (RS-2026-25602117); the author declares no competing interests.
 
-  At Gate A the author chose the local reading: EEG as a scoped latent claim, mouse V1 as a
-  finite-reference result in the main text, and the checks as a descriptive benchmark
-  ([docs/revision_results.md](docs/revision_results.md), Section 7.3). The manuscript was
-  rewritten to those choices and approved at Gate B on 2026-10-06, with the working title
-  ([docs/claims_audit.md](docs/claims_audit.md)).
+## Abstract
 
-Details: [docs/gate3_pilot_things.md](docs/gate3_pilot_things.md) and
-[docs/reframe_prior_art.md](docs/reframe_prior_art.md). The protocol is
-[docs/research_plan.md](docs/research_plan.md), with Amendments 1 to 6 at its end. The
-earlier reports are [docs/gate1_prior_art.md](docs/gate1_prior_art.md) and
-[docs/gate2_report.md](docs/gate2_report.md).
+Two-dimensional maps of trial-averaged responses, made with t-SNE or multidimensional
+scaling, are read neighbor by neighbor and checked against the averaged data (the plug-in
+check). Because the map is fitted to the same noisy averages, such checks share its errors.
+We define the *false comfort* of a check as the share of the neighborhoods it passes that are
+not faithful to the noise-free responses, and estimate it from held-out repetitions,
+extrapolating away the reference's own noise. A simulation study defines observable statuses
+that say when the estimate can be trusted, and tests whether its lower bound is calibrated.
+In human EEG (THINGS-EEG2; 10 participants, 200 images) with 8 trials per image, an
+estimated 81% of the t-SNE neighborhoods that passed the plug-in check were not faithful
+(calibrated lower bound 64%), against 93% for a random selection. At 16 and 32 trials the
+estimate was unresolved; disagreement with a 40-trial held-out reference fell from 88% to
+67%. In mouse primary visual cortex (Allen Brain Observatory; 10 mice, 118 images), a
+24-trial held-out reference confirmed under 0.1% of the passing neighborhoods. Of six common
+checks computed from the same trials, four selected faithful neighborhoods 2.0–4.2 times more
+often than a random selection in EEG, and two passed almost nothing. Even the best-scoring 5%
+of neighborhoods had an estimated false comfort of 68–73%. Neighborhoods in maps of few-trial
+averages should be read against held-out repetitions deep enough for false comfort to be
+estimable.
 
-## Provenance
+## Repository layout
 
-This project succeeds `setwise-certificates-neighborhood-fidelity` (dropped on 2026-09-23;
-evidence base frozen at commit `9bc9f03`). Section 2 of the plan reviews the proposal that
-started it. `pilot/2026-09-28/` archives the scratch pilot the proposal rested on, unchanged.
-The pilot imports the predecessor repository by absolute path and is not part of the
-reproduction. `reach/predecessor/` is the predecessor's code, copied verbatim; see its
-`PROVENANCE.md`.
+```
+reach/          the library: both datasets' loaders, the maps, the six checks, the
+                simulation study, and the per-point certificates of the pilot
+tests/          synthetic known-truth tests; none opens a recording
+docs/           the research plan and each analysis protocol, with its results report
+results/        every derived result: rows, logs, run manifests and printouts
+data/           SHA-256 manifests and fetch logs of the recordings
+fetch_*.py      data acquisition
+run_*.py        one driver per analysis; each writes its rows and log to results/
+analyze_*.py    the pre-specified estimators and decision rules, applied to those rows
+explore_*.py    exploratory, post hoc analyses
+pilot/          the archived scratch pilot the research plan started from
+```
 
-## Layout
+`reach/predecessor/` is copied verbatim from the author's earlier project (see its
+`PROVENANCE.md`). The archived pilot imports that project by absolute path and is not part
+of the reproduction; `tests/test_reach.py` checks the copied code against the pilot's saved
+output.
 
-| path | contents |
-|---|---|
-| `docs/research_plan.md` | the protocol: claim, review of the proposal, engines, gate criteria, seeds, amendments |
-| `docs/gate1_prior_art.md` | Gate 1: prior-art audit of the combination (four literatures) |
-| `docs/gate2_report.md` | Gate 2: validity under seven noise models, robustness, power, need, planning rule |
-| `docs/gate3_pilot_things.md` | Gate 3 need pilot on THINGS-EEG2: need, use, validity under real noise, diagnostics |
-| `docs/reframe_prior_art.md` | prior-art check of the reframed neighborhood noise ceiling: protocol, verdicts, decision |
-| `docs/note_protocol.md` | pre-registered confirmatory analysis for the empirical note (plan Amendment 3) |
-| `docs/note_confirmatory_results.md` | its results: verdict, primary cell, RSA pipeline, robustness |
-| `docs/note_protocol_allen.md` | pre-registered second-dataset protocol: Allen two-photon, mouse V1 (plan Amendment 4) |
-| `docs/note_allen_results.md` | its results and the joint conclusion with THINGS-EEG2 |
-| `note/` | the empirical note, draft: `note.tex`, with `make_figures.py` and `make_tables.py` drawing every figure, table and quoted number from the committed results; the PDF is built, not tracked |
-| `docs/checks_protocol.md` | pre-registered comparison of six common checks against the truth, both datasets (plan Amendment 5) |
-| `docs/checks_results.md` | its results |
-| `reach/checks.py` | the six checks: trustworthiness, scDEED, cross-validated distances, seed, bootstrap and split-half recurrence |
-| `run_checks.py` | the comparison's driver: the confirmatory maps re-created, every check counted against the references |
-| `analyze_checks.py` | its joint-label estimators, subject bootstrap and pre-registered classification |
-| `tests/test_checks.py` | synthetic known-truth checks of that code; touches no data |
-| `docs/review_comments.md` | a colleague's revision plan for the manuscript (2026-10-04), as received |
-| `docs/review_audit.md` | its audit: evidence recomputed from the committed rows, a verdict on each comment, comments added |
-| `analyze_review_audit.py` | recomputes the audit's evidence from the committed rows; opens no data file |
-| `results/review_audit/` | the audit's printout and summary |
-| `docs/revision_protocol.md` | the revision: the estimator validated in three layers, observable statuses, reporting rules, descriptive revision analyses (plan Amendment 6) |
-| `tests/test_estimand.py` | the estimator's limiting cases and count identities, checked also on every committed row; touches no data |
-| `reach/sim.py` | the simulation study's mechanisms (truth families, resampled noise, shared offsets, the stress test) and the published procedure re-run on each simulated dataset |
-| `run_validation.py` | its driver: development pilot and validation, Layers A and B, with disjoint seed ranges; a validation run needs the addendum committed |
-| `analyze_validation.py` | its estimators, observable statuses, the development pilot's decisions, and the validation summary |
-| `tests/test_validation.py` | synthetic known-truth checks of the simulation code; touches no data |
-| `docs/revision_addendum.md` | what the development pilot decided (the noise grid, the estimator, the thresholds, how Gate A is applied), committed before any validation seed |
-| `make_trial_manifest.py` | every trial's session, chronological rank within its session (EEG) or onset and epoch (mouse), and block per split; the mouse overlap accounting |
-| `run_session_disjoint.py`, `analyze_session_disjoint.py` | EEG blocks drawn from separate sessions against a balanced control: a sensitivity analysis |
-| `run_points.py` | per-point rerun of the primary and cv-MDS maps and every check, reproducing every committed count, with the scores and references the benchmark needs |
-| `analyze_benchmark.py` | the checks against a matched random selection, at native and matched acceptance, with yield, overlap and the cv-MDS diagnostics |
-| `tests/test_stage2.py` | synthetic checks of that code; touches no data |
-| `analyze_gate_a.py` | Gate A: every real result's observable status, its matching validation cells and its reporting class under the strict and local readings, with the disagreement at the deepest reference |
-| `run_study_calibration.py`, `analyze_study_calibration.py` | Layer C: virtual studies of 10 subjects drawn from 30 virtual subjects, the published procedure re-run on each, and the bound's calibration against the oracle truth |
-| `run_layer_c.sh` | the chain of Layer C runs that produced `results/revision/layer_c/` |
-| `analyze_layer_c_rule.py` | why the published bound met or missed its level: the bootstrap rule on the exact truths against the estimates (descriptive, added after Layer C) |
-| `tests/test_layer_c.py` | synthetic checks of the Layer C code; touches no data |
-| `docs/revision_results.md` | the revision's results: the validation, Layer C, the analyses on the real data, every claim's class, and the decisions for the author at Gate A |
-| `docs/claims_audit.md` | Gate B: every sentence of the abstract, highlights and conclusions mapped to its result, status and class, and the audit's required fixes |
-| `results/revision/` | the revision's test logs, the development and validation runs, and Layer C (`layer_c/`) |
-| `results/gate_a/` | Gate A's classification of every real result |
-| `describe_allen_subjects.py` | donor, sex, genotype, age at recording, depth and cell count of the included mice, for the manuscript |
-| `results/checks/` | the comparison's test log, rows, semi-synthetic check and printout |
-| `manuscript/` | the Journal of Neuroscience Methods manuscript: `manuscript.tex`, `supplementary.tex` and `cover_letter.tex`, each one self-contained file, with `refs.bib`, `highlights.txt` and `figures/`; `make_figures.py` draws the figures, and `make_tables.py` writes the tables and every quoted number into the `.tex` files from the committed results (`--check` only verifies them); PDFs are built, not tracked |
-| `reach/engines.py` | E-ball, E-pair-t, E-pair-pool and the reference E-cmp (plan Section 4) |
-| `reach/target.py` | reach, its closed-form box bounds, displays, naive maps (plan Section 3) |
-| `reach/noise.py` | the seven noise models (plan Section 5.2) |
-| `reach/quantiles.py` | Student and chi-square quantiles verified in arbitrary precision |
-| `reach/data.py` | the development geometries: the predecessor's digits panel and synthetic families |
-| `reach/predecessor/` | the predecessor's `setwise/` package, verbatim |
-| `tests/test_reach.py` | structural tests and the pilot reproduction (plan Section 5.7) |
-| `run_gate2_validity.py` | family-wise failure of every engine, 24 configurations, 7900 draws |
-| `run_gate2_power.py` | power, need and planning-rule measurements, 20 configurations |
-| `analyze_gate2.py` | applies the pre-registered Gate 2 criteria to the saved runs |
-| `run_gate2_synthetic_ceiling.py` | same-panel comparison with the predecessor's ball ceiling (Gate 2 report, Section 5) |
-| `run_gate2_need_crosstab.py` | naive-map errors against the certificate, point by point (Gate 2 report, Section 6) |
-| `fetch_things_eeg2_test.py` | fetches only the preprocessed test file of each THINGS-EEG2 subject (range requests, CRC-32 checked) |
-| `reach/things.py` | THINGS-EEG2 loading (restricted unpickler), session reconstruction, blocks, representation |
-| `tests/test_things.py` | loader, session and block checks that touch no data value |
-| `run_things_need_pilot.py` | the pilot of plan Amendment 2 |
-| `analyze_things_need_pilot.py` | applies Amendment 2's decision rule |
-| `explore_things_snr.py` | exploratory, post hoc: why nothing resolves, and false comfort |
-| `run_things_confirmatory.py` | the confirmatory analysis of `docs/note_protocol.md`: 12 cells, both pipelines, estimator check |
-| `analyze_things_confirmatory.py` | its estimators, subject bootstrap and pre-registered decision rules |
-| `tests/test_things_confirmatory.py` | synthetic known-truth checks of that code; touches no data |
-| `fetch_allen_2p.py` | applies the Allen selection rule and fetches recordings, SHA-256 recorded |
-| `reach/allen.py` | Allen recordings: per-presentation responses, time strata, blocks, halves |
-| `run_allen_confirmatory.py` | the second-dataset analysis of `docs/note_protocol_allen.md` |
-| `analyze_allen_confirmatory.py` | its estimators, decision rules and joint conclusion with THINGS-EEG2 |
-| `tests/test_allen_confirmatory.py` | synthetic checks with the recordings' file layout; opens no recording |
-| `explore_allen_snr.py` | exploratory, post hoc: image structure and neighbor distance against noise, both datasets |
-| `data/things_eeg2/` | the downloaded test files (not tracked) and their SHA-256 manifest (tracked) |
-| `results/gate2/` | raw results (JSONL), logs, manifests and the analysis printout |
-| `results/things_pilot/` | the pilot's records, semi-synthetic runs, diagnostics and printouts |
-| `results/things_confirmatory/` | the confirmatory analysis's test log, rows, semi-synthetic check and printout |
-| `data/allen_2p/` | Allen metadata and recordings (not tracked) and their SHA-256 manifest (tracked) |
-| `results/allen_confirmatory/` | the second-dataset test log, rows, semi-synthetic check and printouts |
-| `pilot/2026-09-28/` | the scratch pilot and the tail check behind review finding 1 |
+Not in the repository: the THINGS-EEG2 and Allen Brain Observatory recordings, which their
+providers distribute and stage 2 below fetches, and the manuscript. Every number the
+manuscript reports is computed from `results/`; see [Results](#results).
 
-## Reproducing
+## Installation
 
-Run from the repository root:
+```bash
+python3 -m venv .venv && . .venv/bin/activate
+pip install -r requirements.txt
+```
+
+Results were produced with Python 3.13.5, NumPy 2.1.3, SciPy 1.15.3 and scikit-learn 1.6.1,
+as each run's `manifest.json` records, with h5py 3.12.1 and mpmath 1.3.0, on a 36-thread
+Intel Core i9-10980XE. The t-SNE maps depend on the scikit-learn version. The run times
+below are for that machine.
+
+## Data
+
+Two public datasets. Each fetcher records the SHA-256 digest of every file it writes in
+`data/*/manifest.json`, and the confirmatory runs refuse a file whose digest differs.
+
+| Dataset | Used here | Download | Fetched by |
+|---|---|---:|---|
+| THINGS-EEG2, preprocessed ([OSF 3JK45](https://osf.io/3jk45/), component [anp5v](https://osf.io/anp5v/)) | the test set of 10 participants: 200 images × 80 repetitions over 4 sessions | 2.1 GB | `fetch_things_eeg2_test.py`, which reads only the test file of each participant's archive |
+| Allen Brain Observatory, Visual Coding two-photon, natural scenes | 10 experiments in mouse V1, one per mouse, selected by the rule in `docs/note_protocol_allen.md`: 118 images × 50 repetitions | 4.4 GB | `fetch_allen_2p.py` |
+
+## Reproducing the results
+
+Run the stages in order from the repository root; each depends on the ones before it. They
+follow the research plan and its amendments, and every command writes to the path of the
+committed output it reproduces. Seeds are fixed per configuration and draw
+(`docs/research_plan.md`, Section 7).
+
+**1. Per-point certificates on synthetic data** (research plan, Gates 1 and 2; scikit-learn's
+bundled digits; about 15 minutes)
 
 ```bash
 python3 tests/test_reach.py > results/gate2/test_reach.log
-```
-
-```bash
 python3 run_gate2_validity.py --workers 30 > results/gate2/validity.log
+python3 run_gate2_power.py --workers 32 > results/gate2/power.log
+python3 analyze_gate2.py
+python3 run_gate2_synthetic_ceiling.py > results/gate2/synthetic_ceiling.txt
+python3 run_gate2_need_crosstab.py > results/gate2/need_crosstab.txt
 ```
+
+**2. Data** (6.5 GB)
 
 ```bash
-python3 run_gate2_power.py --workers 32 > results/gate2/power.log && python3 analyze_gate2.py
+python3 fetch_things_eeg2_test.py > data/fetch.log
+curl -o data/allen_2p/ophys_experiments.json https://allen-brain-observatory.s3.us-west-2.amazonaws.com/visual-coding-2p/ophys_experiments.json
+python3 fetch_allen_2p.py > data/allen_2p/fetch.log
 ```
+
+**3. The exploratory EEG pilot** (Amendment 2; about 3 minutes)
 
 ```bash
-python3 run_gate2_synthetic_ceiling.py > results/gate2/synthetic_ceiling.txt && python3 run_gate2_need_crosstab.py > results/gate2/need_crosstab.txt
+python3 tests/test_things.py > results/things_pilot/test_things.log
+python3 run_things_need_pilot.py > results/things_pilot/run.log
+python3 analyze_things_need_pilot.py
+python3 explore_things_snr.py > results/things_pilot/explore_snr.txt
 ```
 
-The THINGS-EEG2 pilot downloads 2.1 GB (the ten subjects' test files only):
+**4. The confirmatory EEG analysis** (Amendment 3, `docs/note_protocol.md`; about 8 minutes)
 
 ```bash
-python3 fetch_things_eeg2_test.py > data/fetch.log && python3 tests/test_things.py > results/things_pilot/test_things.log
+python3 tests/test_things_confirmatory.py > results/things_confirmatory/test_things_confirmatory.log
+python3 run_things_confirmatory.py > results/things_confirmatory/run.log
+python3 analyze_things_confirmatory.py
 ```
+
+**5. Mouse V1** (Amendment 4, `docs/note_protocol_allen.md`; about 3 minutes)
 
 ```bash
-python3 run_things_need_pilot.py > results/things_pilot/run.log && python3 analyze_things_need_pilot.py && python3 explore_things_snr.py > results/things_pilot/explore_snr.txt
+python3 tests/test_allen_confirmatory.py > results/allen_confirmatory/test_allen_confirmatory.log
+python3 run_allen_confirmatory.py > results/allen_confirmatory/run.log
+python3 analyze_allen_confirmatory.py
+python3 explore_allen_snr.py > results/allen_confirmatory/explore_snr.txt
+python3 describe_allen_subjects.py
 ```
 
-The confirmatory analysis:
+**6. Common checks against the truth** (Amendment 5, `docs/checks_protocol.md`; about 75
+minutes)
 
 ```bash
-python3 tests/test_things_confirmatory.py > results/things_confirmatory/test_things_confirmatory.log && python3 run_things_confirmatory.py > results/things_confirmatory/run.log && python3 analyze_things_confirmatory.py
+python3 tests/test_checks.py > results/checks/test_checks.log
+python3 run_checks.py --dataset things > results/checks/things/run.log
+python3 run_checks.py --dataset allen > results/checks/allen/run.log
+python3 analyze_checks.py
 ```
 
-The second dataset downloads 4.4 GB (10 Allen recordings, selected by the protocol's rule):
+**7. Validating the estimator** (Amendment 6, `docs/revision_protocol.md`; about 2.5 hours).
+The development runs fixed the noise grid, the estimator and the thresholds in
+`docs/revision_addendum.md` before any validation seed was used.
 
 ```bash
-curl -o data/allen_2p/ophys_experiments.json https://allen-brain-observatory.s3.us-west-2.amazonaws.com/visual-coding-2p/ophys_experiments.json && python3 fetch_allen_2p.py > data/allen_2p/fetch.log
+python3 analyze_review_audit.py
+python3 tests/test_estimand.py > results/revision/test_estimand.log
+python3 tests/test_validation.py > results/revision/test_validation.log
+python3 run_validation.py --phase dev --alpha
+python3 run_validation.py --phase dev > results/revision/dev/run.log
+python3 run_validation.py --phase dev --lams 0.25,0.35 --append --cells T1_l0.25,T2_l0.25,T3_l0.25,T1_l0.35,T2_l0.35,T3_l0.35 > results/revision/dev/run_extension.log
+python3 analyze_validation.py --phase dev --lams 0.1,0.25,0.35,0.5,1,2 > results/revision/dev/analysis.txt
+python3 run_validation.py --phase validation > results/revision/validation/run.log
+python3 analyze_validation.py --phase validation > results/revision/validation/analysis.txt
 ```
+
+**8. Sensitivity analyses and the benchmark** (Amendment 6; about 1 hour). `run_points.py`
+re-creates the primary and cv-MDS maps and every check, and compares each count with the
+committed rows; its committed logs report 0 counts not reproduced.
 
 ```bash
-python3 tests/test_allen_confirmatory.py > results/allen_confirmatory/test_allen_confirmatory.log && python3 run_allen_confirmatory.py > results/allen_confirmatory/run.log && python3 analyze_allen_confirmatory.py && python3 explore_allen_snr.py > results/allen_confirmatory/explore_snr.txt
+python3 tests/test_stage2.py > results/revision/test_stage2.log
+python3 make_trial_manifest.py
+python3 run_session_disjoint.py > results/session_disjoint/run.log
+python3 analyze_session_disjoint.py
+python3 run_points.py --dataset things > results/points/things.log
+python3 run_points.py --dataset allen > results/points/allen.log
+python3 analyze_benchmark.py
 ```
 
-The comparison of common checks (about 65 minutes on 18 cores, both datasets):
+**9. Statuses, reporting classes and the study-level calibration** (Amendment 6; about 19
+hours, nearly all of it the 1,000 simulated studies of `run_layer_c.sh`)
 
 ```bash
-python3 tests/test_checks.py > results/checks/test_checks.log && python3 run_checks.py --dataset things > results/checks/things/run.log && python3 run_checks.py --dataset allen > results/checks/allen/run.log && python3 analyze_checks.py
+python3 analyze_gate_a.py
+python3 tests/test_layer_c.py > results/revision/test_layer_c.log
+bash run_layer_c.sh
+python3 analyze_layer_c_rule.py
 ```
 
-The review audit and the estimator's correctness tests (seconds; no data file is opened):
+## Results
 
-```bash
-python3 analyze_review_audit.py && python3 tests/test_estimand.py > results/revision/test_estimand.log
+| | |
+|---|---|
+| EEG, 8 trials per image — *calibrated* | An estimated 81% of the t-SNE neighborhoods that pass the plug-in check are not faithful (lower bound 64%), against 93% for a random selection of as many neighborhoods. In 1,000 simulated studies the bound exceeded the true value in 2.0% and 1.6% of them (± 0.4%) under two truths, against a nominal 2.5% |
+| EEG, 16 and 32 trials — *finite-reference* | Unresolved; disagreement with a 40-trial held-out reference falls from 88% to 67% |
+| Mouse V1, 8 trials — *finite-reference* | A 24-trial held-out reference confirmed 5 of 5,919 passing neighborhoods (under 0.1%) |
+| Six common checks, EEG — *model-dependent* | Four select faithful neighborhoods 2.0–4.2 times more often than a random selection, and bootstrap and split-half recurrence pass almost nothing; even the best-scoring 5% have an estimated false comfort of 68–73% |
+| MDS of cross-validated distances, EEG, 8 trials — *model-dependent* | An estimated 62–72% of the passing neighborhoods are not faithful |
+
+Each result is reported in the class its observable status allows (`docs/revision_protocol.md`,
+Section 5, as applied in `results/gate_a/classification.json`). Only a *calibrated* result
+carries a threshold claim; a *model-dependent* one is an estimate without one; a
+*finite-reference* one is only the disagreement with the deepest held-out reference. The
+numbers are in `results/things_confirmatory/confirmatory_summary.json`,
+`results/benchmark/summary.json`, `results/gate_a/classification.json` and
+`results/revision/layer_c/`.
+
+## Protocols and the commit trail
+
+Each protocol and the code implementing it were committed before the analysis it governs was
+run. The EEG recordings had first been analyzed in the exploratory pilot (Amendment 2); the
+confirmatory analysis used new splits and seeds, but not new data. Amendment 6 was written
+after the first results and an internal review; its simulation study, statuses and reporting
+rules were committed before they were run. `git show <commit>` shows each step:
+
+| Commit | Date | What it fixed or recorded |
+|---|---|---|
+| `ce69f4e` | 2026-09-28 | Research plan, before any analysis |
+| `5024fe6` | 2026-09-29 | Amendment 2: the exploratory THINGS-EEG2 pilot, before its data were loaded |
+| `c7e5a93` | 2026-09-29 | Pilot results |
+| `598562e` | 2026-09-29 | Amendment 3: the confirmatory EEG protocol, its code and synthetic tests |
+| `5c2bd7f` | 2026-09-29 | Confirmatory EEG results |
+| `985098d` | 2026-09-29 | Amendment 4: the mouse V1 protocol, before any recording was downloaded |
+| `ea36f1d` | 2026-09-29 | Mouse V1 code and synthetic tests, before any response value was read |
+| `0782aa2` | 2026-09-29 | Mouse V1 recordings downloaded, with SHA-256 digests |
+| `a2f39ca` | 2026-09-29 | Mouse V1 results |
+| `766e4b7` | 2026-10-01 | Amendment 5: the comparison of common checks, its code and synthetic tests |
+| `3e3204e` | 2026-10-01 | Results of the comparison |
+| `c5df05b` | 2026-10-04 | Amendment 6, written after the first results and an internal review: the simulation study, statuses, reporting classes and sensitivity analyses |
+| `817f138` | 2026-10-04 | Simulation code and synthetic tests, before the development pilot |
+| `cfa8ba2` | 2026-10-04 | The development pilot's decisions, before any validation seed |
+| `200cf63` | 2026-10-04 | Code for the classes and the study-level calibration, and the trial manifest, before they were used |
+| `5e16193` | 2026-10-04 | The mislabel rate's status from its own curve, before the validation was analyzed |
+| `a3c282d` | 2026-10-04 | Validation results and the class of every real result |
+| `a1047b0` | 2026-10-04 | Results of the sensitivity analyses and the benchmark |
+| `1587f15` | 2026-10-04 | How the study-level calibration is judged, before its output was read |
+| `62df069` | 2026-10-05 | Study-level calibration results |
+| `262d8c3` | 2026-10-05 | The author's choice of how the results are reported |
+
+The research plan and its six amendments are in `docs/research_plan.md`; the protocols, the
+addendum and the results reports are beside it in `docs/`. Internal working documents that
+some of them mention (prior-art audits, a gate report, the internal review and its audit) are
+not part of this release; the evidence the audit computed is reproduced by
+`analyze_review_audit.py` into `results/review_audit/`.
+
+## Citation
+
+```bibtex
+@unpublished{jang2026neighborhood,
+  title  = {Neighborhood faithfulness in maps of trial-averaged neural responses,
+            estimated from held-out repetitions},
+  author = {Jang, Sooyoung},
+  year   = {2026},
+  note   = {Manuscript submitted for publication}
+}
 ```
 
-The simulation study of the revision (plan Amendment 6): the development pilot, then, with the
-addendum committed, the validation:
+## Acknowledgement
 
-```bash
-python3 tests/test_validation.py > results/revision/test_validation.log && python3 run_validation.py --phase dev --alpha && python3 run_validation.py --phase dev > results/revision/dev/run.log && python3 run_validation.py --phase dev --lams 0.25,0.35 --append --cells T1_l0.25,T2_l0.25,T3_l0.25,T1_l0.35,T2_l0.35,T3_l0.35 > results/revision/dev/run_extension.log && python3 analyze_validation.py --phase dev --lams 0.1,0.25,0.35,0.5,1,2 > results/revision/dev/analysis.txt
-```
+The EEG recordings are THINGS-EEG2, and the mouse recordings come from the Allen Brain
+Observatory. Please cite both datasets and their papers when you use the derived results:
 
-```bash
-python3 run_validation.py --phase validation > results/revision/validation/run.log && python3 analyze_validation.py --phase validation > results/revision/validation/analysis.txt
-```
+- A. T. Gifford, K. Dwivedi, G. Roig and R. M. Cichy, "A large and rich EEG dataset for
+  modeling human visual object recognition," *NeuroImage* 264 (2022) 119754,
+  [doi:10.1016/j.neuroimage.2022.119754](https://doi.org/10.1016/j.neuroimage.2022.119754);
+  data on OSF, [doi:10.17605/OSF.IO/3JK45](https://doi.org/10.17605/OSF.IO/3JK45).
+- S. E. J. de Vries, J. A. Lecoq, M. A. Buice et al., "A large-scale standardized
+  physiological survey reveals functional organization of the mouse visual cortex,"
+  *Nature Neuroscience* 23 (2020) 138–151,
+  [doi:10.1038/s41593-019-0550-9](https://doi.org/10.1038/s41593-019-0550-9); data from the
+  Allen Institute MindScope Program, *Allen Brain Observatory – 2-photon Visual Coding*
+  (2016), <https://observatory.brain-map.org/visualcoding>.
 
-The revision's descriptive analyses on the real data (about 1.5 hours, most of it the per-point rerun):
+The scDEED check in `reach/checks.py` reimplements L. Xia, C. Lee and J. J. Li, "Statistical
+method scDEED for detecting dubious 2D single-cell embeddings and optimizing t-SNE and UMAP
+hyperparameters," *Nature Communications* 15 (2024) 1753.
 
-```bash
-python3 tests/test_stage2.py > results/revision/test_stage2.log && python3 make_trial_manifest.py && python3 run_session_disjoint.py > results/session_disjoint/run.log && python3 analyze_session_disjoint.py && python3 run_points.py --dataset things > results/points/things.log && python3 run_points.py --dataset allen > results/points/allen.log && python3 analyze_benchmark.py
-```
+## License
 
-Gate A's classification, then the study-level calibration, Layer C (about 19 hours on 36 cores):
+Released under the MIT License — see [`LICENSE`](LICENSE).
 
-```bash
-python3 analyze_gate_a.py && python3 tests/test_layer_c.py > results/revision/test_layer_c.log && bash run_layer_c.sh && python3 analyze_layer_c_rule.py
-```
-
-The manuscript (needs matplotlib and a LaTeX installation with latexmk):
-
-```bash
-python3 describe_allen_subjects.py && python3 manuscript/make_figures.py && python3 manuscript/make_tables.py && latexmk -pdf -cd manuscript/manuscript.tex && latexmk -pdf -cd manuscript/supplementary.tex && latexmk -pdf -cd manuscript/cover_letter.tex
-```
-
-The note (needs matplotlib and a LaTeX installation with latexmk):
-
-```bash
-python3 note/make_figures.py && python3 note/make_tables.py && latexmk -pdf -cd note/note.tex
-```
-
-On a 36-core workstation the validity runs take about 9 minutes, the power runs under 2, and
-each tabulation about a minute. Gates 1 and 2 use only scikit-learn's bundled digits. The
-THINGS-EEG2 pilot takes about 3 minutes on 10 workers, after the download. Seeds are fixed
-per configuration and draw (plan Section 7). The t-SNE displays of the power runs use
-`n_jobs=1`; the pilot reproduction uses `n_jobs=8`, as the pilot did.
+The THINGS-EEG2 and Allen Brain Observatory data are not covered by it and are not
+redistributed here; they carry their providers' terms.
