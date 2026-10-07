@@ -8,9 +8,9 @@ H. The semi-synthetic estimator check adds rows whose Rh is "exact", counted aga
 truth. Every data file is checked against its SHA-256 before it is loaded.
 analyze_checks.py applies the protocol's Sections 4 to 6.
 
-    python3 run_checks.py --dataset things|allen [--workers 36]
+    python3 analyses/checks/run_checks.py --dataset things|allen [--workers 36]
 """
-import os
+import os, sys
 for _v in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS"):
     os.environ.setdefault(_v, "1")
 import argparse, json, platform, time
@@ -18,9 +18,10 @@ from concurrent.futures import ProcessPoolExecutor, as_completed
 import numpy as np
 import scipy, sklearn
 
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))  # the repository root
 from reach import allen, things, checks, target as tg
-import run_things_confirmatory as RT
-import run_allen_confirmatory as RA
+from analyses.eeg_confirmatory import run_things_confirmatory as RT
+from analyses.mouse_v1 import run_allen_confirmatory as RA
 
 N_SPLITS, N_SIM, SIM_R = 10, 10, 8
 K, EPS = 10, 0.2

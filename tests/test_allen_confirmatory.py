@@ -15,8 +15,8 @@ for _v in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS"):
 import numpy as np
 import h5py
 from reach import allen
-import run_allen_confirmatory as run
-import analyze_allen_confirmatory as ana
+from analyses.mouse_v1 import run_allen_confirmatory as run
+from analyses.mouse_v1 import analyze_allen_confirmatory as ana
 
 fails = []
 

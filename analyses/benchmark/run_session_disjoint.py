@@ -15,17 +15,18 @@ cross-validated (reach/sim.py).
 The rows match the confirmatory rows, with the design ('disjoint' or 'control') and its index.
 analyze_session_disjoint.py compares them.
 
-    python3 run_session_disjoint.py > results/session_disjoint/run.log
+    python3 analyses/benchmark/run_session_disjoint.py > results/session_disjoint/run.log
 """
-import os
+import os, sys
 for _v in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS"):
     os.environ.setdefault(_v, "1")
 import itertools, json, time
 from concurrent.futures import ProcessPoolExecutor, as_completed
 import numpy as np
 
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))  # the repository root
 from reach import sim, things, target as tg
-import run_things_confirmatory as RT
+from analyses.eeg_confirmatory import run_things_confirmatory as RT
 
 SEED = 8_100_000
 RU, RH, H = (8, 16), RT.RH, 40

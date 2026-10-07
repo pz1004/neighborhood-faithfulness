@@ -12,8 +12,8 @@ for _v in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS"):
     os.environ.setdefault(_v, "1")
 import numpy as np
 from reach import things
-import run_things_confirmatory as run
-import analyze_things_confirmatory as ana
+from analyses.eeg_confirmatory import run_things_confirmatory as run
+from analyses.eeg_confirmatory import analyze_things_confirmatory as ana
 
 fails = []
 

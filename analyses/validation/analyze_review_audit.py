@@ -16,15 +16,16 @@ E8  how often the pilot's certificates resolved a neighborhood in simulation.
 
 Writes results/review_audit/audit.txt and audit_summary.json.
 
-    python3 analyze_review_audit.py
+    python3 analyses/validation/analyze_review_audit.py
 """
-import collections, json, math, os
+import collections, json, math, os, sys
 import numpy as np
 
-import analyze_allen_confirmatory as AA      # its disagreement() and estimates() take RH
-import analyze_checks as AC
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))  # the repository root
+from analyses.mouse_v1 import analyze_allen_confirmatory as AA      # its disagreement() and estimates() take RH
+from analyses.checks import analyze_checks as AC
 from reach.checks import NAMES
-from run_things_confirmatory import CELLS
+from analyses.eeg_confirmatory.run_things_confirmatory import CELLS
 
 OUT = "results/review_audit"
 DATA = {

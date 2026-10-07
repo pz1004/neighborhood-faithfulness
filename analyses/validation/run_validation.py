@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """The simulation study of docs/revision_protocol.md (plan Amendment 6): Layers A and B.
 
-    python3 run_validation.py --phase dev --alpha        # T3's alpha from the bases; no simulation
-    python3 run_validation.py --phase dev                # the development pilot, 2 repetitions per base
-    python3 run_validation.py --phase validation         # 10 repetitions per base, after the addendum
+    python3 analyses/validation/run_validation.py --phase dev --alpha        # T3's alpha from the bases; no simulation
+    python3 analyses/validation/run_validation.py --phase dev                # the development pilot, 2 repetitions per base
+    python3 analyses/validation/run_validation.py --phase validation         # 10 repetitions per base, after the addendum
 
 One task is one dataset, cell and base subject. A task loads its subject's data, checked against
 the recorded SHA-256, builds the base (reach/sim.py) and runs its repetitions. The rows go to
@@ -13,7 +13,7 @@ Development and validation seeds start at 6,000,000 and 6,500,000 (protocol Sect
 validation run refuses to start unless the addendum and the decisions file are committed
 (protocol Section 8).
 """
-import os
+import os, sys
 for _v in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS"):
     os.environ.setdefault(_v, "1")
 import argparse, gzip, json, platform, re, subprocess, time, zlib
@@ -21,6 +21,7 @@ from concurrent.futures import ProcessPoolExecutor, as_completed
 import numpy as np
 import scipy, sklearn
 
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))  # the repository root
 from reach import sim
 
 SEED_BASE = {"dev": 6_000_000, "validation": 6_500_000}

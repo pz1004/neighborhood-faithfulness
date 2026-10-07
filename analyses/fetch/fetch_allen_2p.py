@@ -11,8 +11,8 @@ inclusion check, which reads only the ROI count and the natural-scenes stimulus 
 never a response value. Downloading stops when 10 experiments are included. SHA-256s and
 inclusion results go to data/allen_2p/manifest.json.
 
-    python3 fetch_allen_2p.py --list        # candidates and file sizes only
-    python3 fetch_allen_2p.py               # download until 10 are included
+    python3 analyses/fetch/fetch_allen_2p.py --list        # candidates and file sizes only
+    python3 analyses/fetch/fetch_allen_2p.py               # download until 10 are included
 """
 import argparse, hashlib, json, os, re, sys, time, urllib.request
 

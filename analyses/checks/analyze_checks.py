@@ -5,11 +5,12 @@ Reads results/checks/{things,allen}/{rows.jsonl, semi_synthetic.jsonl} and the c
 rows the maps must reproduce; writes results/checks/checks_analysis.txt and
 checks_summary.json.
 """
-import collections, json, warnings
+import collections, json, os, sys, warnings
 import numpy as np
 
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))  # the repository root
 from reach.checks import NAMES
-from run_checks import DATASETS
+from analyses.checks.run_checks import DATASETS
 
 OUT = "results/checks"
 B, BOOT_SEED = 10_000, {"things": 5_300_000, "allen": 5_700_000}

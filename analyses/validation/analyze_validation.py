@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Analysis of the simulation study (docs/revision_protocol.md, Sections 3.5 to 4).
 
-    python3 analyze_validation.py --phase dev           # the development pilot and its decisions
-    python3 analyze_validation.py --phase validation    # performance, by status, and Layer A
+    python3 analyses/validation/analyze_validation.py --phase dev           # the development pilot and its decisions
+    python3 analyses/validation/analyze_validation.py --phase validation    # performance, by status, and Layer A
 
 Each repetition's pooled counts (run_validation.py) give its disagreement curves, the estimates
 of every method and the observables of Section 4. A cell's status is computed from the medians
@@ -16,10 +16,10 @@ The development phase applies the rules of Section 3.7, in this order:
 It writes results/revision/dev/decisions.json, which the validation run reads once it is
 committed with the addendum.
 """
-import argparse, collections, functools, gzip, itertools, json, os
+import argparse, collections, functools, gzip, itertools, json, os, sys
 import numpy as np
-
-import analyze_allen_confirmatory as AA
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))  # the repository root
+from analyses.mouse_v1 import analyze_allen_confirmatory as AA
 from reach import sim
 
 OUT = "results/revision"

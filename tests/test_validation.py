@@ -21,8 +21,8 @@ for _v in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS"):
 import numpy as np
 
 from reach import sim, things, target as tg
-import run_validation as RV
-import analyze_validation as AV
+from analyses.validation import run_validation as RV
+from analyses.validation import analyze_validation as AV
 
 fails = []
 

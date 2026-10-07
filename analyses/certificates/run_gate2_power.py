@@ -8,9 +8,9 @@ PCA-2, 5 draws. For every engine and display: faithful / distorted shares and fa
 at eps x k', interval widths, naive-map mislabel rates, wall time, the ball witness ceiling
 at k' = 40 (t-SNE displays, gamma = 0.15), and the planning-rule constants c_i.
 
-    python3 run_gate2_power.py [--workers 32]
+    python3 analyses/certificates/run_gate2_power.py [--workers 32]
 """
-import os
+import os, sys
 for _v in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS"):
     os.environ.setdefault(_v, "1")
 import json, time, argparse, functools, platform
@@ -19,6 +19,7 @@ import numpy as np
 import scipy, sklearn
 from sklearn.manifold import TSNE
 
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))  # the repository root
 from reach import data, noise, target as tg, engines as eng
 from reach.predecessor.panel import pca2
 from reach.predecessor.intrinsic import levina_bickel

@@ -11,14 +11,15 @@ Split 0 of each subject, blocks U + H (40 repetitions) in the F-fitted 20-dim sp
   at k=10, eps=0.2, k'=20 depends on), next to the pairwise noise of 16-rep means.
 The same numbers are printed for THINGS-EEG2 alongside, from its own 72 U + H repetitions.
 """
-import os
+import os, sys
 for _v in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS"):
     os.environ.setdefault(_v, "1")
 import numpy as np
 from concurrent.futures import ProcessPoolExecutor
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))  # the repository root
 from reach import allen, things, target as tg
-import run_allen_confirmatory as RA
-import run_things_confirmatory as RT
+from analyses.mouse_v1 import run_allen_confirmatory as RA
+from analyses.eeg_confirmatory import run_things_confirmatory as RT
 
 
 def cv(A, B):

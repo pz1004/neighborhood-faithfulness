@@ -8,9 +8,9 @@ statistics of protocol Section 4. The semi-synthetic estimator check of Section 
 whose Rh is "exact", counted against a known truth. analyze_things_confirmatory.py applies
 the decision rules of Section 6.
 
-    python3 run_things_confirmatory.py [--subjects 1,...,10]
+    python3 analyses/eeg_confirmatory/run_things_confirmatory.py [--subjects 1,...,10]
 """
-import os
+import os, sys
 for _v in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS"):
     os.environ.setdefault(_v, "1")
 import argparse, hashlib, json, platform, time
@@ -19,6 +19,7 @@ import numpy as np
 import scipy, sklearn
 from sklearn.manifold import TSNE, MDS
 
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))  # the repository root
 from reach import things, target as tg
 from reach.predecessor.panel import pca2
 

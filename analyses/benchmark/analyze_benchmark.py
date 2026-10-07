@@ -16,10 +16,11 @@ below is descriptive.
 
 Writes results/benchmark/benchmark.txt and summary.json.
 """
-import collections, json, math, os
+import collections, json, math, os, sys
 import numpy as np
 
-import analyze_validation as AV
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))  # the repository root
+from analyses.validation import analyze_validation as AV
 from reach import checks, sim
 
 OUT = "results/benchmark"

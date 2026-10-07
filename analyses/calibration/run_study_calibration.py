@@ -21,11 +21,11 @@ medians, the 10,000-resample subject bootstrap, L and U, the order-statistic bou
 
 Seeds: studies (7,000,000, ...), oracle (7,500,000, ...).
 
-    python3 run_study_calibration.py --dataset EEG --scenario T1 --map tsne --oracle
-    python3 run_study_calibration.py --dataset EEG --scenario T1 --map tsne --studies 1000
-    python3 run_study_calibration.py --dataset mouse --scenario T1 --R 16 --no-guard --studies 1000
+    python3 analyses/calibration/run_study_calibration.py --dataset EEG --scenario T1 --map tsne --oracle
+    python3 analyses/calibration/run_study_calibration.py --dataset EEG --scenario T1 --map tsne --studies 1000
+    python3 analyses/calibration/run_study_calibration.py --dataset mouse --scenario T1 --R 16 --no-guard --studies 1000
 """
-import os
+import os, sys
 for _v in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS"):
     os.environ.setdefault(_v, "1")
 import argparse, functools, gzip, json, time
@@ -33,9 +33,10 @@ from concurrent.futures import ProcessPoolExecutor, as_completed
 import numpy as np
 from sklearn.manifold import TSNE
 
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))  # the repository root
 from reach import sim, target as tg
-import run_things_confirmatory as RT
-import run_validation as RV
+from analyses.eeg_confirmatory import run_things_confirmatory as RT
+from analyses.validation import run_validation as RV
 
 LAMS = (0.8, 1.0, 1.25)
 POPULATION = [(s, lam) for s in range(1, 11) for lam in LAMS]           # virtual subject v = index here

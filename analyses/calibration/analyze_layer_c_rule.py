@@ -14,12 +14,13 @@ populations of known median (20,000 studies of 10 each; seed range 9,200,000, un
 
 Writes results/revision/layer_c/rule.txt and rule.json.
 """
-import collections, glob, gzip, json, os
+import collections, glob, gzip, json, os, sys
 import numpy as np
 
-import analyze_study_calibration as AS
-import analyze_validation as AV
-import run_study_calibration as SC
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))  # the repository root
+from analyses.calibration import analyze_study_calibration as AS
+from analyses.validation import analyze_validation as AV
+from analyses.calibration import run_study_calibration as SC
 from reach import sim
 
 

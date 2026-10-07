@@ -19,8 +19,8 @@ regenerates only the references of the first split's maps.
 import numpy as np
 
 from reach import things, allen, target as tg
-import run_things_confirmatory as RT
-import run_allen_confirmatory as RA
+from analyses.eeg_confirmatory import run_things_confirmatory as RT
+from analyses.mouse_v1 import run_allen_confirmatory as RA
 
 K, EPS = 10, 0.2
 M, KP = tg.m_of(EPS, K), 2 * K

@@ -7,10 +7,11 @@ run. The THINGS verdict is read from results/things_confirmatory/confirmatory_su
 to state the joint conclusion. Writes results/allen_confirmatory/allen_analysis.txt and
 allen_summary.json.
 """
-import collections, json
+import collections, json, os, sys
 import numpy as np
 
-from run_things_confirmatory import CELLS
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))  # the repository root
+from analyses.eeg_confirmatory.run_things_confirmatory import CELLS
 
 OUT = "results/allen_confirmatory"
 RU, RH = (8, 16), (8, 12, 24)

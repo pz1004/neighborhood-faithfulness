@@ -17,10 +17,11 @@ with a 95% subject-bootstrap interval, since it is reportable whatever the class
 Reads the committed confirmatory and checks rows, results/revision/dev/decisions.json and
 results/revision/validation/summary.json. Writes results/gate_a/classification.txt and .json.
 """
-import collections, json, os
+import collections, json, os, sys
 import numpy as np
 
-import analyze_validation as AV
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))  # the repository root
+from analyses.validation import analyze_validation as AV
 from reach import checks, sim
 
 OUT = "results/gate_a"

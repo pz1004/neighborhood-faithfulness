@@ -15,8 +15,8 @@ for _v in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS"):
 import numpy as np
 
 from reach import sim
-import run_study_calibration as SC
-import analyze_study_calibration as AS
+from analyses.calibration import run_study_calibration as SC
+from analyses.calibration import analyze_study_calibration as AS
 
 fails = []
 

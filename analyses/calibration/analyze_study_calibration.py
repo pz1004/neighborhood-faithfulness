@@ -15,13 +15,14 @@
 - Reported with Monte Carlo errors: Pr(L > Theta), Pr(U < Theta), coverage of [L, U], width, the rate
   of declaring L > 0.5, and the rate of declaring it erroneously.
 
-    python3 analyze_study_calibration.py --dataset EEG --scenario T1 --map tsne
+    python3 analyses/calibration/analyze_study_calibration.py --dataset EEG --scenario T1 --map tsne
 """
-import argparse, collections, gzip, json
+import argparse, collections, gzip, json, os, sys
 import numpy as np
 
-import analyze_validation as AV
-import run_study_calibration as SC
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))  # the repository root
+from analyses.validation import analyze_validation as AV
+from analyses.calibration import run_study_calibration as SC
 from reach import sim
 
 B = 10_000

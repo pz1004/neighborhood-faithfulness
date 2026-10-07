@@ -12,9 +12,9 @@ Split 0 also gets the semi-synthetic need and validity runs and the residual dia
 Writes results/things_pilot/records.jsonl, semi_synthetic.jsonl and diagnostics.json;
 analyze_things_need_pilot.py applies the decision rule.
 
-    python3 run_things_need_pilot.py [--subjects 1,...,10] [--splits 10]
+    python3 analyses/eeg_pilot/run_things_need_pilot.py [--subjects 1,...,10] [--splits 10]
 """
-import os
+import os, sys
 for _v in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS"):
     os.environ.setdefault(_v, "1")
 import json, time, argparse, platform
@@ -23,6 +23,7 @@ import numpy as np
 import scipy, sklearn
 from sklearn.manifold import TSNE
 
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))  # the repository root
 from reach import things, target as tg, engines as eng
 from reach.predecessor.panel import pca2
 

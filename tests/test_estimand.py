@@ -21,9 +21,9 @@ for _v in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS"):
 import numpy as np
 
 from reach import things, checks, target as tg
-import run_things_confirmatory as RT
-import analyze_allen_confirmatory as AA      # disagreement() and estimates() with RH as an argument
-import analyze_checks as AC
+from analyses.eeg_confirmatory import run_things_confirmatory as RT
+from analyses.mouse_v1 import analyze_allen_confirmatory as AA      # disagreement() and estimates() with RH as an argument
+from analyses.checks import analyze_checks as AC
 
 fails = []
 

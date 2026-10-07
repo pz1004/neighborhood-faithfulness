@@ -4,10 +4,11 @@
 Reads results/things_confirmatory/{rows.jsonl, semi_synthetic.jsonl}; writes
 results/things_confirmatory/confirmatory_analysis.txt and confirmatory_summary.json.
 """
-import collections, json
+import collections, json, os, sys
 import numpy as np
 
-from run_things_confirmatory import CELLS
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))  # the repository root
+from analyses.eeg_confirmatory.run_things_confirmatory import CELLS
 
 OUT = "results/things_confirmatory"
 RU, RH = (8, 16, 32), (8, 20, 40)

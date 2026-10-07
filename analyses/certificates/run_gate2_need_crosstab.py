@@ -6,10 +6,10 @@ only. Prints the table saved as results/gate2/need_crosstab.txt."""
 import os, sys
 for _v in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS"):
     os.environ.setdefault(_v, "1")
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))  # the repository root
 import numpy as np
 from concurrent.futures import ProcessPoolExecutor
-import run_gate2_power as P
+from analyses.certificates import run_gate2_power as P
 from reach import noise, target as tg, engines as eng
 
 K, KP, EPS = 20, 40, 0.2

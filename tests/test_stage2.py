@@ -17,9 +17,9 @@ for _v in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS"):
 import numpy as np
 
 from reach import checks, things, target as tg
-import run_points as RP
-import run_session_disjoint as SD
-import make_trial_manifest as TM
+from analyses.benchmark import run_points as RP
+from analyses.benchmark import run_session_disjoint as SD
+from analyses.benchmark import make_trial_manifest as TM
 
 fails = []
 

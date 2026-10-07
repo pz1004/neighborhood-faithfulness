@@ -12,10 +12,11 @@ also change. Reads results/revision/dev/decisions.json for the estimator and the
 
 Writes results/session_disjoint/analysis.txt and summary.json.
 """
-import collections, json
+import collections, json, os, sys
 import numpy as np
 
-import analyze_validation as AV
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))  # the repository root
+from analyses.validation import analyze_validation as AV
 from reach import sim
 
 OUT = "results/session_disjoint"

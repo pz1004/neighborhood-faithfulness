@@ -18,9 +18,9 @@ import numpy as np
 from sklearn.manifold import trustworthiness
 
 from reach import allen, things, checks, target as tg
-import run_things_confirmatory as RT
-import run_checks as run
-import analyze_checks as ana
+from analyses.eeg_confirmatory import run_things_confirmatory as RT
+from analyses.checks import run_checks as run
+from analyses.checks import analyze_checks as ana
 
 fails = []
 

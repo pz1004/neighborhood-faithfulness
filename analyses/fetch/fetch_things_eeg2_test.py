@@ -9,8 +9,8 @@ requests, then downloads only the test member's bytes, checks the CRC-32 recorde
 zip, and writes data/things_eeg2/sub-XX/preprocessed_eeg_test.npy. Nothing is executed or
 unpickled here; loading is done separately by a restricted unpickler (reach/things.py).
 
-    python3 fetch_things_eeg2_test.py --list          # central directories only (a few KB)
-    python3 fetch_things_eeg2_test.py [--subjects 1,2,...]
+    python3 analyses/fetch/fetch_things_eeg2_test.py --list          # central directories only (a few KB)
+    python3 analyses/fetch/fetch_things_eeg2_test.py [--subjects 1,2,...]
 """
 import argparse, hashlib, json, os, struct, sys, time, urllib.request, zlib
 

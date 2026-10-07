@@ -21,14 +21,15 @@ and per split, how many consecutive presentation pairs fall one in U and one in 
 
 Writes results/manifest/trials_eeg.csv, trials_mouse.csv, mouse_overlap.json and overlap.txt.
 """
-import csv, hashlib, json, os
+import csv, hashlib, json, os, sys
 import numpy as np
 import h5py
 from sklearn.utils import shuffle as sk_shuffle
 
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))  # the repository root
 from reach import things, allen
-import run_things_confirmatory as RT
-import run_allen_confirmatory as RA
+from analyses.eeg_confirmatory import run_things_confirmatory as RT
+from analyses.mouse_v1 import run_allen_confirmatory as RA
 
 OUT = "results/manifest"
 N_SPLITS = 10

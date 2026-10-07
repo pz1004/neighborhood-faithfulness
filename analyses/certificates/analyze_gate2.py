@@ -8,8 +8,9 @@ import json, collections, os, sys
 import numpy as np
 from scipy.stats import beta, binom
 
-import run_gate2_validity as V
-import run_gate2_power as P
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))  # the repository root
+from analyses.certificates import run_gate2_validity as V
+from analyses.certificates import run_gate2_power as P
 
 ENGINES = ("ball", "pair_t", "pair_pool", "cmp")
 EXACT_UNDER = {"ball": ("gauss", "gauss_het"), "pair_t": ("gauss", "gauss_het"),

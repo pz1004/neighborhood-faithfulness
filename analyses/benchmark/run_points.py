@@ -23,18 +23,19 @@ The alternative scDEED null permutes the representation's 20 coordinates indepen
 images, as the null was first written (Supplementary Section S1.4). It uses its own seeds,
 (8,200,000, ...).
 
-    python3 run_points.py --dataset things|allen [--workers 35]
+    python3 analyses/benchmark/run_points.py --dataset things|allen [--workers 35]
 """
-import os
+import os, sys
 for _v in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS"):
     os.environ.setdefault(_v, "1")
 import argparse, json, time
 from concurrent.futures import ProcessPoolExecutor, as_completed
 import numpy as np
 
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))  # the repository root
 from reach import checks, sim, things, target as tg
-import run_checks as RC
-import run_things_confirmatory as RT
+from analyses.checks import run_checks as RC
+from analyses.eeg_confirmatory import run_things_confirmatory as RT
 
 ALT_SEED = 8_200_000
 K, EPS = RC.K, RC.EPS

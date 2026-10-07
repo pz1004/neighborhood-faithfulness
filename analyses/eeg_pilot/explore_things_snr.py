@@ -7,13 +7,14 @@ are unbiased for the true squared distances. From them: how far apart the images
 are relative to the noise, and how different the 8th and 20th true neighbors of a point
 are in distance, which is the gap a certificate at k=10, eps=0.2, k'=20 must resolve.
 """
-import os
+import os, sys
 for _v in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS"):
     os.environ.setdefault(_v, "1")
 import numpy as np
 from concurrent.futures import ProcessPoolExecutor
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))  # the repository root
 from reach import things, engines as eng, target as tg
-import run_things_need_pilot as P
+from analyses.eeg_pilot import run_things_need_pilot as P
 
 
 def one(s):

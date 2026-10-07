@@ -13,9 +13,9 @@ What changes (protocol Section 4):
 - user budgets R in {8, 16};
 - reference sub-blocks R_h in {8, 12, 24}.
 
-    python3 run_allen_confirmatory.py
+    python3 analyses/mouse_v1/run_allen_confirmatory.py
 """
-import os
+import os, sys
 for _v in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS"):
     os.environ.setdefault(_v, "1")
 import hashlib, json, platform, time
@@ -24,8 +24,9 @@ import numpy as np
 import scipy, sklearn
 from sklearn.manifold import TSNE
 
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))  # the repository root
 from reach import allen, target as tg
-from run_things_confirmatory import CELLS, TSNE_SEEDS, MDS_SEEDS, seeds_for, embed, counts, fit_variant
+from analyses.eeg_confirmatory.run_things_confirmatory import CELLS, TSNE_SEEDS, MDS_SEEDS, seeds_for, embed, counts, fit_variant
 
 RU, RH, H_SIZE = (8, 16), (8, 12, 24), 24
 N_SPLITS, N_SIM = 10, 20

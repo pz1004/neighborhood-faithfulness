@@ -9,7 +9,7 @@ comparisons for the displayed members (all triples on digits200). A draw is a fa
 failure for an engine if any count is nonzero. Results stream to a JSONL file, one line per
 task, so an interrupted run resumes where it stopped.
 
-    python3 run_gate2_validity.py [--workers 32] [--only CFG_INDEX,...]
+    python3 analyses/certificates/run_gate2_validity.py [--workers 32] [--only CFG_INDEX,...]
 """
 import os
 for _v in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS"):
@@ -19,6 +19,7 @@ from concurrent.futures import ProcessPoolExecutor, as_completed
 import numpy as np
 import scipy, sklearn
 
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))  # the repository root
 from reach import data, noise, target as tg, engines as eng
 from reach.predecessor.panel import pca2
 

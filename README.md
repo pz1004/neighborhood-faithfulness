@@ -34,18 +34,29 @@ estimable.
 ## Repository layout
 
 ```
-reach/          the library: both datasets' loaders, the maps, the six checks, the
-                simulation study, and the per-point certificates of the pilot
-tests/          synthetic known-truth tests; none opens a recording
-docs/           the research plan and each analysis protocol, with its results report
-results/        every derived result: rows, logs, run manifests and printouts
-data/           SHA-256 manifests and fetch logs of the recordings
-fetch_*.py      data acquisition
-run_*.py        one driver per analysis; each writes its rows and log to results/
-analyze_*.py    the pre-specified estimators and decision rules, applied to those rows
-explore_*.py    exploratory, post hoc analyses
-pilot/          the archived scratch pilot the research plan started from
+analyses/             one package per stage, in the order of the research plan
+  certificates/       per-point certificates on synthetic data (Gates 1 and 2)
+  fetch/              fetching the recordings
+  eeg_pilot/          the exploratory EEG pilot (Amendment 2)
+  eeg_confirmatory/   the confirmatory EEG analysis (Amendment 3)
+  mouse_v1/           mouse V1 (Amendment 4)
+  checks/             common checks against the truth (Amendment 5)
+  validation/         the estimator's simulation study (Amendment 6)
+  benchmark/          sensitivity analyses and the benchmark of the checks (Amendment 6)
+  calibration/        statuses, reporting classes and Layer C (Amendment 6)
+scripts/              one runner per stage, in order
+reach/                the library: both datasets' loaders, the maps, the six checks, the
+                      simulation study, and the per-point certificates of the pilot
+tests/                synthetic known-truth tests; none opens a recording
+docs/                 the research plan and each analysis protocol, with its results report
+results/              every derived result: rows, logs, run manifests and printouts
+data/                 SHA-256 manifests and fetch logs of the recordings
+pilot/                the archived scratch pilot the research plan started from
 ```
+
+Within a stage, `run_*.py` drives an analysis and writes its rows and log to `results/`,
+`analyze_*.py` applies the pre-specified estimators and decision rules to those rows, and
+`explore_*.py` is exploratory and post hoc.
 
 `reach/predecessor/` is copied verbatim from the author's earlier project (see its
 `PROVENANCE.md`). The archived pilot imports that project by absolute path and is not part
@@ -75,112 +86,55 @@ Two public datasets. Each fetcher records the SHA-256 digest of every file it wr
 
 | Dataset | Used here | Download | Fetched by |
 |---|---|---:|---|
-| THINGS-EEG2, preprocessed ([OSF 3JK45](https://osf.io/3jk45/), component [anp5v](https://osf.io/anp5v/)) | the test set of 10 participants: 200 images × 80 repetitions over 4 sessions | 2.1 GB | `fetch_things_eeg2_test.py`, which reads only the test file of each participant's archive |
-| Allen Brain Observatory, Visual Coding two-photon, natural scenes | 10 experiments in mouse V1, one per mouse, selected by the rule in `docs/note_protocol_allen.md`: 118 images × 50 repetitions | 4.4 GB | `fetch_allen_2p.py` |
+| THINGS-EEG2, preprocessed ([OSF 3JK45](https://osf.io/3jk45/), component [anp5v](https://osf.io/anp5v/)) | the test set of 10 participants: 200 images × 80 repetitions over 4 sessions | 2.1 GB | `analyses/fetch/fetch_things_eeg2_test.py`, which reads only the test file of each participant's archive |
+| Allen Brain Observatory, Visual Coding two-photon, natural scenes | 10 experiments in mouse V1, one per mouse, selected by the rule in `docs/note_protocol_allen.md`: 118 images × 50 repetitions | 4.4 GB | `analyses/fetch/fetch_allen_2p.py` |
 
 ## Reproducing the results
 
-Run the stages in order from the repository root; each depends on the ones before it. They
-follow the research plan and its amendments, and every command writes to the path of the
-committed output it reproduces. Seeds are fixed per configuration and draw
+Run the stages in order; each depends on the ones before it. Each runner can be started from
+any directory, runs that stage's tests and scripts from the repository root, and writes to the
+paths of the committed outputs it reproduces. Seeds are fixed per configuration and draw
 (`docs/research_plan.md`, Section 7).
 
-**1. Per-point certificates on synthetic data** (research plan, Gates 1 and 2; scikit-learn's
-bundled digits; about 15 minutes)
-
 ```bash
-python3 tests/test_reach.py > results/gate2/test_reach.log
-python3 run_gate2_validity.py --workers 30 > results/gate2/validity.log
-python3 run_gate2_power.py --workers 32 > results/gate2/power.log
-python3 analyze_gate2.py
-python3 run_gate2_synthetic_ceiling.py > results/gate2/synthetic_ceiling.txt
-python3 run_gate2_need_crosstab.py > results/gate2/need_crosstab.txt
+./scripts/01_certificates.sh       # Gates 1-2: per-point certificates, synthetic data    ~15 min
+./scripts/02_fetch.sh              # the recordings, 6.5 GB
+./scripts/03_eeg_pilot.sh          # Amendment 2: the exploratory EEG pilot              ~3 min
+./scripts/04_eeg_confirmatory.sh   # Amendment 3: the confirmatory EEG analysis          ~8 min
+./scripts/05_mouse_v1.sh           # Amendment 4: mouse V1                               ~3 min
+./scripts/06_checks.sh             # Amendment 5: common checks against the truth        ~75 min
+./scripts/07_validation.sh         # Amendment 6: the estimator's simulation study       ~2.5 h
+./scripts/08_benchmark.sh          # Amendment 6: sensitivity analyses and the benchmark ~1 h
+./scripts/09_calibration.sh        # Amendment 6: statuses, classes and Layer C          ~19 h
 ```
 
-**2. Data** (6.5 GB)
+**Stage 9 takes most of a day.** Nearly all of it is Layer C, 1,000 simulated studies in each of
+six scenarios (`analyses/calibration/run_layer_c.sh`); the runner stops if any of them fails.
 
-```bash
-python3 fetch_things_eeg2_test.py > data/fetch.log
-curl -o data/allen_2p/ophys_experiments.json https://allen-brain-observatory.s3.us-west-2.amazonaws.com/visual-coding-2p/ophys_experiments.json
-python3 fetch_allen_2p.py > data/allen_2p/fetch.log
-```
+`analyses/benchmark/run_points.py` re-creates the primary and cv-MDS maps and every check of
+stages 4 to 6, and reports how many committed counts it did not reproduce; the committed logs
+report 0. Stage 1's validity run resumes from `results/gate2/validity.jsonl`; delete that file
+to recompute every draw. Stage 7 writes the development decisions to
+`results/revision/dev/decisions_rerun.json` and leaves the committed ones alone.
 
-**3. The exploratory EEG pilot** (Amendment 2; about 3 minutes)
+Any script can also be run on its own from the repository root, for example
+`python3 analyses/checks/run_checks.py --dataset things`.
 
-```bash
-python3 tests/test_things.py > results/things_pilot/test_things.log
-python3 run_things_need_pilot.py > results/things_pilot/run.log
-python3 analyze_things_need_pilot.py
-python3 explore_things_snr.py > results/things_pilot/explore_snr.txt
-```
+| Stage | Folder | Scripts (`.py`) | Writes to `results/` |
+|---|---|---|---|
+| 1 | `analyses/certificates/` | `run_gate2_validity`, `run_gate2_power`, `run_gate2_synthetic_ceiling`, `run_gate2_need_crosstab`, `analyze_gate2` | `gate2/` |
+| 2 | `analyses/fetch/` | `fetch_things_eeg2_test`, `fetch_allen_2p` | (`data/`) |
+| 3 | `analyses/eeg_pilot/` | `run_things_need_pilot`, `analyze_things_need_pilot`, `explore_things_snr` | `things_pilot/` |
+| 4 | `analyses/eeg_confirmatory/` | `run_things_confirmatory`, `analyze_things_confirmatory` | `things_confirmatory/` |
+| 5 | `analyses/mouse_v1/` | `run_allen_confirmatory`, `analyze_allen_confirmatory`, `explore_allen_snr`, `describe_allen_subjects` | `allen_confirmatory/` |
+| 6 | `analyses/checks/` | `run_checks`, `analyze_checks` | `checks/` |
+| 7 | `analyses/validation/` | `analyze_review_audit`, `run_validation`, `analyze_validation` | `review_audit/`, `revision/` |
+| 8 | `analyses/benchmark/` | `make_trial_manifest`, `run_session_disjoint`, `analyze_session_disjoint`, `run_points`, `analyze_benchmark` | `manifest/`, `session_disjoint/`, `points/`, `benchmark/` |
+| 9 | `analyses/calibration/` | `analyze_gate_a`, `run_study_calibration`, `analyze_study_calibration`, `run_layer_c.sh`, `analyze_layer_c_rule` | `gate_a/`, `revision/layer_c/` |
 
-**4. The confirmatory EEG analysis** (Amendment 3, `docs/note_protocol.md`; about 8 minutes)
-
-```bash
-python3 tests/test_things_confirmatory.py > results/things_confirmatory/test_things_confirmatory.log
-python3 run_things_confirmatory.py > results/things_confirmatory/run.log
-python3 analyze_things_confirmatory.py
-```
-
-**5. Mouse V1** (Amendment 4, `docs/note_protocol_allen.md`; about 3 minutes)
-
-```bash
-python3 tests/test_allen_confirmatory.py > results/allen_confirmatory/test_allen_confirmatory.log
-python3 run_allen_confirmatory.py > results/allen_confirmatory/run.log
-python3 analyze_allen_confirmatory.py
-python3 explore_allen_snr.py > results/allen_confirmatory/explore_snr.txt
-python3 describe_allen_subjects.py
-```
-
-**6. Common checks against the truth** (Amendment 5, `docs/checks_protocol.md`; about 75
-minutes)
-
-```bash
-python3 tests/test_checks.py > results/checks/test_checks.log
-python3 run_checks.py --dataset things > results/checks/things/run.log
-python3 run_checks.py --dataset allen > results/checks/allen/run.log
-python3 analyze_checks.py
-```
-
-**7. Validating the estimator** (Amendment 6, `docs/revision_protocol.md`; about 2.5 hours).
-The development runs fixed the noise grid, the estimator and the thresholds in
-`docs/revision_addendum.md` before any validation seed was used.
-
-```bash
-python3 analyze_review_audit.py
-python3 tests/test_estimand.py > results/revision/test_estimand.log
-python3 tests/test_validation.py > results/revision/test_validation.log
-python3 run_validation.py --phase dev --alpha
-python3 run_validation.py --phase dev > results/revision/dev/run.log
-python3 run_validation.py --phase dev --lams 0.25,0.35 --append --cells T1_l0.25,T2_l0.25,T3_l0.25,T1_l0.35,T2_l0.35,T3_l0.35 > results/revision/dev/run_extension.log
-python3 analyze_validation.py --phase dev --lams 0.1,0.25,0.35,0.5,1,2 > results/revision/dev/analysis.txt
-python3 run_validation.py --phase validation > results/revision/validation/run.log
-python3 analyze_validation.py --phase validation > results/revision/validation/analysis.txt
-```
-
-**8. Sensitivity analyses and the benchmark** (Amendment 6; about 1 hour). `run_points.py`
-re-creates the primary and cv-MDS maps and every check, and compares each count with the
-committed rows; its committed logs report 0 counts not reproduced.
-
-```bash
-python3 tests/test_stage2.py > results/revision/test_stage2.log
-python3 make_trial_manifest.py
-python3 run_session_disjoint.py > results/session_disjoint/run.log
-python3 analyze_session_disjoint.py
-python3 run_points.py --dataset things > results/points/things.log
-python3 run_points.py --dataset allen > results/points/allen.log
-python3 analyze_benchmark.py
-```
-
-**9. Statuses, reporting classes and the study-level calibration** (Amendment 6; about 19
-hours, nearly all of it the 1,000 simulated studies of `run_layer_c.sh`)
-
-```bash
-python3 analyze_gate_a.py
-python3 tests/test_layer_c.py > results/revision/test_layer_c.log
-bash run_layer_c.sh
-python3 analyze_layer_c_rule.py
-```
+The protocols in `docs/` name the scripts by their earlier paths in the repository root. They
+moved into `analyses/` in commit `5198734`, after every committed result had been produced,
+with their names unchanged; `git log --follow analyses/<stage>/<script>` traces each one.
 
 ## Results
 
@@ -236,7 +190,7 @@ The research plan and its six amendments are in `docs/research_plan.md`; the pro
 addendum and the results reports are beside it in `docs/`. Internal working documents that
 some of them mention (prior-art audits, a gate report, the internal review and its audit) are
 not part of this release; the evidence the audit computed is reproduced by
-`analyze_review_audit.py` into `results/review_audit/`.
+`analyses/validation/analyze_review_audit.py` into `results/review_audit/`.
 
 ## Citation
 
