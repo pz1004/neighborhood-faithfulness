@@ -18,13 +18,5 @@ data/allen_2p/ophys_experiments.json
 # with their generators, and the earlier short note. Kept on disk, not published here.
 manuscript/
 note/
-
-# Internal working documents, not needed to reproduce or check the results:
-# the prior-art audits and the Gate 2 decision report, the internal review of the
-# manuscript and its audit, and the manuscript's claims audit. Kept on disk.
-docs/gate1_prior_art.md
-docs/gate2_report.md
-docs/reframe_prior_art.md
-docs/review_comments.md
-docs/review_audit.md
-docs/claims_audit.md
+docs/
+pilot/
